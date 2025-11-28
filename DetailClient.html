@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails Client -VisioPro</title>
+    <title>Détails Client - VisioPro</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -1646,6 +1646,272 @@
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
 }
+
+/* Styles pour le loader amélioré */
+.modern-loader-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(67, 97, 238, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.pulse-avatar {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
+
+.pulse-ring {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: pulseRing 2s ease-out infinite;
+}
+
+.loading-content {
+    flex: 1;
+}
+
+.loading-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 0.25rem;
+    background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.loading-subtext {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+    margin-bottom: 1rem;
+}
+
+.wave-loader {
+    display: flex;
+    align-items: end;
+    gap: 3px;
+    height: 20px;
+}
+
+.wave-bar {
+    width: 4px;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    border-radius: 2px;
+    animation: wave 1.2s ease-in-out infinite;
+}
+
+.wave-bar:nth-child(1) { animation-delay: 0s; height: 5px; }
+.wave-bar:nth-child(2) { animation-delay: 0.1s; height: 10px; }
+.wave-bar:nth-child(3) { animation-delay: 0.2s; height: 15px; }
+.wave-bar:nth-child(4) { animation-delay: 0.3s; height: 10px; }
+.wave-bar:nth-child(5) { animation-delay: 0.4s; height: 5px; }
+
+/* Animations pour le loader */
+@keyframes pulseRing {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+@keyframes wave {
+    0%, 60%, 100% {
+        transform: scaleY(0.4);
+    }
+    30% {
+        transform: scaleY(1);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Styles pour l'état d'erreur */
+.error-state {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    border-radius: 16px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1);
+    animation: shake 0.5s ease-in-out;
+}
+
+.error-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--danger-color), #dc2626);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.error-content {
+    flex: 1;
+}
+
+.error-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--danger-color);
+    margin-bottom: 0.5rem;
+}
+
+.error-message {
+    font-size: 0.9rem;
+    color: #7f1d1d;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.retry-btn {
+    background: linear-gradient(135deg, var(--danger-color), #dc2626);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.retry-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Styles pour les modales d'appel */
+.call-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-dialog {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.modal-body {
+    padding: 25px;
+    text-align: center;
+}
+
+.phone-number-display {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin: 15px 0;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+}
+
+.client-info {
+    color: var(--gray-color);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Animations pour les messages */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
     </style>
 </head>
 <body>
@@ -1657,7 +1923,6 @@
             </div>
 
             <div class="user-info">
-                
                 <div class="profile-dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
                     <span class="profile-name" id="username-display"></span>
                     <img src="https://ui-avatars.com/api/?name=John+Doe&background=4361ee&color=fff" alt="Photo de profil" class="profile-img">
@@ -1934,7 +2199,7 @@
                             </div>
                         </div>
                     </div>
-                                        <div class="detail-item" style="margin-top: 1.5rem;">
+                    <div class="detail-item" style="margin-top: 1.5rem;">
                         <span class="detail-label">Statut</span>
                         <p class="detail-value" id="payment-status"></p>
                     </div>
@@ -2002,7 +2267,6 @@
                             <div class="payment-amount" id="remaining-amount-payment"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -2050,6 +2314,50 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de consigne d'appel -->
+<div class="call-modal" id="logCallModal">
+    <div class="modal-dialog">
+        <div class="modal-header">
+            <h3><i class="fas fa-clipboard-list me-2"></i>Consigner l'appel</h3>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">ID Client</label>
+                <input type="text" id="logClientId" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Utilisateur</label>
+                <input type="text" id="logUser" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Numéro appelé</label>
+                <input type="text" id="logPhoneNumber" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Notes de l'appel <span style="color: var(--danger-color);">*</span></label>
+                <textarea id="logNote" class="form-control" 
+                          placeholder="Décrivez le contenu de l'appel, les décisions prises, les actions à suivre..."></textarea>
+                <div style="font-size: 0.8rem; color: var(--gray-color); margin-top: 5px;">
+                    Minimum 5 caractères requis
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeLogModal()">
+                <i class="fas fa-times me-2"></i>Ne Pas Consigner
+            </button>
+            <button class="btn btn-primary" id="saveLogBtn" onclick="saveCallLog()">
+                <i class="fas fa-save me-2"></i>Consigner
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Bouton d'appel mobile -->
+<button class="mobile-call-btn" id="mobileCallBtn" style="display: none;">
+    <i class="fas fa-phone"></i>
+</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
@@ -2158,203 +2466,11 @@ function setupTabs() {
 }
 
 // ==================== CHARGEMENT DES DONNÉES CLIENT ====================
-// Fonction pour ajouter les styles du loader
-function addLoaderStyles() {
-    if (document.getElementById('modern-loader-styles')) return;
-    
-    const styles = `
-        <style id="modern-loader-styles">
-            .modern-loader-container {
-                display: flex;
-                align-items: center;
-                gap: 1.5rem;
-                padding: 1rem;
-                background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-                border-radius: 16px;
-                border: 1px solid rgba(67, 97, 238, 0.1);
-                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-                animation: fadeInUp 0.6s ease-out;
-            }
-            
-            .pulse-avatar {
-                position: relative;
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 1.5rem;
-                box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
-            }
-            
-            .pulse-ring {
-                position: absolute;
-                top: -5px;
-                left: -5px;
-                right: -5px;
-                bottom: -5px;
-                border: 2px solid var(--primary-color);
-                border-radius: 50%;
-                animation: pulseRing 2s ease-out infinite;
-            }
-            
-            .loading-content {
-                flex: 1;
-            }
-            
-            .loading-text {
-                font-size: 1.1rem;
-                font-weight: 600;
-                color: var(--dark-color);
-                margin-bottom: 0.25rem;
-                background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-            }
-            
-            .loading-subtext {
-                font-size: 0.9rem;
-                color: var(--gray-color);
-                margin-bottom: 1rem;
-            }
-            
-            .wave-loader {
-                display: flex;
-                align-items: end;
-                gap: 3px;
-                height: 20px;
-            }
-            
-            .wave-bar {
-                width: 4px;
-                background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-                border-radius: 2px;
-                animation: wave 1.2s ease-in-out infinite;
-            }
-            
-            .wave-bar:nth-child(1) { animation-delay: 0s; height: 5px; }
-            .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 10px; }
-            .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 15px; }
-            .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 10px; }
-            .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 5px; }
-            
-            /* Animations */
-            @keyframes pulseRing {
-                0% {
-                    transform: scale(1);
-                    opacity: 1;
-                }
-                50% {
-                    transform: scale(1.1);
-                    opacity: 0.5;
-                }
-                100% {
-                    transform: scale(1.2);
-                    opacity: 0;
-                }
-            }
-            
-            @keyframes wave {
-                0%, 60%, 100% {
-                    transform: scaleY(0.4);
-                }
-                30% {
-                    transform: scaleY(1);
-                }
-            }
-            
-            @keyframes fadeInUp {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-            
-            /* Styles pour l'état d'erreur */
-            .error-state {
-                display: flex;
-                align-items: center;
-                gap: 1.5rem;
-                padding: 1.5rem;
-                background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-                border-radius: 16px;
-                border: 1px solid rgba(239, 68, 68, 0.2);
-                box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1);
-                animation: shake 0.5s ease-in-out;
-            }
-            
-            .error-icon {
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, var(--danger-color), #dc2626);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-size: 1.5rem;
-                box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-            }
-            
-            .error-content {
-                flex: 1;
-            }
-            
-            .error-title {
-                font-size: 1.1rem;
-                font-weight: 600;
-                color: var(--danger-color);
-                margin-bottom: 0.5rem;
-            }
-            
-            .error-message {
-                font-size: 0.9rem;
-                color: #7f1d1d;
-                margin-bottom: 1rem;
-                line-height: 1.4;
-            }
-            
-            .retry-btn {
-                background: linear-gradient(135deg, var(--danger-color), #dc2626);
-                color: white;
-                border: none;
-                padding: 0.5rem 1rem;
-                border-radius: 8px;
-                font-weight: 500;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-            }
-            
-            .retry-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-            }
-            
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                25% { transform: translateX(-5px); }
-                75% { transform: translateX(5px); }
-            }
-        </style>
-    `;
-    
-    document.head.insertAdjacentHTML('beforeend', styles);
-}
 async function loadClientData(clientId) {
     try {
         console.log("Tentative de chargement des données pour l'ID:", clientId);
+        
+        // Afficher le loader amélioré
         document.getElementById('client-name').innerHTML = `
             <div class="modern-loader-container">
                 <div class="pulse-avatar">
@@ -2375,9 +2491,6 @@ async function loadClientData(clientId) {
             </div>
         `;
 
-        // Ajouter les styles CSS pour le loader
-        addLoaderStyles();
-        
         const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=getClientDetails&clientId=${encodeURIComponent(clientId)}`;
         console.log("URL de l'API:", apiUrl);
         
@@ -2400,14 +2513,30 @@ async function loadClientData(clientId) {
         
     } catch (error) {
         console.error("Erreur complète:", error);
-        alert("Erreur lors du chargement des données du client: " + error.message);
+        
+        // Afficher un état d'erreur élégant
+        document.getElementById('client-name').innerHTML = `
+            <div class="error-state">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="error-content">
+                    <div class="error-title">Erreur de chargement</div>
+                    <div class="error-message">${error.message}</div>
+                    <button class="retry-btn" onclick="location.reload()">
+                        <i class="fas fa-redo"></i> Réessayer
+                    </button>
+                </div>
+            </div>
+        `;
     }
 }
 
 // ==================== AFFICHAGE DES DONNÉES CLIENT ====================
 async function displayClientData(data) {
     console.log("Structure complète des données:", data);
-        // Calcul de l'acompte total
+    
+    // Calcul de l'acompte total
     const depositAmount = parseFloat(data["Acompte (FCFA)"]) || 0;
     const complement1Amount = parseFloat(data["Complement 1"]) || 0;
     const complement2Amount = parseFloat(data["Complement 2"]) || 0;
@@ -2495,6 +2624,7 @@ async function displayClientData(data) {
     const statutVente = data["Statut de la vente"] || ''; 
     console.log("Statut de la vente importé:", statutVente); 
     statusElement.textContent = statutVente;
+    
     // Initialiser le statut après avoir chargé toutes les données
     setTimeout(() => {
         initializeStatus();
@@ -2522,6 +2652,7 @@ function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('fr-FR');
 }
+
 // ==================== IMPRESSION ====================
 async function printClientDetails() {
     // Récupération de l'ID du client depuis le DOM
@@ -2686,6 +2817,10 @@ function showSuccessMessage(message) {
 
 // ==================== GESTION DES COMPLÉMENTS ====================
 function showComplementDialog() {
+    if (!hasCaisseRights()) {
+        alert("⛔ Accès refusé");
+        return;
+    }
     const modalContainer = document.getElementById('modal-container');
     const clientId = document.getElementById('client-id').textContent;
     const clientName = document.getElementById('client-name').textContent;
@@ -3002,6 +3137,7 @@ async function submitComplementForm() {
         submitButton.innerHTML = '<i class="fas fa-check"></i> Enregistrer';
     }
 }
+
 function closeModal() {
     const modal = document.getElementById('complement-dialog');
     if (modal) {
@@ -3013,6 +3149,7 @@ function closeModal() {
         }, 300);
     }
 }
+
 // ==================== GESTION DU STATUT ====================
 
 let pendingStatusChange = null;
@@ -3488,55 +3625,6 @@ function initializeStatus() {
     }
 }
 
-// Fonction pour afficher des messages temporaires stylés
-function showTemporaryMessage(message, type, duration) {
-    console.log(`[showTemporaryMessage] Affichage message: ${message} (type: ${type}, durée: ${duration}ms)`);
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `alert-message ${type}`;
-    messageDiv.textContent = message;
-    
-    // Style CSS intégré
-    messageDiv.style.position = 'fixed';
-    messageDiv.style.top = '20px';
-    messageDiv.style.right = '20px';
-    messageDiv.style.padding = '12px 24px';
-    messageDiv.style.borderRadius = '4px';
-    messageDiv.style.color = 'white';
-    messageDiv.style.fontWeight = 'bold';
-    messageDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-    messageDiv.style.zIndex = '1000';
-    messageDiv.style.animation = 'fadeIn 0.3s ease-out';
-    
-    // Couleurs selon le type
-    if (type === 'success') {
-        messageDiv.style.backgroundColor = '#4CAF50';
-    } else if (type === 'error') {
-        messageDiv.style.backgroundColor = '#F44336';
-    } else {
-        messageDiv.style.backgroundColor = '#2196F3';
-    }
-    
-    document.body.appendChild(messageDiv);
-    console.log('[showTemporaryMessage] Message ajouté au DOM');
-    
-    // Disparaître après la durée spécifiée
-    setTimeout(() => {
-        console.log('[showTemporaryMessage] Début de la disparition du message');
-        messageDiv.style.animation = 'fadeOut 0.3s ease-out';
-        setTimeout(() => {
-            if (messageDiv.parentNode) {
-                document.body.removeChild(messageDiv);
-                console.log('[showTemporaryMessage] Message retiré du DOM');
-            }
-        }, 300);
-    }, duration);
-}
-
-// Initialiser les écouteurs d'événements après le chargement du DOM
-document.addEventListener('DOMContentLoaded', function() {
-    setupEtuiReferenceListener();
-    initializeStatus();
-});
 // ==================== GESTION DES APPELS ====================
 
 // Configuration des appels
@@ -3615,8 +3703,6 @@ function initiatePhoneCall() {
 function showCallConfirmation() {
     document.getElementById('confirmPhoneNumber').textContent = 
         formatPhoneNumber(currentCallData.phoneNumber);
-    document.getElementById('confirmClientInfo').textContent = 
-        `Client: ${currentCallData.clientId}`;
     
     showModal('callConfirmationModal');
 }
@@ -3688,7 +3774,7 @@ async function saveCallLog() {
     
     // Validation de la note
     if (note.length < CALL_CONFIG.minNoteLength) {
-        showTemporaryMessage(`Veuillez saisir une note d'au moins ${CALL_CONFIG.minNoteLength} caractères`, 'warning', 3000);
+        showTemporaryMessage(`Veuillez saisir une note d'au moins ${CALL_CONFIG.minNoteLength} caractères`, "warning", 3000);
         noteField.focus();
         return;
     }
@@ -3739,6 +3825,7 @@ async function saveCallLog() {
         localStorage.removeItem('pendingCallLog');
     }
 }
+
 // Fermer la modale de consigne
 function closeLogModal() {
     hideModal('logCallModal');
@@ -3775,7 +3862,7 @@ function initializeCallSystem() {
     }
     
     // Vérifier les appels en attente au chargement de la page
-    //setTimeout(openAutoCallLog, 1000);
+    setTimeout(openAutoCallLog, 1000);
     
     // Configurer la fermeture des modales en cliquant à l'extérieur
     setupModalCloseHandlers();
@@ -3823,201 +3910,27 @@ function setupKeyboardShortcuts() {
     });
 }
 
-// Ajouter les styles CSS pour le système d'appel
-function addCallSystemStyles() {
-    if (document.getElementById('call-system-styles')) return;
-    
-    const styles = `
-        <style id="call-system-styles">
-            /* Styles pour le bouton d'appel mobile */
-            .mobile-call-btn {
-                background: linear-gradient(135deg, var(--success-color), #22c55e);
-                color: white;
-                border: none;
-                border-radius: 50%;
-                width: 50px;
-                height: 50px;
-                display: none;
-                align-items: center;
-                justify-content: center;
-                margin: 10px;
-                cursor: pointer;
-                font-size: 20px;
-                box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-                transition: all 0.3s ease;
-                position: relative;
-                overflow: hidden;
-            }
-
-            .mobile-call-btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
-            }
-
-            .mobile-call-btn:active {
-                transform: translateY(0);
-            }
-
-            /* Styles des modales */
-            .call-modal {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.7);
-                backdrop-filter: blur(5px);
-                display: none;
-                justify-content: center;
-                align-items: center;
-                z-index: 10000;
-                animation: fadeIn 0.3s ease;
-            }
-
-            .modal-dialog {
-                background: white;
-                border-radius: 12px;
-                padding: 0;
-                width: 90%;
-                max-width: 400px;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-                animation: slideUp 0.3s ease;
-                overflow: hidden;
-            }
-
-            .modal-header {
-                background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-                color: white;
-                padding: 20px;
-                text-align: center;
-            }
-
-            .modal-header h3 {
-                margin: 0;
-                font-size: 1.3rem;
-                font-weight: 600;
-            }
-
-            .modal-body {
-                padding: 25px;
-                text-align: center;
-            }
-
-            .phone-number-display {
-                font-size: 1.5rem;
-                font-weight: 700;
-                color: var(--dark-color);
-                margin: 15px 0;
-                padding: 10px;
-                background: #f8f9fa;
-                border-radius: 8px;
-                border: 2px solid #e9ecef;
-            }
-
-            .client-info {
-                color: var(--gray-color);
-                font-size: 0.9rem;
-                margin-bottom: 20px;
-            }
-
-            .modal-footer {
-                padding: 20px;
-                display: flex;
-                gap: 10px;
-                justify-content: center;
-                border-top: 1px solid #e9ecef;
-            }
-
-            /* Formulaire de consigne */
-            .form-group {
-                margin-bottom: 15px;
-                text-align: left;
-            }
-
-            .form-label {
-                display: block;
-                margin-bottom: 5px;
-                font-weight: 600;
-                color: var(--dark-color);
-            }
-
-            .form-control {
-                width: 100%;
-                padding: 10px 12px;
-                border: 2px solid #e9ecef;
-                border-radius: 8px;
-                font-size: 0.95rem;
-                transition: border-color 0.3s ease;
-            }
-
-            .form-control:focus {
-                outline: none;
-                border-color: var(--primary-color);
-                box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
-            }
-
-            .form-control[readonly] {
-                background-color: #f8f9fa;
-                color: var(--gray-color);
-            }
-
-            textarea.form-control {
-                resize: vertical;
-                min-height: 80px;
-            }
-
-            /* Animations */
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-
-            @keyframes slideUp {
-                from { 
-                    opacity: 0;
-                    transform: translateY(30px);
-                }
-                to { 
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-
-            /* Responsive */
-            @media (max-width: 480px) {
-                .modal-dialog {
-                    width: 95%;
-                    margin: 10px;
-                }
-                
-                .modal-body {
-                    padding: 20px 15px;
-                }
-                
-                .phone-number-display {
-                    font-size: 1.3rem;
-                }
-                
-                .modal-footer {
-                    flex-direction: column;
-                }
-                
-                .btn {
-                    width: 100%;
-                }
-            }
-        </style>
-    `;
-    
-    document.head.insertAdjacentHTML('beforeend', styles);
-}
-
 // Initialiser le système d'appel au chargement de la page
 document.addEventListener('DOMContentLoaded', function() {
-    addCallSystemStyles();
     initializeCallSystem();
 });
+
 // ==================== FONCTIONS UTILITAIRES ====================
+// Fonction pour vérifier les droits d'accès à la caisse
+function hasCaisseRights() {
+    // Vérifie si l'utilisateur est connecté
+    const currentUser = sessionStorage.getItem("utilisateur");
+    if (!currentUser) {
+        console.log('🚫 Utilisateur non connecté - accès caisse refusé');
+        return false;
+    }
+    
+    // Vérifie directement le statut caisse
+    const hasCaisseAccess = sessionStorage.getItem("hasCaisseAccess") === "true";
+    
+    return hasCaisseAccess;
+}
+
 function showTemporaryMessage(message, type, duration) {
     console.log(`[showTemporaryMessage] Affichage message: ${message} (type: ${type}, durée: ${duration}ms)`);
     const messageDiv = document.createElement('div');
@@ -4032,94 +3945,13 @@ function showTemporaryMessage(message, type, duration) {
         console.log('[showTemporaryMessage] Début de la disparition du message');
         messageDiv.style.animation = 'fadeOut 0.3s ease-out';
         setTimeout(() => {
-            document.body.removeChild(messageDiv);
-            console.log('[showTemporaryMessage] Message retiré du DOM');
+            if (messageDiv.parentNode) {
+                document.body.removeChild(messageDiv);
+                console.log('[showTemporaryMessage] Message retiré du DOM');
+            }
         }, 300);
     }, duration);
 }
-
-// Ajout des styles d'animation pour les messages
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeOut {
-        from { opacity: 1; transform: translateY(0); }
-        to { opacity: 0; transform: translateY(-20px); }
-    }
-`;
-document.head.appendChild(style);
 </script>
-<!-- Modal de confirmation d'appel -->
-<!-- Modal de confirmation d'appel -->
-<div class="call-modal" id="callConfirmationModal">
-    <div class="modal-dialog">
-        <div class="modal-header">
-            <h3><i class="fas fa-phone-alt me-2"></i>Confirmer l'appel</h3>
-        </div>
-        <div class="modal-body">
-            <div class="phone-number-display" id="confirmPhoneNumber"></div>
-            <div class="client-info" id="confirmClientInfo"></div>
-            <p style="color: var(--gray-color); font-size: 0.9rem;">
-                <i class="fas fa-info-circle me-1"></i>
-                L'appel sera passé et une consigne s'ouvrira automatiquement
-            </p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="cancelCall()">
-                <i class="fas fa-times me-2"></i>Annuler
-            </button>
-            <button class="btn btn-primary" onclick="confirmCall()">
-                <i class="fas fa-phone me-2"></i>Appeler
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal de consigne d'appel -->
-<div class="call-modal" id="logCallModal">
-    <div class="modal-dialog">
-        <div class="modal-header">
-            <h3><i class="fas fa-clipboard-list me-2"></i>Consigner l'appel</h3>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label class="form-label">ID Client</label>
-                <input type="text" id="logClientId" class="form-control" readonly>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Utilisateur</label>
-                <input type="text" id="logUser" class="form-control" readonly>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Numéro appelé</label>
-                <input type="text" id="logPhoneNumber" class="form-control" readonly>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Notes de l'appel <span style="color: var(--danger-color);">*</span></label>
-                <textarea id="logNote" class="form-control" 
-                          placeholder="Décrivez le contenu de l'appel, les décisions prises, les actions à suivre..."></textarea>
-                <div style="font-size: 0.8rem; color: var(--gray-color); margin-top: 5px;">
-                    Minimum 5 caractères requis
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="closeLogModal()">
-                <i class="fas fa-times me-2"></i>Ne Pas Consigner
-            </button>
-            <button class="btn btn-primary" id="saveLogBtn" onclick="saveCallLog()">
-                <i class="fas fa-save me-2"></i>Consigner
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Bouton d'appel mobile -->
-<button class="mobile-call-btn" id="mobileCallBtn" style="display: none;">
-    <i class="fas fa-phone"></i>
-</button>
 </body>
 </html>
