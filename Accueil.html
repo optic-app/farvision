@@ -8396,6 +8396,7 @@ function openDataProduit() {
 window.location.href = 'Stock.html';
 }
 
+
 function openDatafacture() {
 window.location.href = 'Facturation.html';
 }
@@ -8911,6 +8912,22 @@ function hasAdminRights() {
     return isAdmin;
 }
 
+
+// Fonction pour vérifier les droits d'accès à la caisse
+function hasCaisseRights() {
+    // Vérifie si l'utilisateur est connecté
+    const currentUser = sessionStorage.getItem("utilisateur");
+    if (!currentUser) {
+        console.log('🚫 Utilisateur non connecté - accès caisse refusé');
+        return false;
+    }
+    
+    // Vérifie directement le statut caisse
+    const hasCaisseAccess =         sessionStorage.getItem("hasCaisseAccess") === "true";
+    
+    return hasCaisseAccess;
+}
+
 // Fonction protégée pour ajouter un utilisateur
 window.openAddUserForm = function() {
     if (!hasAdminRights()) {
@@ -9025,6 +9042,10 @@ async function submitAddUserForm() {
 // 🔹 Fonction principale
 // =========================
 window.openCaisse = function(action, title) {
+        if (!hasCaisseRights()) {
+        alert("⛔ Accès refusé");
+        return;
+    }
     const modalContainer = document.getElementById('modal-container');
     const tableId = `caisseTable-${action}`;
     const dataId = `caisseData-${action}`;
@@ -12539,6 +12560,10 @@ async function fetchDataFromGoogleSheet() {
 }
 // Function to fetch categories from Google Sheets
 window.openDepense = async function() {
+        if (!hasCaisseRights()) {
+        alert("⛔ Accès refusé");
+        return;
+    }
     const modalContainer = document.getElementById('modal-container');
 
     // Afficher un loader pendant le chargement
@@ -12724,6 +12749,10 @@ const totalSteps = 4;
 
 // Fonction pour ouvrir la modal de nouvelle vente
 function openNewSale() {
+    if (!hasCaisseRights()) {
+        alert("⛔ Accès refusé");
+        return;
+    }
     // Vérifier si la modal existe déjà
     let modal = document.getElementById('newSaleModal');
     
