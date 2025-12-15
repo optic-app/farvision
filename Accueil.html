@@ -14468,7 +14468,7 @@ function calculerTotal() {
     const acompte = getValue('acompte');
     
     // NOUVEAU : Calcul automatique de la TVA (18% du montant monture)
-    const tvaMonture = montantMonture * 0.18;
+ const tvaMonture = montantMonture * (18/118);
     
     // Mettre à jour le champ TVA (lecture seule)
     const tvaInput = modal.querySelector('#tva');
