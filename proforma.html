@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique des Proformas - VisionPro</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --warning-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            
+            --primary-50: #f0f4ff;
+            --primary-100: #d9e4ff;
+            --primary-200: #b3c9ff;
+            --primary-300: #8daef8;
+            --primary-400: #6793f1;
+            --primary-500: #4f46e5;
+            --primary-600: #4338ca;
+            --primary-700: #3730a3;
+            --primary-800: #312e81;
+            --primary-900: #1e1b4b;
+            
+            --gray-50: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-300: #d4d4d4;
+            --gray-400: #a3a3a3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            
+            --border-radius-sm: 8px;
+            --border-radius-md: 16px;
+            --border-radius-lg: 24px;
+            --border-radius-xl: 32px;
+            --border-radius-full: 9999px;
+            
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            font-smooth: always;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: #2d3748;
+            position: relative;
+        }
+
+        .admin-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem 2rem;
+            box-shadow: var(--glass-shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-300);
+        }
+
+        .back-btn {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            position: relative;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-400);
+            color: var(--primary-600);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-50);
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.8125rem;
+        }
+
+        .main-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: 1.75rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .filters-panel {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-md);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius-sm);
+            font-family: inherit;
+            font-size: 0.875rem;
+            transition: all 0.3s var(--transition-smooth);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .form-control-sm {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+
+        .table-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            max-height: 600px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .proforma-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        .proforma-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .proforma-table th {
+            background: rgba(79, 70, 229, 0.95);
+            color: white;
+            font-weight: 600;
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--primary-300);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .proforma-table td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            vertical-align: middle;
+        }
+
+        .proforma-table tbody tr:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid transparent;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-left-color: #3b82f6;
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-left-color: #ef4444;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-left-color: #10b981;
+        }
+
+        .loading-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            gap: 1rem;
+        }
+
+        .spinner-border {
+            width: 2rem;
+            height: 2rem;
+            border: 3px solid var(--primary-400);
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray-500);
+            font-style: italic;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--primary-700);
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--gray-500);
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .small {
+            font-size: 0.875rem;
+        }
+
+        .me-1 { margin-right: 0.25rem; }
+        .me-2 { margin-right: 0.5rem; }
+        .mt-2 { margin-top: 0.5rem; }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 1rem;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .filters-panel {
+                padding: 1rem;
+            }
+            
+            .table-container {
+                max-height: 500px;
+            }
+            
+            .proforma-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        .grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .grid-cols-1 { grid-template-columns: repeat(1, 1fr); }
+        .grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+        @media (min-width: 768px) {
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); }
+            .md\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); }
+            .md\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+
+        .items-end {
+            align-items: end;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .flex-1 {
+            flex: 1;
+        }
+
+        .min-w-180 {
+            min-width: 180px;
+        }
+
+        .min-w-200 {
+            min-width: 200px;
+        }
+
+        .text-muted {
+            color: var(--gray-500);
+        }
+
+        .border-top {
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .p-2 {
+            padding: 0.5rem;
+        }
+
+        .justify-content-between {
+            justify-content: space-between;
+        }
+
+        .align-items-center {
+            align-items: center;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="header">
+            <div class="header-left">
+                <h1>VisionPro</h1>
+            </div>
+            <div class="user-info">
+                <span id="username-display"></span>
+                <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff" alt="Photo de profil" class="profile-img">
+            </div>
+        </header>
+
+        <div class="back-btn">
+            <button class="btn btn-primary" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+        </div>
+
+        <div class="main-content">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-history"></i>
+                    Historique des Proformas
+                </h2>
+            </div>
+
+            <!-- Filtres -->
+            <div class="filters-panel">
+                <div class="grid md:grid-cols-4 gap-4 items-end">
+                    <!-- Filtre Date Début -->
+                    <div class="form-group">
+                        <label for="proformaDateStart" class="form-label">Date début</label>
+                        <input type="date" id="proformaDateStart" class="form-control" onchange="applyProformaFilter()">
+                    </div>
+                    
+                    <!-- Filtre Date Fin -->
+                    <div class="form-group">
+                        <label for="proformaDateEnd" class="form-label">Date fin</label>
+                        <input type="date" id="proformaDateEnd" class="form-control" onchange="applyProformaFilter()">
+                    </div>
+                    
+                    <!-- Filtre Nom Complet -->
+                    <div class="form-group">
+                        <label for="filterNomComplet" class="form-label">Nom complet</label>
+                        <input type="text" id="filterNomComplet" class="form-control" placeholder="Rechercher..." oninput="applyProformaFilter()">
+                    </div>
+
+                    <!-- Filtre Contact -->
+                    <div class="form-group">
+                        <label for="filterContact" class="form-label">Contact</label>
+                        <input type="text" id="filterContact" class="form-control" placeholder="Numéro..." oninput="applyProformaFilter()">
+                    </div>
+                </div>
+                
+                <div class="flex justify-content-between align-items-center mt-4">
+                    <button class="btn btn-outline btn-sm" onclick="resetProformaFilter()">
+                        <i class="fas fa-undo"></i> Réinitialiser les filtres
+                    </button>
+                    
+                    <div id="proforma-stats" class="small text-muted">
+                        Chargement...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tableau -->
+            <div class="table-container">
+                <table class="proforma-table" id="proformaTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom Complet</th>
+                            <th>Contact</th>
+                            <th>Date Naissance</th>
+                            <th>Civilité</th>
+                            <th>Type Verre</th>
+                            <th>Gamme Verre</th>
+                            <th>Choix Monture</th>
+                            <th class="text-right">Montant Monture</th>
+                            <th class="text-right">Montant Verres</th>
+                            <th class="text-right">Total Brut</th>
+                            <th>PDF</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proformaData">
+                        <tr>
+                            <td colspan="12" class="text-center">
+                                <div class="loading-indicator">
+                                    <div class="spinner-border"></div>
+                                    <div>Chargement des proformas...</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Message -->
+            <div id="proforma-message" class="alert" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Conteneur pour les modales -->
+    <div id="modal-container"></div>
+
+    <script>
+        // Variables globales
+        let allProformaData = [];
+        let currentUser = '';
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            // Récupérer l'utilisateur connecté
+            currentUser = sessionStorage.getItem("utilisateur") || localStorage.getItem("utilisateur");
+            
+            if (currentUser) {
+                document.getElementById('username-display').textContent = currentUser;
+                document.querySelector('.profile-img').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser)}&background=6366f1&color=fff`;
+            } else {
+                document.getElementById('username-display').textContent = 'Utilisateur';
+            }
+            
+            // Charger les données initiales
+            loadProformaData();
+        });
+
+        // ==================== NAVIGATION ====================
+        function goBack() {
+            window.history.back();
+            window.location.href = 'Accueil.html';
+        }
+
+        // ==================== UTILITAIRES ====================
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
+                return isNaN(date.getTime()) ? dateString : date.toLocaleDateString('fr-FR');
+            } catch (e) {
+                return dateString;
+            }
+        }
+
+        function formatCurrency(amount) {
+            if (typeof amount !== 'number') amount = parseFloat(amount) || 0;
+            return amount.toLocaleString('fr-FR', { 
+                minimumFractionDigits: 2, 
+                maximumFractionDigits: 2 
+            });
+        }
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function showMessage(message, type, containerId) {
+            const messageDiv = document.getElementById(containerId);
+            if (messageDiv) {
+                messageDiv.textContent = message;
+                messageDiv.className = `alert alert-${type}`;
+                messageDiv.style.display = 'flex';
+                
+                // Masquer après 5 secondes
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function updateStats(data) {
+            const statsDiv = document.getElementById('proforma-stats');
+            if (!statsDiv) return;
+            
+            if (!data || data.length === 0) {
+                statsDiv.textContent = 'Aucun proforma trouvé';
+                return;
+            }
+            
+            const totalBrut = data.reduce((sum, item) => sum + (item.total_brut || 0), 0);
+            const totalMontures = data.reduce((sum, item) => sum + (item.montant_monture || 0), 0);
+            const totalVerres = data.reduce((sum, item) => sum + (item.montant_verres || 0), 0);
+            
+            statsDiv.innerHTML = `
+                <span class="me-3"><strong>${data.length}</strong> proformas</span>
+                <span class="me-3">Total brut: <strong>${formatCurrency(totalBrut)}</strong></span>
+                <span>Montures: <strong>${formatCurrency(totalMontures)}</strong></span>
+                <span class="ms-3">Verres: <strong>${formatCurrency(totalVerres)}</strong></span>
+            `;
+        }
+
+        // ==================== GESTION DES PROFORMAS ====================
+        async function loadProformaData() {
+            const proformaData = document.getElementById('proformaData');
+            proformaData.innerHTML = `
+                <tr>
+                    <td colspan="12" class="text-center">
+                        <div class="loading-indicator">
+                            <div class="spinner-border"></div>
+                            <div>Chargement des proformas...</div>
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            try {
+                const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=historiquedesdevis`;
+                
+                const response = await fetch(apiUrl);
+                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+                
+                const responseData = await response.json();
+                
+                if (!responseData?.data?.rows) {
+                    throw new Error('Structure de données invalide');
+                }
+                
+                // Transformation des données
+                allProformaData = responseData.data.rows.map(row => {
+                    const headers = responseData.data.headers;
+                    return {
+                        id: row[headers.indexOf('id')] || '',
+                        nom_complet: row[headers.indexOf('nom_complet')] || '',
+                        contact: row[headers.indexOf('contact')] || '',
+                        date_naissance: row[headers.indexOf('date_naissance')] || '',
+                        civilite: row[headers.indexOf('civilite')] || '',
+                        type_verre: row[headers.indexOf('type_verre')] || '',
+                        gamme_verre: row[headers.indexOf('gamme_verre')] || '',
+                        choix_monture: row[headers.indexOf('choix_monture')] || '',
+                        sphere_od: parseFloat(row[headers.indexOf('sphere_od')]) || 0,
+                        cylindre_od: parseFloat(row[headers.indexOf('cylindre_od')]) || 0,
+                        od_axe: row[headers.indexOf('od_ axe')] || '',
+                        od_add: parseFloat(row[headers.indexOf('od_add')]) || 0,
+                        sphere_og: parseFloat(row[headers.indexOf('sphere_og')]) || 0,
+                        cylindre_og: parseFloat(row[headers.indexOf('cylindre_og')]) || 0,
+                        og_axe: row[headers.indexOf('og_axe')] || '',
+                        og_add: parseFloat(row[headers.indexOf('og_add')]) || 0,
+                        date_soin: row[headers.indexOf('date_soin')] || '',
+                        montant_monture: parseFloat(row[headers.indexOf('montant_monture')]) || 0,
+                        montant_verres: parseFloat(row[headers.indexOf('montant_verres')]) || 0,
+                        total_brut: parseFloat(row[headers.indexOf('total_brut')]) || 0,
+                        remise: row[headers.indexOf('remise')] || '',
+                        net_a_payer: parseFloat(row[headers.indexOf('net_a_payer')]) || 0,
+                        lien: row[headers.indexOf('lien')] || ''
+                    };
+                });
+
+                // TRI DES DONNÉES PAR DATE DE SOIN DÉCROISSANTE
+                allProformaData.sort((a, b) => {
+                    const dateA = a.date_soin ? new Date(a.date_soin) : new Date(0);
+                    const dateB = b.date_soin ? new Date(b.date_soin) : new Date(0);
+                    return dateB - dateA; // Ordre décroissant
+                });
+
+                displayFilteredProforma(allProformaData);
+                updateStats(allProformaData);
+               
+            } catch (error) {
+                console.error('Erreur:', error);
+                showMessage(`❌ Erreur: ${error.message || 'Chargement échoué'}`, 'error', 'proforma-message');
+                proformaData.innerHTML = '<tr><td colspan="12" class="text-center no-data">Erreur de chargement</td></tr>';
+            }
+        }
+
+        // Affichage des données filtrées proforma
+        function displayFilteredProforma(data) {
+            const proformaData = document.getElementById('proformaData');
+            
+            if (!data || data.length === 0) {
+                proformaData.innerHTML = '<tr><td colspan="12" class="text-center no-data">Aucun proforma trouvé</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            data.forEach(item => {
+                // Gestion du lien PDF
+                const pdfBtn = item.lien && isValidUrl(item.lien) 
+                    ? `<button class="btn btn-sm btn-outline" onclick="window.open('${item.lien}', '_blank')" title="Voir le PDF">
+                           <i class="fas fa-file-pdf"></i> Voir
+                       </button>`
+                    : '<span class="text-muted">N/A</span>';
+
+                html += `
+                    <tr>
+                        <td><strong>${item.id || 'N/A'}</strong></td>
+                        <td>${item.nom_complet || 'N/A'}</td>
+                        <td>${item.contact || 'N/A'}</td>
+                        <td>${formatDate(item.date_naissance) || 'N/A'}</td>
+                        <td>${item.civilite || 'N/A'}</td>
+                        <td>${item.type_verre || 'N/A'}</td>
+                        <td>${item.gamme_verre || 'N/A'}</td>
+                        <td>${item.choix_monture || 'N/A'}</td>
+                        <td class="text-right">${formatCurrency(item.montant_monture)}</td>
+                        <td class="text-right">${formatCurrency(item.montant_verres)}</td>
+                        <td class="text-right">
+                            <strong>${formatCurrency(item.total_brut)}</strong>
+                        </td>
+                        <td class="text-center">${pdfBtn}</td>
+                    </tr>
+                `;
+            });
+            
+            proformaData.innerHTML = html;
+        }
+
+        // Application des filtres proforma
+        function applyProformaFilter() {
+            const dateStart = document.getElementById('proformaDateStart').value;
+            const dateEnd = document.getElementById('proformaDateEnd').value;
+            const nomComplet = document.getElementById('filterNomComplet').value.toLowerCase();
+            const contact = document.getElementById('filterContact').value.toLowerCase();
+            
+            let filteredData = allProformaData.filter(item => {
+                // Filtre par date de soin
+                let dateMatch = true;
+                if (dateStart || dateEnd) {
+                    const itemDateSoin = item.date_soin ? new Date(item.date_soin) : null;
+                    const startDate = dateStart ? new Date(dateStart) : null;
+                    const endDate = dateEnd ? new Date(dateEnd) : null;
+                    
+                    if (startDate && endDate) {
+                        dateMatch = itemDateSoin >= startDate && itemDateSoin <= endDate;
+                    } else if (startDate) {
+                        dateMatch = itemDateSoin >= startDate;
+                    } else if (endDate) {
+                        dateMatch = itemDateSoin <= endDate;
+                    }
+                }
+
+                // Filtre par nom complet
+                const nomMatch = !nomComplet || 
+                                (item.nom_complet && item.nom_complet.toLowerCase().includes(nomComplet));
+                
+                // Filtre par contact
+                const contactMatch = !contact || 
+                                   (item.contact && item.contact.toLowerCase().includes(contact));
+                
+                return dateMatch && nomMatch && contactMatch;
+            });
+            
+            displayFilteredProforma(filteredData);
+            updateStats(filteredData);
+        }
+
+        // Réinitialisation des filtres proforma
+        function resetProformaFilter() {
+            document.getElementById('proformaDateStart').value = '';
+            document.getElementById('proformaDateEnd').value = '';
+            document.getElementById('filterNomComplet').value = '';
+            document.getElementById('filterContact').value = '';
+            
+            displayFilteredProforma(allProformaData);
+            updateStats(allProformaData);
+        }
+    </script>
+</body>
+</html>
