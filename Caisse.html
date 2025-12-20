@@ -1,0 +1,1692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Caisses - VisionPro</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --warning-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            
+            --primary-50: #f0f4ff;
+            --primary-100: #d9e4ff;
+            --primary-200: #b3c9ff;
+            --primary-300: #8daef8;
+            --primary-400: #6793f1;
+            --primary-500: #4f46e5;
+            --primary-600: #4338ca;
+            --primary-700: #3730a3;
+            --primary-800: #312e81;
+            --primary-900: #1e1b4b;
+            
+            --gray-50: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #e5e5e5;
+            --gray-300: #d4d4d4;
+            --gray-400: #a3a3a3;
+            --gray-500: #737373;
+            --gray-600: #525252;
+            --gray-700: #404040;
+            --gray-800: #262626;
+            --gray-900: #171717;
+            
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            
+            --border-radius-sm: 8px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 20px;
+            --border-radius-full: 9999px;
+            
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            font-smooth: always;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: #2d3748;
+            position: relative;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem 2rem;
+            box-shadow: var(--glass-shadow);
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 2rem;
+            z-index: 1000;
+            animation: slideDown 0.6s var(--transition-bounce);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-300);
+        }
+
+        .back-btn {
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            position: relative;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            color: var(--gray-700);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-600);
+        }
+
+        /* Section des cartes de caisse */
+        .caisses-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-700);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .caisses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Cartes améliorées */
+        .caisse-card {
+            background: white;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            transition: all 0.3s var(--transition-smooth);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .caisse-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(79, 70, 229, 0.15);
+            border-color: var(--primary-300);
+        }
+
+        .caisse-card.active {
+            border-color: var(--primary-500);
+            background: rgba(79, 70, 229, 0.02);
+        }
+
+        .caisse-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+        }
+
+        .caisse-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .caisse-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--border-radius-md);
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .caisse-info {
+            flex: 1;
+        }
+
+        .caisse-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 0.25rem;
+        }
+
+        .caisse-location {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .caisse-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--border-radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-online {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-offline {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        /* Statistiques améliorées */
+        .caisse-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-item {
+            background: var(--gray-50);
+            border-radius: var(--border-radius-md);
+            padding: 0.75rem;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+        .stat-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--primary-700);
+        }
+
+        .stat-value.positive {
+            color: #10b981;
+        }
+
+        .stat-value.negative {
+            color: #ef4444;
+        }
+
+        /* Tableau cumulatif */
+        .cumul-section {
+            margin-top: 3rem;
+        }
+
+        .filters-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .date-range-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius-md);
+            font-family: inherit;
+            font-size: 0.875rem;
+            transition: all 0.3s var(--transition-smooth);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .select-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23737373'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+        }
+
+        .table-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+
+        .cumul-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .cumul-table th {
+            text-align: left;
+            padding: 1rem;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-700);
+            font-weight: 600;
+            border-bottom: 2px solid var(--primary-300);
+            white-space: nowrap;
+        }
+
+        .cumul-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .cumul-table tbody tr:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--border-radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .total-row {
+            background: rgba(79, 70, 229, 0.05);
+            font-weight: 600;
+        }
+
+        .total-row td {
+            border-top: 2px solid var(--primary-300);
+            border-bottom: none;
+        }
+
+        /* Pagination Styles */
+        .pagination-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            margin-top: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .pagination-info {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pagination-navigation {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--glass-border);
+            background: white;
+            color: var(--gray-700);
+            border-radius: var(--border-radius-md);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s var(--transition-smooth);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--primary-50);
+            color: var(--primary-600);
+            border-color: var(--primary-300);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--gray-100);
+        }
+
+        .items-per-page {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .per-page-label {
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+
+        .select-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .modern-select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--border-radius-md);
+            background: white;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+            cursor: pointer;
+            appearance: none;
+            min-width: 70px;
+        }
+
+        .modern-select:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-500);
+            pointer-events: none;
+            font-size: 0.75rem;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid var(--primary-400);
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            margin: 1rem 0;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border-left-color: #3b82f6;
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border-left-color: #ef4444;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-left-color: #10b981;
+        }
+
+        /* Modal Styles for Individual Caisse */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content-large {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            max-width: 1400px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-50);
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary-700);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-500);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s var(--transition-smooth);
+        }
+
+        .modal-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .caisse-value-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-600);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .admin-container {
+                padding: 1rem;
+            }
+            
+            .caisses-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .caisse-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .date-range-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .cumul-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .pagination-controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+            
+            .pagination-navigation {
+                justify-content: center;
+            }
+            
+            .items-per-page {
+                justify-content: center;
+            }
+            
+            .modal-content-large {
+                max-height: 95vh;
+                margin: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .header-left {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .pagination-btn span {
+                display: none;
+            }
+            
+            .pagination-btn i {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <header class="header">
+            <div class="header-left">
+                <h1>VisionPro</h1>
+            </div>
+            <div class="user-info">
+                <span id="username-display"></span>
+                <img src="https://ui-avatars.com/api/?name=Caisse&background=6366f1&color=fff" alt="Photo de profil" class="profile-img">
+            </div>
+        </header>
+
+        <div class="back-btn">
+            <button class="btn btn-primary" onclick="openVueGlobale()">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+        </div>
+
+        <!-- Section des cartes de caisses -->
+        <div class="caisses-section">
+            <h2 class="section-title">
+                <i class="fas fa-cash-register"></i>
+                <span>Caisses Physiques</span>
+            </h2>
+            
+            <div class="caisses-grid" id="caissesContainer">
+                <!-- Les cartes de caisse seront générées dynamiquement ici -->
+                <div class="loading-indicator" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <div>Chargement des caisses...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section tableau cumulatif -->
+        <div class="cumul-section">
+            <h2 class="section-title">
+                <i class="fas fa-table"></i>
+                <span>Vue Cumulée des Caisses</span>
+            </h2>
+            
+            <!-- Panel de filtres -->
+            <div class="filters-panel">
+                <div class="filter-group">
+                    <label><i class="fas fa-calendar-alt"></i> Date début</label>
+                    <input type="date" id="filterDateStart" class="form-control" onchange="applyCumulFilter()">
+                </div>
+                
+                <div class="filter-group">
+                    <label><i class="fas fa-calendar-alt"></i> Date fin</label>
+                    <input type="date" id="filterDateEnd" class="form-control" onchange="applyCumulFilter()">
+                </div>
+                
+                <div class="filter-group">
+                    <label><i class="fas fa-building"></i> Agence</label>
+                    <select id="filterAgence" class="form-control select-control" onchange="applyCumulFilter()">
+                        <option value="">Toutes les agences</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label><i class="fas fa-exchange-alt"></i> Mouvement</label>
+                    <select id="filterMouvement" class="form-control select-control" onchange="applyCumulFilter()">
+                        <option value="">Tous les mouvements</option>
+                        <option value="Entrée">Entrée</option>
+                        <option value="Sortie">Sortie</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label><i class="fas fa-tag"></i> Catégorie</label>
+                    <select id="filterCategorie" class="form-control select-control" onchange="applyCumulFilter()">
+                        <option value="">Toutes les catégories</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button class="btn btn-secondary" onclick="resetCumulFilter()">
+                        <i class="fas fa-undo"></i> Réinitialiser
+                    </button>
+                    <div class="filter-group">
+    <label>&nbsp;</label>
+    <button class="btn btn-primary" onclick="exportCumulData()" title="Exporter les données visibles">
+        <i class="fas fa-file-export"></i> Exporter CSV
+    </button>
+</div>
+                </div>
+            </div>
+            
+            <!-- Tableau cumulatif -->
+            <div class="table-container">
+                <table class="cumul-table" id="cumulTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Agence</th>
+                            <th>Désignation</th>
+                            <th class="text-right">Montant</th>
+                            <th>Mouvement</th>
+                            <th>Utilisateur</th>
+                            <th>Catégorie</th>
+                            <th>Note</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cumulData">
+                        <tr><td colspan="8" class="text-center"><div class="spinner"></div></td></tr>
+                    </tbody>
+                    <tfoot id="cumulTotals"></tfoot>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination-controls">
+                <div class="pagination-info" id="page-info">
+                    <!-- Page info will be injected here -->
+                </div>
+                <div class="pagination-navigation">
+                    <button class="pagination-btn prev-btn" id="prevPage" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        <span>Précédent</span>
+                    </button>
+                    <button class="pagination-btn next-btn" id="nextPage">
+                        <span>Suivant</span>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="items-per-page">
+                    <span class="per-page-label">Ligne:</span>
+                    <div class="select-wrapper">
+                        <select id="itemsPerPageSelect" class="modern-select">
+                            <option value="20">20</option>
+                            <option value="50" selected>50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="cumul-message" class="alert alert-info" style="display:none; margin-top: 1rem;"></div>
+        </div>
+    </div>
+
+    <!-- Conteneur pour les modales -->
+    <div id="modal-container"></div>
+
+    <script>
+        // Variables globales
+        let currentUser = '';
+        const caisseDataStore = {};
+        const allCumulData = [];
+        const caissesConfig = [
+            {
+                id: 'caisse1',
+                name: 'Cotonou',
+                code: 'CTN-CAISSE1',
+                endpoint: 'caisse1',
+                status: 'online',
+                color: '#4f46e5'
+            },
+            {
+                id: 'caisse2',
+                name: 'Porto-Novo',
+                code: 'PNV-CAISSE1',
+                endpoint: 'caisse2',
+                status: 'online',
+                color: '#8b5cf6'
+            },
+            {
+                id: 'caisse3',
+                name: 'Bohicon',
+                code: 'BHC-CAISSE1',
+                endpoint: 'caisse3',
+                status: 'online',
+                color: '#06b6d4'
+            }
+        ];
+function exportCumulData() {
+    const dataToExport = filteredData.length > 0 ? filteredData : allCumulData;
+    const prefix = 'Vue_Cumulee_Caisses';
+    exportToCSV(dataToExport, prefix);
+}
+        // Variables de pagination
+        let currentPage = 1;
+        let itemsPerPage = 50;
+        let filteredData = [];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async () => {
+            currentUser = sessionStorage.getItem("utilisateur") || localStorage.getItem("utilisateur");
+            
+            if (currentUser) {
+                document.getElementById('username-display').textContent = currentUser;
+                document.querySelector('.profile-img').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser)}&background=6366f1&color=fff`;
+            } else {
+                document.getElementById('username-display').textContent = 'Gestionnaire';
+            }
+            
+            // Configurer les événements
+            setupEventListeners();
+            
+            // Charger toutes les caisses
+            await loadAllCaisses();
+            
+            // Charger les données cumulatives
+            loadCumulData();
+        });
+
+        // Configuration des événements
+        function setupEventListeners() {
+            
+            // Pagination
+            document.getElementById('prevPage').addEventListener('click', () => changePage(-1));
+            document.getElementById('nextPage').addEventListener('click', () => changePage(1));
+            
+            // Items par page
+            document.getElementById('itemsPerPageSelect').addEventListener('change', function() {
+                itemsPerPage = parseInt(this.value);
+                currentPage = 1;
+                updatePagination();
+                displayCurrentPage();
+            });
+        }
+
+        function openVueGlobale() {
+            try {
+                const homePath = 'Accueil.html';
+                window.location.href = homePath;
+            } catch (error) {
+                console.error("Erreur d'ouverture:", error);
+                alert("Impossible d'ouvrir la page. Contactez l'administrateur.");
+            }
+        }
+
+
+        // ==================== CHARGEMENT DES CAISSES ====================
+async function loadAllCaisses() {
+    const container = document.getElementById('caissesContainer');
+    
+    if (!container) return;
+    
+    try {
+        // Stocker la référence à l'indicateur de chargement avant de le modifier
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        
+        // Si l'indicateur existe, l'utiliser, sinon créer un nouvel indicateur
+        let loadingElement = loadingIndicator;
+        if (!loadingIndicator) {
+            loadingElement = document.createElement('div');
+            loadingElement.id = 'loadingIndicator';
+            loadingElement.className = 'loading-indicator';
+            loadingElement.innerHTML = '<div class="spinner"></div><div>Chargement des données...</div>';
+            container.innerHTML = '';
+            container.appendChild(loadingElement);
+        } else {
+            loadingIndicator.innerHTML = '<div class="spinner"></div><div>Chargement des données...</div>';
+        }
+        
+        // Charger les données de chaque caisse
+        const caissePromises = caissesConfig.map(async (caisse) => {
+            try {
+                const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=${caisse.endpoint}`;
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+                
+                const data = await response.json();
+                
+                if (data.success && data.data?.rows) {
+                    caisseDataStore[caisse.id] = {
+                        data: data.data.rows,
+                        headers: data.data.headers,
+                        timestamp: data.timestamp
+                    };
+                    
+                    return {
+                        ...caisse,
+                        data: data.data.rows,
+                        lastUpdate: new Date(data.timestamp || Date.now()).toLocaleDateString('fr-FR'),
+                        totalOperations: data.data.rows.length
+                    };
+                }
+            } catch (error) {
+                console.error(`Erreur chargement ${caisse.name}:`, error);
+                return {
+                    ...caisse,
+                    status: 'offline',
+                    lastUpdate: 'Erreur',
+                    totalOperations: '0'
+                };
+            }
+        });
+        
+        const caissesWithData = await Promise.all(caissePromises);
+        
+        // Afficher les cartes
+        displayCaissesCards(caissesWithData);
+        
+    } catch (error) {
+        console.error('Erreur général:', error);
+        container.innerHTML = '<div class="alert alert-danger">Erreur de chargement des caisses</div>';
+    }
+}
+
+        function displayCaissesCards(caisses) {
+            const container = document.getElementById('caissesContainer');
+            
+            let html = '';
+            caisses.forEach(caisse => {
+                // Calculer les statistiques
+                const stats = calculateCaisseStats(caisse);
+                
+                html += `
+                    <div class="caisse-card" onclick="openCaisseModal('${caisse.id}', '${caisse.name}')">
+                        <div class="caisse-header">
+                            <div class="caisse-icon" style="background: ${caisse.color}">
+                                <i class="fas fa-cash-register"></i>
+                            </div>
+                            <div class="caisse-info">
+                                <div class="caisse-title">${caisse.name}</div>
+                                <div class="caisse-location">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>${caisse.code}</span>
+                                </div>
+                                <div class="caisse-status status-${caisse.status}">
+                                    <i class="fas fa-circle"></i>
+                                    ${caisse.status === 'online' ? 'En ligne' : 'Hors ligne'}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="caisse-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Solde actuel</span>
+                                <span class="stat-value ${stats.solde >= 0 ? 'positive' : 'negative'}">
+                                    ${formatCurrency(stats.solde)}
+                                </span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Total entrées</span>
+                                <span class="stat-value positive">${formatCurrency(stats.totalEntrees)}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Total sorties</span>
+                                <span class="stat-value negative">${formatCurrency(stats.totalSorties)}</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Opérations</span>
+                                <span class="stat-value">${caisse.totalOperations || 0}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row" style="font-size: 0.75rem; color: var(--gray-500); text-align: center;">
+                            <i class="fas fa-sync-alt"></i> Dernière mise à jour: ${caisse.lastUpdate || '--'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function calculateCaisseStats(caisse) {
+            if (!caisse.data || !Array.isArray(caisse.data)) {
+                return { solde: 0, totalEntrees: 0, totalSorties: 0 };
+            }
+            
+            let solde = 0;
+            let totalEntrees = 0;
+            let totalSorties = 0;
+            
+            // Trouver la dernière valeur "En caisse" non vide
+            const lastCaisseValue = caisse.data.find(row => row[5] !== "");
+            if (lastCaisseValue && lastCaisseValue[5]) {
+                solde = parseFloat(lastCaisseValue[5]) || 0;
+            }
+            
+            // Calculer les totaux
+            caisse.data.forEach(row => {
+                const montant = parseFloat(row[2]) || 0;
+                const mouvement = row[3];
+                
+                if (mouvement === 'Entrée') {
+                    totalEntrees += montant;
+                } else if (mouvement === 'Sortie') {
+                    totalSorties += montant;
+                }
+            });
+            
+            return { solde, totalEntrees, totalSorties };
+        }
+
+        // ==================== TABLEAU CUMULATIF ====================
+        async function loadCumulData() {
+            const cumulData = document.getElementById('cumulData');
+            const messageDiv = document.getElementById('cumul-message');
+            
+            cumulData.innerHTML = '<tr><td colspan="8" class="text-center"><div class="spinner"></div></td></tr>';
+            messageDiv.style.display = 'none';
+            
+            try {
+                // Charger les données de toutes les caisses
+                allCumulData.length = 0; // Vider le tableau
+                
+                for (const caisse of caissesConfig) {
+                    const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=${caisse.endpoint}`;
+                    const response = await fetch(apiUrl);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        if (data.success && data.data?.rows) {
+                            // Ajouter les données avec l'identifiant de l'agence
+                            data.data.rows.forEach(row => {
+                                // S'assurer que les indices de colonne sont corrects
+                                allCumulData.push({
+                                    agence: caisse.name,
+                                    agenceCode: caisse.id,
+                                    date: row[0] || '',
+                                    designation: row[1] || '',
+                                    montant: parseFloat(row[2]) || 0,
+                                    mouvement: row[3] || '',
+                                    user: row[4] || '',
+                                    categorie: row[6] || '',
+                                    note: row[7] || '',
+                                    rawDate: new Date(row[0] || Date.now())
+                                });
+                            });
+                        }
+                    }
+                }
+                
+                // Trier par date (plus récent en premier)
+                allCumulData.sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate));
+                
+                // Mettre à jour les filtres
+                updateCumulFilters();
+                
+                // Appliquer le filtre initial
+                applyCumulFilter();
+                
+                
+            } catch (error) {
+                console.error('Erreur chargement cumul:', error);
+                cumulData.innerHTML = '<tr><td colspan="8" class="text-center">Erreur de chargement</td></tr>';
+                showMessage('cumul-message', '❌ Erreur lors du chargement des données', 'danger');
+            }
+        }
+
+        function updateCumulFilters() {
+            // Mettre à jour les filtres Agence
+            const agenceFilter = document.getElementById('filterAgence');
+            agenceFilter.innerHTML = '<option value="">Toutes les agences</option>';
+            caissesConfig.forEach(caisse => {
+                agenceFilter.innerHTML += `<option value="${caisse.id}">${caisse.name}</option>`;
+            });
+            
+            // Mettre à jour les filtres Catégorie
+            const categorieFilter = document.getElementById('filterCategorie');
+            const categories = [...new Set(allCumulData.map(item => item.categorie).filter(Boolean))];
+            categorieFilter.innerHTML = '<option value="">Toutes les catégories</option>';
+            categories.forEach(cat => {
+                categorieFilter.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+            
+            // Définir les dates par défaut (dernière semaine)
+            const today = new Date();
+            const lastWeek = new Date();
+            lastWeek.setDate(lastWeek.getDate() - 7);
+            
+            document.getElementById('filterDateStart').value = lastWeek.toISOString().split('T')[0];
+            document.getElementById('filterDateEnd').value = today.toISOString().split('T')[0];
+        }
+
+        function applyCumulFilter() {
+            const dateStart = document.getElementById('filterDateStart').value;
+            const dateEnd = document.getElementById('filterDateEnd').value;
+            const agence = document.getElementById('filterAgence').value;
+            const mouvement = document.getElementById('filterMouvement').value;
+            const categorie = document.getElementById('filterCategorie').value;
+            
+            filteredData = allCumulData.filter(item => {
+                // Vérification de la date
+                if (!item.date) return false;
+                
+                let dateMatch = true;
+                if (dateStart || dateEnd) {
+                    const itemDate = new Date(item.date);
+                    const startDate = dateStart ? new Date(dateStart) : null;
+                    const endDate = dateEnd ? new Date(dateEnd) : null;
+                    
+                    if (startDate && endDate) {
+                        dateMatch = itemDate >= startDate && itemDate <= endDate;
+                    } else if (startDate) {
+                        dateMatch = itemDate >= startDate;
+                    } else if (endDate) {
+                        dateMatch = itemDate <= endDate;
+                    }
+                }
+                
+                const agenceMatch = !agence || item.agenceCode === agence;
+                const mouvementMatch = !mouvement || item.mouvement === mouvement;
+                const categorieMatch = !categorie || item.categorie === categorie;
+                
+                return dateMatch && agenceMatch && mouvementMatch && categorieMatch;
+            });
+            
+            // Réinitialiser à la première page
+            currentPage = 1;
+            
+            // Mettre à jour l'affichage
+            updatePagination();
+            displayCurrentPage();
+            
+            let message = `📊 ${filteredData.length} enregistrements`;
+            if (filteredData.length !== allCumulData.length) {
+                message += ' (filtres appliqués)';
+            }
+            showMessage('cumul-message', message, 'info');
+        }
+
+        function resetCumulFilter() {
+            const lastWeek = new Date();
+            lastWeek.setDate(lastWeek.getDate() - 7);
+            const today = new Date();
+            
+            document.getElementById('filterDateStart').value = lastWeek.toISOString().split('T')[0];
+            document.getElementById('filterDateEnd').value = today.toISOString().split('T')[0];
+            document.getElementById('filterAgence').value = '';
+            document.getElementById('filterMouvement').value = '';
+            document.getElementById('filterCategorie').value = '';
+            
+            applyCumulFilter();
+            showMessage('cumul-message', '↻ Filtres réinitialisés', 'info');
+        }
+
+        // ==================== PAGINATION ====================
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            const pageInfo = document.getElementById('page-info');
+            
+            if (filteredData.length === 0) {
+                pageInfo.innerHTML = 'Aucune donnée';
+                document.getElementById('prevPage').disabled = true;
+                document.getElementById('nextPage').disabled = true;
+                return;
+            }
+            
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, filteredData.length);
+            
+            // Activer/désactiver les boutons
+            document.getElementById('prevPage').disabled = currentPage === 1;
+            document.getElementById('nextPage').disabled = currentPage === totalPages;
+        }
+
+        function displayCurrentPage() {
+            const cumulData = document.getElementById('cumulData');
+            const cumulTotals = document.getElementById('cumulTotals');
+            
+            if (!filteredData || filteredData.length === 0) {
+                cumulData.innerHTML = '<tr><td colspan="8" class="text-center">Aucune donnée disponible pour les filtres sélectionnés</td></tr>';
+                cumulTotals.innerHTML = '';
+                return;
+            }
+            
+            // Calculer les indices pour la page courante
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+            const pageData = filteredData.slice(startIndex, endIndex);
+            
+            let html = '';
+            pageData.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${formatDate(item.date)}</td>
+                        <td>
+                            <span class="badge" style="background: ${getCaisseColor(item.agenceCode)}20; color: ${getCaisseColor(item.agenceCode)};">
+                                ${item.agence}
+                            </span>
+                        </td>
+                        <td title="${item.designation || ''}">${(item.designation || '').substring(0, 50)}${(item.designation || '').length > 50 ? '...' : ''}</td>
+                        <td class="text-right">${formatCurrency(item.montant)}</td>
+                        <td>
+                            <span class="badge ${item.mouvement === 'Entrée' ? 'badge-success' : 'badge-danger'}">
+                                ${item.mouvement || ''}
+                            </span>
+                        </td>
+                        <td>${item.user || ''}</td>
+                        <td>${item.categorie || ''}</td>
+                        <td title="${item.note || ''}">${(item.note || '').substring(0, 30)}${(item.note || '').length > 30 ? '...' : ''}</td>
+                    </tr>
+                `;
+            });
+            
+            cumulData.innerHTML = html;
+
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+            
+            if (direction === 1 && currentPage < totalPages) {
+                currentPage++;
+            } else if (direction === -1 && currentPage > 1) {
+                currentPage--;
+            }
+            
+            updatePagination();
+            displayCurrentPage();
+            
+            // Faire défiler vers le haut du tableau
+            document.querySelector('.cumul-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // ==================== FONCTIONS UTILITAIRES ====================
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            try {
+                const date = new Date(dateString);
+                return isNaN(date.getTime()) ? dateString : date.toLocaleDateString('fr-FR');
+            } catch (e) {
+                return dateString;
+            }
+        }
+
+        function formatCurrency(amount) {
+            if (typeof amount !== 'number') amount = parseFloat(amount) || 0;
+            return amount.toLocaleString('fr-FR', { 
+                minimumFractionDigits: 0, 
+                maximumFractionDigits: 0 
+            }) + ' FCFA';
+        }
+
+        function showMessage(containerId, message, type) {
+            const messageDiv = document.getElementById(containerId);
+            if (messageDiv) {
+                messageDiv.textContent = message;
+                messageDiv.className = `alert alert-${type}`;
+                messageDiv.style.display = 'flex';
+            }
+        }
+
+        function getCaisseColor(caisseId) {
+            const caisse = caissesConfig.find(c => c.id === caisseId);
+            return caisse ? caisse.color : '#4f46e5';
+        }
+
+        // ==================== MODALES DE CAISSE INDIVIDUELLE ====================
+        function openCaisseModal(caisseId, caisseName) {
+            const modalContainer = document.getElementById('modal-container');
+            
+            // HTML pour la modal de caisse individuelle
+            modalContainer.innerHTML = `
+                <div class="modal-overlay active" id="modal-${caisseId}">
+                    <div class="modal-content-large">
+                        <div class="modal-header">
+                            <h3 class="modal-title">
+                                <i class="fas fa-cash-register" style="color: ${getCaisseColor(caisseId)}"></i>
+                                Caisse ${caisseName}
+                            </h3>
+                            <button class="modal-close" onclick="closeModal()">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div style="text-align: center; padding: 2rem;">
+                                <div class="spinner"></div>
+                                <p>Chargement des données de la caisse...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Charger les données de la caisse
+            setTimeout(() => loadCaisseModalData(caisseId, caisseName), 100);
+        }
+
+        async function loadCaisseModalData(caisseId, caisseName) {
+            const modal = document.querySelector(`#modal-${caisseId} .modal-body`);
+            
+            try {
+                const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=${caisseId}`;
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
+                
+                const data = await response.json();
+                
+                if (data.success && data.data?.rows) {
+                    // Créer le HTML pour la modal avec les données
+                    let html = `
+                        <div class="filters-panel">
+                            <div class="filter-group">
+                                <label><i class="fas fa-calendar-alt"></i> Période</label>
+                                <div class="date-range-container">
+                                    <input type="date" id="modal-${caisseId}-start" class="form-control" value="${getDateLastWeek()}">
+                                    <span>à</span>
+                                    <input type="date" id="modal-${caisseId}-end" class="form-control" value="${getDateToday()}">
+                                </div>
+                            </div>
+                            <div class="filter-group">
+                                <label><i class="fas fa-exchange-alt"></i> Mouvement</label>
+                                <select id="modal-${caisseId}-mouvement" class="form-control select-control">
+                                    <option value="">Tous</option>
+                                    <option value="Entrée">Entrée</option>
+                                    <option value="Sortie">Sortie</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label><i class="fas fa-user"></i> Utilisateur</label>
+                                <select id="modal-${caisseId}-user" class="form-control select-control">
+                                    <option value="">Tous</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label>&nbsp;</label>
+                                <button class="btn btn-secondary" onclick="filterCaisseModal('${caisseId}')">
+                                    <i class="fas fa-filter"></i> Filtrer
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="cumul-table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Désignation</th>
+                                        <th class="text-right">Montant</th>
+                                        <th>Mouvement</th>
+                                        <th>Utilisateur</th>
+                                        <th class="text-right">En Caisse</th>
+                                        <th>Catégorie</th>
+                                        <th>Note</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="modal-${caisseId}-data">
+                    `;
+                    
+                    // Ajouter les données
+                    data.data.rows.forEach(row => {
+                        html += `
+                            <tr>
+                                <td>${formatDate(row[0])}</td>
+                                <td title="${row[1] || ''}">${(row[1] || '').substring(0, 50)}${(row[1] || '').length > 50 ? '...' : ''}</td>
+                                <td class="text-right">${formatCurrency(row[2])}</td>
+                                <td><span class="badge ${row[3] === 'Entrée' ? 'badge-success' : 'badge-danger'}">${row[3] || ''}</span></td>
+                                <td>${row[4] || ''}</td>
+                                <td class="text-right">${formatCurrency(row[5])}</td>
+                                <td>${row[6] || ''}</td>
+                                <td title="${row[7] || ''}">${(row[7] || '').substring(0, 30)}${(row[7] || '').length > 30 ? '...' : ''}</td>
+                            </tr>
+                        `;
+                    });
+                    
+                    html += `
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 1rem; padding: 1rem; background: var(--primary-50); border-radius: var(--border-radius-md);">
+                            <strong>${data.data.rows.length} opérations chargées</strong>
+                        </div>
+                    `;
+                    
+                    modal.innerHTML = html;
+                    
+                    // Remplir la liste des utilisateurs
+                    fillUserFilter(caisseId, data.data.rows);
+                    
+                } else {
+                    throw new Error('Structure de données invalide');
+                }
+                
+            } catch (error) {
+                console.error('Erreur chargement modal:', error);
+                modal.innerHTML = `
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem;"></i>
+                        <h3>Erreur de chargement</h3>
+                        <p>${error.message}</p>
+                        <button class="btn btn-primary" onclick="loadCaisseModalData('${caisseId}', '${caisseName}')">
+                            <i class="fas fa-redo"></i> Réessayer
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function fillUserFilter(caisseId, rows) {
+            const userSelect = document.getElementById(`modal-${caisseId}-user`);
+            const users = [...new Set(rows.map(row => row[4]).filter(user => user && user.trim() !== ''))];
+            
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user;
+                option.textContent = user;
+                userSelect.appendChild(option);
+            });
+        }
+
+        function filterCaisseModal(caisseId) {
+            const startDate = document.getElementById(`modal-${caisseId}-start`).value;
+            const endDate = document.getElementById(`modal-${caisseId}-end`).value;
+            const mouvement = document.getElementById(`modal-${caisseId}-mouvement`).value;
+            const user = document.getElementById(`modal-${caisseId}-user`).value;
+            
+            const rows = document.querySelectorAll(`#modal-${caisseId}-data tr`);
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const dateCell = row.cells[0].textContent;
+                const mouvementCell = row.cells[3].querySelector('.badge').textContent;
+                const userCell = row.cells[4].textContent;
+                
+                let visible = true;
+                
+                // Filtre par date
+                if (startDate || endDate) {
+                    const rowDate = new Date(dateCell);
+                    const start = startDate ? new Date(startDate) : null;
+                    const end = endDate ? new Date(endDate) : null;
+                    
+                    if (start && end) {
+                        visible = rowDate >= start && rowDate <= end;
+                    } else if (start) {
+                        visible = rowDate >= start;
+                    } else if (end) {
+                        visible = rowDate <= end;
+                    }
+                }
+                
+                // Filtre par mouvement
+                if (mouvement && mouvementCell !== mouvement) {
+                    visible = false;
+                }
+                
+                // Filtre par utilisateur
+                if (user && userCell !== user) {
+                    visible = false;
+                }
+                
+                row.style.display = visible ? '' : 'none';
+                if (visible) visibleCount++;
+            });
+            
+            // Mettre à jour le message de comptage
+            const countDiv = document.querySelector(`#modal-${caisseId} .modal-body`).lastElementChild;
+            countDiv.innerHTML = `<strong>${visibleCount} opérations filtrées</strong>`;
+        }
+
+        function getDateToday() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function getDateLastWeek() {
+            const lastWeek = new Date();
+            lastWeek.setDate(lastWeek.getDate() - 7);
+            return lastWeek.toISOString().split('T')[0];
+        }
+
+        function closeModal() {
+            const modal = document.querySelector('.modal-overlay.active');
+            if (modal) {
+                modal.classList.remove('active');
+                setTimeout(() => {
+                    modal.remove();
+                }, 300);
+            }
+        }
+
+        // Fermeture de la modale en cliquant à l'extérieur
+        document.addEventListener('click', function(event) {
+            const modal = document.querySelector('.modal-overlay.active');
+            if (modal && event.target === modal) {
+                closeModal();
+            }
+        });
+
+        // ==================== GESTION DES DONNÉES EN TEMPS RÉEL ====================
+        function refreshCaisseData() {
+            loadAllCaisses();
+            loadCumulData();
+            showMessage('cumul-message', '🔄 Données actualisées', 'info');
+        }
+
+        // Rafraîchissement automatique toutes les 5 minutes
+        setInterval(refreshCaisseData, 5 * 60 * 1000);
+
+function exportToCSV(dataArray, filenamePrefix) {
+    if (!dataArray || dataArray.length === 0) {
+        alert('Aucune donnée à exporter.');
+        return;
+    }
+
+    // Définition des en-têtes et mappage des clés
+    const headers = [
+        { key: 'date', label: 'Date' },
+        { key: 'agence', label: 'Agence' },
+        { key: 'designation', label: 'Désignation' },
+        { key: 'montant', label: 'Montant' },
+        { key: 'mouvement', label: 'Mouvement' },
+        { key: 'user', label: 'Utilisateur' },
+        { key: 'categorie', label: 'Catégorie' },
+        { key: 'note', label: 'Note' }
+    ];
+
+    // Construction des lignes CSV
+    const csvRows = [];
+    
+    // Ligne d'en-tête
+    const headerLabels = headers.map(h => `"${h.label}"`);
+    csvRows.push(headerLabels.join(';'));
+    
+    // Lignes de données
+    dataArray.forEach(item => {
+        const row = headers.map(header => {
+            let value = item[header.key] || '';
+            // Gestion des nombres et du format français
+            if (header.key === 'montant' && typeof value === 'number') {
+                value = value.toLocaleString('fr-FR', { 
+                    minimumFractionDigits: 0, 
+                    maximumFractionDigits: 0 
+                });
+            }
+            // Encadrer les valeurs avec des guillemets pour éviter les problèmes de séparateurs[citation:1]
+            return `"${value.toString().replace(/"/g, '""')}"`;
+        });
+        csvRows.push(row.join(';'));
+    });
+
+    // Création et téléchargement du fichier
+    const csvString = csvRows.join('\n');
+    const blob = new Blob(['\ufeff' + csvString], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.href = url;
+    link.download = `${filenamePrefix}_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+}
+    </script>
+</body>
+</html>
