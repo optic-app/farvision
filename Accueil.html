@@ -6010,7 +6010,7 @@ async function generatePDF() {
     submitBtn.disabled = true;
 
     try {
-        const url = `https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=addproforma`;
+        const url = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=addproforma`;
         
         // Envoyer les données en no-cors
         await fetch(url, {
@@ -6046,7 +6046,7 @@ async function generatePDF() {
 // Fonction unique pour récupérer et ouvrir le PDF (version robuste)
 async function checkAndOpenPDF() {
     try {
-        const url = `https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=getlastpdf`;
+        const url = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=getlastpdf`;
         
         const response = await fetch(url);
         
@@ -6261,7 +6261,7 @@ async function loadFournisseurs(selectId) {
         supplierSelect.disabled = true;
         supplierSelect.innerHTML = '<option value="">-- Chargement en cours --</option>';
         
-        const apiUrl = 'https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=catalogue';
+        const apiUrl = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=catalogue';
         
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error('Erreur de chargement des fournisseurs');
@@ -6615,7 +6615,7 @@ async function submitProductForm() {
     submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...';
 
     try {
-        const apiUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=addProduct";
+        const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=addProduct";
 
         await fetch(apiUrl, {
             method: 'POST',
@@ -6705,7 +6705,7 @@ let currentSortDirection = 'asc';
 async function loadClientsFromScript() {
     showLoading();
 
-    const apiUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=liste";
+    const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=liste";
 
     try {
         const response = await fetch(apiUrl);
@@ -7072,7 +7072,7 @@ function updateTableAndPagination() {
 
 async function fetchDataFromGoogleSheet() {
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=getconfigdata');
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=getconfigdata');
 
         if (!response.ok) {
             throw new Error(`Erreur HTTP! statut: ${response.status}`);
@@ -7246,7 +7246,7 @@ if (isNaN(depenseData.montant)) {
     submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...';
 
     try {
-        const apiUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=addDepense";
+        const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=addDepense";
 
             await fetch(apiUrl, {
               method: 'POST',
@@ -8273,13 +8273,13 @@ function openNewSale() {
     initModal();
 };
 // URL pour soumettre les données
-const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=addCommandeClient";
+const SUBMIT_URL = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=addCommandeClient";
 
 // URL de votre Web App Google Apps Script
-const DATA_SOURCE_URL = 'https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=catalogue';
+const DATA_SOURCE_URL = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=catalogue';
 
 // URL de l'API produits
-const PRODUCTS_URL = 'https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=importproduits';
+const PRODUCTS_URL = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=importproduits';
 
 // Variables globales
 let currentStep = 1;
@@ -9931,7 +9931,7 @@ async function loadGrandCaisseData() {
     msgDiv.style.display = 'none';
 
     try {
-        const apiUrl = `https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=grandcaisse`;
+        const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=grandcaisse`;
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
 
@@ -10107,7 +10107,7 @@ let banqueCategories = [];
 // Charger les catégories de configuration
 async function loadConfigData() {
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=getconfigdata');
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=getconfigdata');
         const json = await response.json();
 
         if (json.success && json.data?.categories) {
