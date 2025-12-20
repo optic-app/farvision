@@ -38,14 +38,28 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-        body {
-            background: url("fond.png") no-repeat center center fixed;
-            background-size: cover;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
+body {
+    background: url("fond.png") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* Styles pour mobile */
+@media (max-width: 768px) {
+    body {
+        background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+        min-height: 100vh;
+        font-family: 'Inter', sans-serif;
+        color: #2d3748;
+        position: relative;
+        display: block; /* Remet à la valeur par défaut */
+        padding: 0; /* Supprime le padding si nécessaire */
+    }
+}
+
 
 .dashboard {
     display: flex;
