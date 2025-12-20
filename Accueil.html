@@ -6019,10 +6019,10 @@ async function generatePDF() {
         remise_type: document.getElementById('remise_type').value,
         net_a_payer: document.getElementById('net_a_payer').value,
         // Ajouter les détails des coûts
-        cout_verre: document.getElementById('coutVerre')?.value,
-        cout_photochromique: document.getElementById('coutPhotochromique')?.value,
-        cout_antireflet: document.getElementById('coutAntireflet')?.value,
-        cout_anti_lumiere_bleu: document.getElementById('coutAntiLumiereBleu')?.value
+      cout_verre: document.getElementById('coutVerre') ? document.getElementById('coutVerre').value : '0',
+        cout_photochromique: document.getElementById('coutPhotochromique') ? document.getElementById('coutPhotochromique').value : '0',
+        cout_antireflet: document.getElementById('coutAntireflet') ? document.getElementById('coutAntireflet').value : '0',
+        cout_anti_lumiere_bleu: document.getElementById('coutAntiLumiereBleu') ? document.getElementById('coutAntiLumiereBleu').value : '0'
     };
 
     // Afficher un indicateur de chargement
