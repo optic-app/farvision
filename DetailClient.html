@@ -1633,7 +1633,7 @@
                     </div>
                 `;
 
-                const apiUrl = `https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=getClientDetails&clientId=${encodeURIComponent(clientId)}`;
+                const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=getClientDetails&clientId=${encodeURIComponent(clientId)}`;
                 
                 const response = await fetch(apiUrl);
                 
@@ -1794,7 +1794,7 @@
                 showLoadingIndicator('Génération du PDF en cours...');
 
                 // 1. Envoyer les données au serveur pour créer le reçu
-                const apiUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=addrecu";
+                const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=addrecu";
                 
                 const payload = {
                     clientId: clientId
@@ -1811,7 +1811,7 @@
                 await new Promise(resolve => setTimeout(resolve, 2000));
 
                 // 3. Récupérer le lien du PDF généré
-                const pdfUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=getrecucaissepdf";
+                const pdfUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=getrecucaissepdf";
                 
                 const response = await fetch(pdfUrl);
                 
@@ -2135,7 +2135,7 @@
             submitButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrement...';
 
             try {
-                const apiUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=addComplement";
+                const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=addComplement";
 
                 await fetch(apiUrl, {
                     method: 'POST',
@@ -2235,7 +2235,7 @@
             }
 
             try {
-                const apiUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=updateDealStatus";
+                const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=updateDealStatus";
                 
                 await fetch(apiUrl, {
                     method: 'POST',
@@ -2473,7 +2473,7 @@
             saveButton.disabled = true;
 
             try {
-                const apiUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=logCall";
+                const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=logCall";
                 
                 await fetch(apiUrl, {
                     method: 'POST',
@@ -2614,7 +2614,7 @@
 
         async function loadEtuiReferences() {
             try {
-                const apiUrl = 'https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=catalogue';
+                const apiUrl = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=catalogue';
                 const response = await fetch(apiUrl);
                 
                 if (!response.ok) {
