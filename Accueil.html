@@ -60,6 +60,12 @@ body {
     }
 }
 
+
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     left: -280px;            /* masquée par défaut */
@@ -68,10 +74,6 @@ body {
   .sidebar.active {
     left: 0;                 /* visible quand on ajoute la classe */
   }
-}
-.dashboard {
-    display: flex;
-    min-height: 100vh;
 }
 
 /* ===== SIDEBAR ===== */
@@ -6018,8 +6020,8 @@ async function generatePDF() {
         remise: document.getElementById('remise').value,
         remise_type: document.getElementById('remise_type').value,
         net_a_payer: document.getElementById('net_a_payer').value,
-        // Ajouter les détails des coût
-     cout_verre: document.getElementById('coutVerre')?.value || 0,
+        // Ajouter les détails des coûts
+        cout_verre: document.getElementById('coutVerre')?.value || 0,
         cout_photochromique: document.getElementById('coutPhotochromique')?.value || 0,
         cout_antireflet: document.getElementById('coutAntireflet')?.value || 0,
         cout_anti_lumiere_bleu: document.getElementById('coutAntiLumiereBleu')?.value || 0
@@ -11161,7 +11163,8 @@ function downloadAPK() {
 
 
     </script>
- <script>
+
+    <script>
 /* ------------------- GESTION DU BURGER MOBILE ------------------- */
 document.addEventListener('DOMContentLoaded', () => {
   const btn   = document.getElementById('mobileMenuBtn');
