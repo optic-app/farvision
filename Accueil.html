@@ -8527,7 +8527,7 @@ function populateMonturesSelect(montures, agence) {
         montureSelect.classList.remove('monture-select-disabled');
         
         // Trier les montures par référence
-        montures.sort((a, b) => (a.reference || '').localeCompare(b.reference || ''));
+        montures.sort((a, b) => {     const refA = (a.reference || '').toString();     const refB = (b.reference || '').toString();     return refA.localeCompare(refB); });
         
         // Ajouter les options
         montures.forEach((monture) => {
