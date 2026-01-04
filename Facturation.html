@@ -2122,6 +2122,57 @@
                 opacity: 0;
             }
         }
+
+        /* ============================================
+           STYLES POUR LES CASES À COCHER
+        =============================================== */
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .facture-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-500);
+            transition: all 0.3s var(--transition-smooth);
+        }
+
+        .facture-checkbox:hover {
+            transform: scale(1.1);
+        }
+
+        .facture-checkbox:checked {
+            box-shadow: 0 0 10px var(--primary-400);
+        }
+
+        .selection-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--glass-border);
+        }
+
+        .selection-info {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 500;
+        }
+
+        .selection-info .count {
+            color: var(--primary-600);
+            font-weight: 600;
+        }
     </style>   
 </head>
 <body>
@@ -2129,7 +2180,7 @@
     <div class="main">
         <header class="header">
             <div class="header-left">
-                <h1 class="page-title">Facturations</h1>
+                <h1 class="page-title">Gestion des Facturations</h1>
             </div>
 
             <div class="header-actions">
@@ -2154,7 +2205,7 @@
         <!-- Navigation entre sections -->
         <div class="section-nav">
             <button class="section-nav-btn active" onclick="showSection('gestion-facturations')">
-                <i class="fas fa-file-invoice"></i> Gestion des Factures
+                <i class="fas fa-file-invoice"></i> Gestion des Facturations
             </button>
             <button class="section-nav-btn" onclick="showSection('point-facturations')">
                 <i class="fas fa-chart-bar"></i> Point des Facturations
@@ -2219,6 +2270,19 @@
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <!-- Contrôles de sélection -->
+                <div class="selection-controls" id="selectionControls" style="display: none;">
+                    <div class="selection-info">
+                        <span id="selectedCount">0</span> facture(s) sélectionnée(s)
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="selectAllFilteredFactures()">
+                        <i class="fas fa-check-square"></i> Tout sélectionner
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="deselectAllFactures()">
+                        <i class="fas fa-times-circle"></i> Tout désélectionner
+                    </button>
                 </div>
 
                 <!-- Tableau -->
@@ -2450,12 +2514,14 @@ class FactureManager {
         this.filteredData = [];
         this.currentPage = 1;
         this.perPage = 10;
+        this.selectedFactures = new Set(); // Stocke les IDs des factures sélectionnées
         this.stats = {
             total: 0,
             pending: 0,
             amount: 0,
-            tva: 0 // MODIFICATION: On va maintenant calculer la TVA réelle
+            tva: 0
         };
+        this.lastDisplayedData = []; // Stocke les dernières données affichées
     }
 
     async loadData() {
@@ -2477,10 +2543,8 @@ class FactureManager {
                     const cleanHeader = header.replace(/\t/g, ' ').trim();
                     let value = row[index] || '';
                     
-                    // MODIFICATION: Conversion spécifique pour les montants et TVA
                     if (cleanHeader.includes('MONTANT TOTAL') || cleanHeader.includes('TOTAL PART ASSURE') || 
                         cleanHeader.includes('PART ASSUREUR') || cleanHeader.includes('TVA')) {
-                        // Convertir en nombre, traiter les chaînes vides comme 0
                         if (value === '' || value === null || value === undefined) {
                             value = 0;
                         } else {
@@ -2519,7 +2583,6 @@ class FactureManager {
             return sum + (parseFloat(item['MONTANT TOTAL']) || 0);
         }, 0);
         
-        // MODIFICATION: Calcul de la TVA à partir de la colonne "TVA sur Monture"
         this.stats.tva = this.allData.reduce((sum, item) => {
             return sum + (parseFloat(item['TVA sur Monture']) || 0);
         }, 0);
@@ -2529,16 +2592,13 @@ class FactureManager {
         searchTerm = searchTerm.toLowerCase();
         
         this.filteredData = this.allData.filter(item => {
-            // Recherche automatique sur ID client, n° police et bénéficiaire
             const searchMatch = !searchTerm || 
                 (item['Id Client'] && item['Id Client'].toLowerCase().includes(searchTerm)) ||
                 (item['N°Police'] && item['N°Police'].toLowerCase().includes(searchTerm)) ||
                 (item['Bénéficiaire'] && item['Bénéficiaire'].toLowerCase().includes(searchTerm));
             
-            // Filtre par statut
             const statusMatch = !statusFilter || (item['Statut'] || 'En attente') === statusFilter;
             
-            // Filtre par date
             let dateMatch = true;
             if (dateFilter && item['Date']) {
                 const itemDate = new Date(item['Date']).toISOString().split('T')[0];
@@ -2572,6 +2632,62 @@ class FactureManager {
         };
     }
 
+    // Méthodes pour la sélection des factures
+    toggleFactureSelection(idClient) {
+        if (this.selectedFactures.has(idClient)) {
+            this.selectedFactures.delete(idClient);
+        } else {
+            this.selectedFactures.add(idClient);
+        }
+        this.updateSelectionControls();
+    }
+
+    selectAllFilteredFactures() {
+        // CORRECTION: Ne sélectionner que les factures filtrées
+        this.selectedFactures.clear();
+        this.lastDisplayedData.forEach(item => {
+            if (item['Id Client']) {
+                this.selectedFactures.add(item['Id Client']);
+            }
+        });
+        this.updateSelectionControls();
+    }
+
+    deselectAllFactures() {
+        this.selectedFactures.clear();
+        this.updateSelectionControls();
+    }
+
+    isFactureSelected(idClient) {
+        return this.selectedFactures.has(idClient);
+    }
+
+    getSelectedFactures() {
+        return this.allData.filter(item => 
+            item['Id Client'] && this.selectedFactures.has(item['Id Client'])
+        );
+    }
+
+    updateSelectionControls() {
+        const controls = document.getElementById('selectionControls');
+        const countSpan = document.getElementById('selectedCount');
+        
+        if (controls && countSpan) {
+            const count = this.selectedFactures.size;
+            if (count > 0) {
+                controls.style.display = 'flex';
+                countSpan.textContent = count;
+            } else {
+                controls.style.display = 'none';
+            }
+        }
+    }
+
+    // CORRECTION: Méthode pour trouver une facture dans allData par son ID Client
+    findFactureIndexByIdClient(idClient) {
+        return this.allData.findIndex(item => item['Id Client'] === idClient);
+    }
+
     // NOUVELLES FONCTIONS POUR LES STATISTIQUES
     getStatsParAssurance() {
         const stats = {};
@@ -2582,7 +2698,7 @@ class FactureManager {
                 stats[assurance] = {
                     montantTotal: 0,
                     partAssureur: 0,
-                    tvaTotal: 0, // MODIFICATION: Ajout de la TVA
+                    tvaTotal: 0,
                     nombreFactures: 0,
                     moisActuel: 0
                 };
@@ -2590,14 +2706,13 @@ class FactureManager {
             
             const montant = parseFloat(item['MONTANT TOTAL']) || 0;
             const partAssureur = parseFloat(item['PART ASSUREUR']) || 0;
-            const tva = parseFloat(item['TVA sur Monture']) || 0; // MODIFICATION: Récupérer la TVA réelle
+            const tva = parseFloat(item['TVA sur Monture']) || 0;
             
             stats[assurance].montantTotal += montant;
             stats[assurance].partAssureur += partAssureur;
-            stats[assurance].tvaTotal += tva; // MODIFICATION: Ajouter la TVA
+            stats[assurance].tvaTotal += tva;
             stats[assurance].nombreFactures++;
             
-            // Vérifier si c'est le mois en cours
             const itemDate = new Date(item['Date']);
             const currentMonth = new Date().getMonth();
             const currentYear = new Date().getFullYear();
@@ -2668,7 +2783,7 @@ class FactureManager {
                 mois: mois.name,
                 montant: facturesDuMois.reduce((sum, item) => sum + (parseFloat(item['MONTANT TOTAL']) || 0), 0),
                 nombre: facturesDuMois.length,
-                tva: facturesDuMois.reduce((sum, item) => sum + (parseFloat(item['TVA sur Monture']) || 0), 0) // MODIFICATION: TVA réelle
+                tva: facturesDuMois.reduce((sum, item) => sum + (parseFloat(item['TVA sur Monture']) || 0), 0)
             };
         });
         
@@ -2740,13 +2855,11 @@ class ChartManager {
     static createMontureParAssuranceChart(data, canvasId) {
         const ctx = document.getElementById(canvasId).getContext('2d');
         
-        // Trier les assurances par montant total (décroissant)
         const sortedEntries = Object.entries(data).sort((a, b) => b[1].montantTotal - a[1].montantTotal);
         const labels = sortedEntries.map(([assurance]) => assurance);
         const montants = sortedEntries.map(([, stats]) => stats.montantTotal);
         const partsAssureur = sortedEntries.map(([, stats]) => stats.partAssureur);
         
-        // Couleurs
         const backgroundColors = this.generateColors(labels.length, 0.2);
         const borderColors = this.generateColors(labels.length, 1);
         
@@ -2802,7 +2915,6 @@ class ChartManager {
         const assurances = Object.keys(data);
         const mois = data[assurances[0]]?.map(item => item.mois) || [];
         
-        // Limiter à 5 assurances pour la lisibilité
         const assurancesToShow = assurances.slice(0, 5);
         
         const datasets = assurancesToShow.map((assurance, index) => {
@@ -2957,58 +3069,48 @@ let charts = {};
 
 // ==================== FONCTIONS DE NAVIGATION ENTRE SECTIONS ====================
 function showSection(sectionId) {
-    // Masquer toutes les sections
     document.querySelectorAll('.section-container').forEach(section => {
         section.classList.remove('active');
     });
     
-    // Désactiver tous les boutons de navigation
     document.querySelectorAll('.section-nav-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     
-    // Activer la section sélectionnée
     const section = document.getElementById(sectionId);
     if (section) {
         section.classList.add('active');
         
-        // Activer le bouton correspondant
         const btn = document.querySelector(`.section-nav-btn[onclick*="${sectionId}"]`);
         if (btn) {
             btn.classList.add('active');
         }
         
-        // Charger les données si nécessaire
         if (sectionId === 'gestion-facturations') {
             loadFactureDataForSection();
         } else if (sectionId === 'point-facturations') {
             loadFacturationDataForSection();
         }
         
-        // Ajuster les positions sticky après le chargement
         setTimeout(adjustStickyPositions, 100);
     }
 }
 
-// Fonction pour ajuster dynamiquement les positions sticky
 function adjustStickyPositions() {
     const headerHeight = document.querySelector('.header').offsetHeight;
     const sectionNavHeight = document.querySelector('.section-nav').offsetHeight;
     
-    // Calculer la position du header de section
-    const sectionHeaderTop = headerHeight + sectionNavHeight + 40; // 40px de marge
+    const sectionHeaderTop = headerHeight + sectionNavHeight + 40;
     document.querySelectorAll('.section-container.active .section-header').forEach(el => {
         el.style.top = `${sectionHeaderTop}px`;
     });
     
-    // Calculer la position du panel de filtres
     const filtersTop = sectionHeaderTop + document.querySelector('.section-container.active .section-header').offsetHeight + 20;
     document.querySelectorAll('.section-container.active .filters-panel').forEach(el => {
         el.style.top = `${filtersTop}px`;
     });
 }
 
-// Remplacer les anciennes fonctions openFacturation et openPointFacturation
 function openFacturation() {
     showSection('gestion-facturations');
 }
@@ -3026,19 +3128,16 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // Affiche le nom d'utilisateur
     const usernameDisplay = document.getElementById("username-display");
     if (usernameDisplay) {
         usernameDisplay.textContent = username;
     }
 
-    // Met à jour l'image de profil avec les initiales
     const profileImg = document.querySelector('.profile-img');
     if (profileImg) {
         profileImg.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=6366f1&color=fff`;
     }
 
-    // Gestion du bouton de déconnexion
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', (e) => {
@@ -3047,26 +3146,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialiser le thème
     initTheme();
-    
-    // Activer le timer d'inactivité
     startInactivityTimer();
-    
-    // Charger les données initiales
     loadFactureDataForSection();
-    
-    // Configurer la recherche avec debounce
     setupSearchWithDebounce();
-    
-    // Ajuster les positions sticky au redimensionnement
     window.addEventListener('resize', adjustStickyPositions);
-    
 });
 
 // ==================== CONFIGURATION DE LA RECHERCHE AVEC DEBOUNCE ====================
 function setupSearchWithDebounce() {
-    // Configuration pour la recherche rapide
     const quickSearch = document.getElementById('quickSearch');
     const quickFilterStatus = document.getElementById('quickFilterStatus');
     const quickFilterDate = document.getElementById('quickFilterDate');
@@ -3086,7 +3174,6 @@ function setupSearchWithDebounce() {
 }
 
 function performQuickSearch() {
-    // Cette fonction est pour la recherche rapide si vous l'ajoutez
     const searchTerm = document.getElementById('quickSearch')?.value || '';
     const statusFilter = document.getElementById('quickFilterStatus')?.value || '';
     const dateFilter = document.getElementById('quickFilterDate')?.value || '';
@@ -3166,10 +3253,7 @@ async function loadFactureDataForSection() {
         refreshFiltersForSection();
         displayFilteredFactures(factureManager.allData, headers);
         
-        // Rafraîchir les effets 3D
         refresh3DEffects();
-        
-        // Ajuster les positions sticky
         adjustStickyPositions();
         
     } catch (error) {
@@ -3184,6 +3268,13 @@ function generateTableHeaders(headers) {
     tableHeader.innerHTML = '';
     
     const headerRow = document.createElement('tr');
+    
+    // Ajouter une colonne pour les cases à cocher
+    const checkboxTh = document.createElement('th');
+    checkboxTh.textContent = 'Sélection';
+    checkboxTh.setAttribute('scope', 'col');
+    checkboxTh.style.width = '80px';
+    headerRow.appendChild(checkboxTh);
     
     headers.forEach(header => {
         const th = document.createElement('th');
@@ -3255,21 +3346,40 @@ function applyFactureFilter() {
     const headers = Object.keys(factureManager.allData[0] || {});
     displayFilteredFactures(filteredData, headers);
     
-    // Rafraîchir les effets 3D
     refresh3DEffects();
 }
 
 function displayFilteredFactures(data, headers) {
     const factureData = document.getElementById('factureData');
     
+    // CORRECTION: Stocker les données affichées
+    factureManager.lastDisplayedData = [...data];
+    
     if (!data?.length) {
-        factureData.innerHTML = `<tr><td colspan="${headers.length + 1}" class="text-center">Aucune facture trouvée</td></tr>`;
+        factureData.innerHTML = `<tr><td colspan="${headers.length + 2}" class="text-center">Aucune facture trouvée</td></tr>`;
+        factureManager.deselectAllFactures();
         return;
     }
     
     let html = '';
     data.forEach((item, index) => {
+        const idClient = item['Id Client'];
+        const isChecked = factureManager.isFactureSelected(idClient);
+        
         html += '<tr>';
+        
+        // Ajouter la case à cocher
+        html += `
+            <td class="text-center">
+                <div class="checkbox-container">
+                    <input type="checkbox" class="facture-checkbox" 
+                           id="check-${index}" 
+                           data-id="${idClient}"
+                           ${isChecked ? 'checked' : ''}
+                           onchange="toggleFactureSelection('${idClient}')">
+                </div>
+            </td>
+        `;
         
         headers.forEach(header => {
             const cleanHeader = header.replace(/\t/g, ' ').trim();
@@ -3290,13 +3400,14 @@ function displayFilteredFactures(data, headers) {
             }
         });
         
+        // CORRECTION: Utiliser l'ID Client au lieu de l'index pour les boutons d'action
         html += `
             <td>
                 <div class="action-btns">
-                    <button class="action-btn btn-edit" onclick="editFactureFromList(${index})" title="Modifier" aria-label="Modifier la facture ${item['Id Client']}">
+                    <button class="action-btn btn-edit" onclick="editFactureFromList('${idClient}')" title="Modifier" aria-label="Modifier la facture ${item['Id Client']}">
                         <i class="fas fa-pencil-alt"></i>
                     </button>
-                    <button class="action-btn btn-cancel" onclick="cancelFactureFromList(${index})" title="Annuler" aria-label="Annuler la facture ${item['Id Client']}">
+                    <button class="action-btn btn-cancel" onclick="cancelFactureFromList('${idClient}')" title="Annuler" aria-label="Annuler la facture ${item['Id Client']}">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
@@ -3318,15 +3429,45 @@ function showSectionMessage(message, type) {
     }
 }
 
+// ==================== FONCTIONS DE SÉLECTION DES FACTURES ====================
+function toggleFactureSelection(idClient) {
+    factureManager.toggleFactureSelection(idClient);
+}
+
+// CORRECTION: Fonction pour sélectionner toutes les factures filtrées
+function selectAllFilteredFactures() {
+    factureManager.selectAllFilteredFactures();
+    
+    // Mettre à jour toutes les cases à cocher visibles
+    const checkboxes = document.querySelectorAll('.facture-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function deselectAllFactures() {
+    factureManager.deselectAllFactures();
+    
+    // Mettre à jour toutes les cases à cocher visibles
+    const checkboxes = document.querySelectorAll('.facture-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
 // ==================== ÉDITION ET SUPPRESSION ====================
-function editFactureFromList(index) {
-    if (index >= 0 && index < factureManager.allData.length) {
+// CORRECTION: Utiliser l'ID Client au lieu de l'index
+function editFactureFromList(idClient) {
+    const index = factureManager.findFactureIndexByIdClient(idClient);
+    if (index >= 0) {
         openEditFactureModal(index, factureManager.allData[index]);
     }
 }
 
-function cancelFactureFromList(index) {
-    if (index >= 0 && index < factureManager.allData.length) {
+// CORRECTION: Utiliser l'ID Client au lieu de l'index
+function cancelFactureFromList(idClient) {
+    const index = factureManager.findFactureIndexByIdClient(idClient);
+    if (index >= 0) {
         cancelFacture(index);
     }
 }
@@ -3485,7 +3626,6 @@ function submitFactureUpdate(index) {
         
         factureManager.filteredData = [...factureManager.allData];
         
-        // Recharger les données dans la section de gestion
         if (document.getElementById('gestion-facturations').classList.contains('active')) {
             const headers = Object.keys(factureManager.allData[0] || {});
             displayFilteredFactures(factureManager.allData, headers);
@@ -3536,7 +3676,6 @@ async function cancelFacture(index) {
         
         factureManager.filteredData = [...factureManager.allData];
         
-        // Recharger les données dans la section de gestion
         if (document.getElementById('gestion-facturations').classList.contains('active')) {
             const headers = Object.keys(factureManager.allData[0] || {});
             displayFilteredFactures(factureManager.allData, headers);
@@ -3738,7 +3877,6 @@ async function submitNewFacture() {
         
         await factureManager.loadData();
         
-        // Recharger les données dans la section de gestion
         if (document.getElementById('gestion-facturations').classList.contains('active')) {
             const headers = Object.keys(factureManager.allData[0] || {});
             displayFilteredFactures(factureManager.allData, headers);
@@ -3781,57 +3919,36 @@ async function loadDynamicOptions() {
     }
 }
 
-// ==================== GÉNÉRER DÉPÔT AVEC PRÉ-VISUALISATION ====================
-// ==================== GÉNÉRER DÉPÔT AVEC PRÉ-VISUALISATION ====================
+// ==================== GÉNÉRER DÉPÔT AVEC SÉLECTION ====================
 async function genererFacture() {
-    const dateDebut = document.getElementById('filterFactureDateStart')?.value;
-    const dateFin = document.getElementById('filterFactureDateEnd')?.value;
-    const assurance = document.getElementById('filterFactureAssurance')?.value;
-    const compagnie = document.getElementById('filterFactureCompagnie')?.value;
+    const selectedFactures = factureManager.getSelectedFactures();
     
-    if (!dateDebut || !dateFin || !assurance || !compagnie) {
-        UIManager.showTemporaryMessage("❌ Veuillez remplir tous les filtres obligatoires", 'error', 4000);
+    if (selectedFactures.length === 0) {
+        UIManager.showTemporaryMessage("❌ Veuillez sélectionner au moins une facture", 'warning', 4000);
         return;
     }
-    
-    // Filtrer les factures selon les critères sélectionnés
-    const facturesFiltrees = await filtrerFacturesPourDepot(dateDebut, dateFin, assurance, compagnie);
-    
-    if (facturesFiltrees.length === 0) {
-        UIManager.showTemporaryMessage("❌ Aucune facture trouvée avec ces critères", 'warning', 4000);
-        return;
-    }
-    
-    // Afficher la modal de prévisualisation
-    afficherModalPrevisualisation(facturesFiltrees, dateDebut, dateFin, assurance, compagnie);
+
+    // Afficher la modal de prévisualisation avec les factures sélectionnées
+    afficherModalPrevisualisationSelectionnee(selectedFactures);
 }
 
-async function filtrerFacturesPourDepot(dateDebut, dateFin, assurance, compagnie) {
-    // Si les données ne sont pas encore chargées, les charger
-    if (factureManager.allData.length === 0) {
-        await factureManager.loadData();
-    }
-    
-    const startDateObj = new Date(dateDebut);
-    const endDateObj = new Date(dateFin);
-    
-    // Filtrer les factures selon les critères
-    return factureManager.allData.filter(item => {
-        if (!item['Date']) return false;
-        
-        const itemDate = new Date(item['Date']);
-        const dateMatch = itemDate >= startDateObj && itemDate <= endDateObj;
-        const assuranceMatch = item['Assurance'] === assurance;
-        const compagnieMatch = item['Compagnie'] === compagnie;
-        
-        return dateMatch && assuranceMatch && compagnieMatch;
-    });
-}
-
-function afficherModalPrevisualisation(factures, dateDebut, dateFin, assurance, compagnie) {
+function afficherModalPrevisualisationSelectionnee(factures) {
     const modalContainer = document.getElementById('modal-container');
     
-    // Calculer les totaux
+    // Regrouper par assurance et compagnie
+    const groupes = {};
+    factures.forEach(facture => {
+        const key = `${facture['Assurance']} - ${facture['Compagnie']}`;
+        if (!groupes[key]) {
+            groupes[key] = {
+                assurance: facture['Assurance'],
+                compagnie: facture['Compagnie'],
+                factures: []
+            };
+        }
+        groupes[key].factures.push(facture);
+    });
+
     const totaux = calculerTotaux(factures);
     
     const modalHTML = `
@@ -3840,7 +3957,7 @@ function afficherModalPrevisualisation(factures, dateDebut, dateFin, assurance, 
                 <div class="modal-header">
                     <h3 class="modal-title">
                         <i class="fas fa-file-export modal-icon"></i> 
-                        Prévisualisation du Dépôt
+                        Prévisualisation du Dépôt (Factures Sélectionnées)
                     </h3>
                     <button class="modal-close" onclick="fermerModalPrevisualisation()" aria-label="Fermer">
                         <i class="fas fa-times"></i>
@@ -3850,48 +3967,38 @@ function afficherModalPrevisualisation(factures, dateDebut, dateFin, assurance, 
                 <div class="modal-body">
                     <div class="alert-message info" style="margin-bottom: 1.5rem;">
                         <i class="fas fa-info-circle"></i>
-                        <span>Vérifiez les factures avant de générer le dépôt. Vous pouvez modifier, supprimer ou ajouter des factures.</span>
+                        <span>${factures.length} facture(s) sélectionnée(s). Vérifiez avant de générer le dépôt.</span>
                     </div>
                     
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
                         <div class="assurance-card">
-                            <div class="assurance-name">Période</div>
-                            <div class="assurance-details">
-                                <div>
-                                    <div><strong>Du:</strong> ${Utils.formatDate(dateDebut)}</div>
-                                    <div><strong>Au:</strong> ${Utils.formatDate(dateFin)}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="assurance-card">
-                            <div class="assurance-name">Assurance</div>
-                            <div class="assurance-details">
-                                <div>
-                                    <div><strong>${assurance}</strong></div>
-                                    <div>${compagnie}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="assurance-card">
                             <div class="assurance-name">Récapitulatif</div>
                             <div class="assurance-details">
                                 <div>
-                                    <div><strong>${factures.length}</strong> factures</div>
+                                    <div><strong>${factures.length}</strong> factures sélectionnées</div>
                                     <div>Total: ${Utils.formatCurrency(totaux.montantTotal)}</div>
                                 </div>
                             </div>
                         </div>
+                        ${Object.entries(groupes).map(([key, groupe]) => `
+                            <div class="assurance-card">
+                                <div class="assurance-name">${groupe.assurance}</div>
+                                <div class="assurance-details">
+                                    <div>
+                                        <div><strong>${groupe.compagnie}</strong></div>
+                                        <div>${groupe.factures.length} factures</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                     
                     <div class="section-header" style="position: static; margin-top: 1rem;">
-                        <h4 class="section-title">Liste des Factures</h4>
+                        <h4 class="section-title">Liste des Factures Sélectionnées</h4>
                         <div class="dashboard-buttons">
-                            <button type="button" class="btn btn-success" onclick="ajouterFactureAuDepot('${dateDebut}', '${dateFin}', '${assurance}', '${compagnie}')">
-                                <i class="fas fa-plus"></i> Ajouter Facture
+                            <button type="button" class="btn btn-success" id="genererDepotBtn" onclick="confirmerGenerationDepotSelectionne()">
+                                <i class="fas fa-file-export"></i> Générer Dépôt
                             </button>
-                            <button type="button" class="btn btn-primary" id="genererDepotBtn" onclick="confirmerGenerationDepot('${dateDebut}', '${dateFin}', '${assurance}', '${compagnie}')">
-                        <i class="fas fa-file-export"></i> Générer Dépôt
-                    </button>
                         </div>
                     </div>                    
                     <div class="table-container" style="max-height: 400px; overflow-y: auto;">
@@ -3901,16 +4008,15 @@ function afficherModalPrevisualisation(factures, dateDebut, dateFin, assurance, 
                                     <th scope="col">Date</th>
                                     <th scope="col">ID Client</th>
                                     <th scope="col">N° Police</th>
-                                    <th scope="col">Bénéficiaire</th>
-                                    <th scope="col">Actes</th>
+                                    <th scope="col">Assurance</th>
+                                    <th scope="col">Compagnie</th>
                                     <th scope="col" class="text-end">Montant Total</th>
                                     <th scope="col" class="text-end">Part Assureur</th>
                                     <th scope="col" class="text-end">TVA</th>
-                                    <th scope="col">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="previsualisationData">
-                                ${genererLignesFactures(factures)}
+                                ${genererLignesFacturesSelectionnees(factures)}
                             </tbody>
                             <tfoot>
                                 <tr class="total-row">
@@ -3918,7 +4024,6 @@ function afficherModalPrevisualisation(factures, dateDebut, dateFin, assurance, 
                                     <td class="text-end"><strong>${Utils.formatCurrency(totaux.montantTotal)}</strong></td>
                                     <td class="text-end"><strong>${Utils.formatCurrency(totaux.partAssureur)}</strong></td>
                                     <td class="text-end"><strong>${Utils.formatCurrency(totaux.tva)}</strong></td>
-                                    <td></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -3932,33 +4037,21 @@ function afficherModalPrevisualisation(factures, dateDebut, dateFin, assurance, 
     
     modalContainer.innerHTML = modalHTML;
     
-    // Stocker les factures pour référence - IMPORTANT: cloner le tableau pour éviter les références
+    // Stocker les factures pour référence
     window.facturesPrevisualisation = JSON.parse(JSON.stringify(factures));
-    window.criteresDepot = { dateDebut, dateFin, assurance, compagnie };
-    window.facturesOriginales = JSON.parse(JSON.stringify(factures)); // Sauvegarde des données originales
 }
 
-function genererLignesFactures(factures) {
-    return factures.map((facture, index) => `
-        <tr id="facture-row-${index}" data-index="${index}">
+function genererLignesFacturesSelectionnees(factures) {
+    return factures.map(facture => `
+        <tr>
             <td>${Utils.formatDate(facture['Date'])}</td>
             <td>${facture['Id Client'] || ''}</td>
             <td>${facture['N°Police'] || ''}</td>
-            <td>${facture['Bénéficiaire'] || ''}</td>
-            <td>${facture['Actes'] || ''}</td>
+            <td>${facture['Assurance'] || ''}</td>
+            <td>${facture['Compagnie'] || ''}</td>
             <td class="text-end">${Utils.formatCurrency(facture['MONTANT TOTAL'] || 0)}</td>
             <td class="text-end">${Utils.formatCurrency(facture['PART ASSUREUR'] || 0)}</td>
             <td class="text-end">${Utils.formatCurrency(facture['TVA sur Monture'] || 0)}</td>
-            <td>
-                <div class="action-btns">
-                    <button class="action-btn btn-edit" onclick="editerFactureDansDepot(${index})" title="Modifier">
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
-                    <button class="action-btn btn-cancel" onclick="supprimerFactureDuDepot(${index})" title="Supprimer">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </div>
-            </td>
         </tr>
     `).join('');
 }
@@ -3979,592 +4072,12 @@ function fermerModalPrevisualisation() {
             modal.remove();
         }, 300);
     }
-    // Nettoyer les références
     window.facturesPrevisualisation = null;
-    window.criteresDepot = null;
-    window.facturesOriginales = null;
-    window.facturesAvantModification = null;
 }
 
-function afficherMessagePrevisualisation(message, type) {
-    const messageDiv = document.getElementById('previsualisationMessage');
-    if (messageDiv) {
-        messageDiv.textContent = message;
-        messageDiv.className = `alert-message ${type}`;
-        messageDiv.style.display = 'block';
-        
-        // Masquer après 5 secondes
-        setTimeout(() => {
-            messageDiv.style.display = 'none';
-        }, 5000);
-    }
-}
-
-async function editerFactureDansDepot(index) {
-    if (!window.facturesPrevisualisation || !window.facturesPrevisualisation[index]) {
-        afficherMessagePrevisualisation("Facture non trouvée", "error");
-        return;
-    }
-    
-    // Sauvegarder l'état actuel avant modification
-    window.facturesAvantModification = JSON.parse(JSON.stringify(window.facturesPrevisualisation));
-    window.factureEditIndex = index;
-    
-    const facture = window.facturesPrevisualisation[index];
-    const modalContainer = document.getElementById('modal-container');
-    
-    const modalHTML = `
-        <div class="edit-modal active" id="editFactureDepotModal">
-            <div class="edit-modal-content">
-                <div class="edit-modal-header">
-                    <h3 class="edit-modal-title">
-                        <i class="fas fa-edit me-2"></i> 
-                        Modifier Facture dans le Dépôt
-                    </h3>
-                    <button class="modal-close" onclick="fermerEditModalDepotEtReafficherPrevisualisation()" aria-label="Fermer">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="edit-modal-body">
-                    <form id="editFactureDepotForm">
-                        <div class="edit-row">
-                            <div class="edit-col">
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">ID Client</label>
-                                    <input type="text" class="edit-form-control" id="editDepotClientId" 
-                                           value="${facture['Id Client'] || ''}" readonly>
-                                </div>
-                                
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">Date</label>
-                                    <input type="date" class="edit-form-control" id="editDepotDate" 
-                                           value="${Utils.formatDateForInput(facture['Date'])}">
-                                </div>
-                                
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">N° Police</label>
-                                    <input type="text" class="edit-form-control" id="editDepotPolice" 
-                                           value="${facture['N°Police'] || ''}">
-                                </div>
-                                
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">Bénéficiaire</label>
-                                    <input type="text" class="edit-form-control" id="editDepotBeneficiaire" 
-                                           value="${facture['Bénéficiaire'] || ''}">
-                                </div>
-                            </div>
-                            
-                            <div class="edit-col">
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">Actes</label>
-                                    <input type="text" class="edit-form-control" id="editDepotActes" 
-                                           value="${facture['Actes'] || ''}">
-                                </div>
-                                
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">Montant Total</label>
-                                    <input type="number" step="0.01" class="edit-form-control" id="editDepotMontant" 
-                                           value="${facture['MONTANT TOTAL'] || 0}">
-                                </div>
-                                
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">Part Assureur</label>
-                                    <input type="number" step="0.01" class="edit-form-control" id="editDepotPartAssureur" 
-                                           value="${facture['PART ASSUREUR'] || 0}">
-                                </div>
-
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">Par Client</label>
-                                    <input type="number" step="0.01" class="edit-form-control" id="editDepotPartAssure" 
-                                           value="${facture['TOTAL PART ASSURE'] || 0}">
-                                </div>
-                                
-                                <div class="edit-form-group">
-                                    <label class="edit-form-label">TVA sur Monture</label>
-                                    <input type="number" step="0.01" class="edit-form-control" id="editDepotTVA" 
-                                           value="${facture['TVA sur Monture'] || 0}">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                
-                <div class="edit-modal-footer">
-                    <button type="button" class="edit-btn edit-btn-secondary" onclick="fermerEditModalDepotEtReafficherPrevisualisation()">
-                        <i class="fas fa-times"></i> Annuler
-                    </button>
-                    <button type="button" class="edit-btn edit-btn-primary" onclick="sauvegarderModificationFacture(${index})">
-                        <i class="fas fa-save"></i> Enregistrer
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    modalContainer.innerHTML = modalHTML;
-}
-
-function fermerEditModalDepotEtReafficherPrevisualisation() {
-    const modal = document.getElementById('editFactureDepotModal');
-    if (modal) {
-        modal.classList.remove('active');
-        setTimeout(() => {
-            modal.remove();
-        }, 300);
-    }
-    
-    // Restaurer l'état d'avant la modification si annulation
-    if (window.facturesAvantModification && window.criteresDepot) {
-        window.facturesPrevisualisation = window.facturesAvantModification;
-        window.facturesAvantModification = null;
-        window.factureEditIndex = null;
-        
-        // Réafficher la modal de prévisualisation
-        afficherModalPrevisualisation(window.facturesPrevisualisation, 
-            window.criteresDepot.dateDebut, 
-            window.criteresDepot.dateFin, 
-            window.criteresDepot.assurance, 
-            window.criteresDepot.compagnie);
-    }
-}
-
-async function sauvegarderModificationFacture(index) {
-    if (!window.facturesPrevisualisation || !window.facturesPrevisualisation[index]) {
-        afficherMessagePrevisualisation("Facture non trouvée", "error");
-        return;
-    }
-    
-    const facture = window.facturesPrevisualisation[index];
-    const idClient = facture['Id Client'];
-    
-    const updatedData = {
-        'Id Client': document.getElementById('editDepotClientId').value,
-        'Date': document.getElementById('editDepotDate').value,
-        'N°Police': document.getElementById('editDepotPolice').value,
-        'Bénéficiaire': document.getElementById('editDepotBeneficiaire').value,
-        'Actes': document.getElementById('editDepotActes').value,
-        'MONTANT TOTAL': parseFloat(document.getElementById('editDepotMontant').value) || 0,
-        'PART ASSUREUR': parseFloat(document.getElementById('editDepotPartAssureur').value) || 0,
-        'TOTAL PART ASSURE': parseFloat(document.getElementById('editDepotPartAssure').value) || 0,
-        'TVA sur Monture': parseFloat(document.getElementById('editDepotTVA').value) || 0
-    };
-
-    const submitBtn = document.querySelector('#editFactureDepotModal .edit-btn-primary');
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
-    submitBtn.disabled = true;
-
-    try {
-        // Envoyer la mise à jour au Google Sheet
-        const url = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=updateFacture`;
-        
-        await fetch(url, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                idClient: idClient,
-                updatedData: updatedData
-            })
-        });
-
-        // Mettre à jour la facture dans la prévisualisation
-        window.facturesPrevisualisation[index] = { 
-            ...window.facturesPrevisualisation[index], 
-            ...updatedData 
-        };
-        
-        // Fermer la modal d'édition
-        const modal = document.getElementById('editFactureDepotModal');
-        if (modal) {
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.remove();
-            }, 300);
-        }
-        
-        // Nettoyer les sauvegardes
-        window.facturesAvantModification = null;
-        window.factureEditIndex = null;
-        
-        // Réafficher la modal de prévisualisation avec les modifications
-        if (window.criteresDepot) {
-            afficherModalPrevisualisation(window.facturesPrevisualisation, 
-                window.criteresDepot.dateDebut, 
-                window.criteresDepot.dateFin, 
-                window.criteresDepot.assurance, 
-                window.criteresDepot.compagnie);
-        }
-        
-        // Afficher message de succès
-        UIManager.showTemporaryMessage('✅ Facture mise à jour avec succès', 'success', 3000);
-        
-    } catch (error) {
-        console.error("Erreur d'envoi:", error);
-        
-        // En cas d'erreur, restaurer l'état précédent
-        if (window.facturesAvantModification && window.criteresDepot) {
-            window.facturesPrevisualisation = window.facturesAvantModification;
-            
-            afficherModalPrevisualisation(window.facturesPrevisualisation, 
-                window.criteresDepot.dateDebut, 
-                window.criteresDepot.dateFin, 
-                window.criteresDepot.assurance, 
-                window.criteresDepot.compagnie);
-        }
-        
-        afficherMessagePrevisualisation('❌ Erreur lors de la mise à jour', 'error');
-    } finally {
-        submitBtn.innerHTML = originalBtnText;
-        submitBtn.disabled = false;
-    }
-}
-
-async function supprimerFactureDuDepot(index) {
-    if (!window.facturesPrevisualisation || !window.facturesPrevisualisation[index]) {
-        afficherMessagePrevisualisation("Facture non trouvée", "error");
-        return;
-    }
-    
-    // Sauvegarder l'état avant suppression
-    window.facturesAvantSuppression = JSON.parse(JSON.stringify(window.facturesPrevisualisation));
-    
-    const facture = window.facturesPrevisualisation[index];
-    const clientId = facture['Id Client'];
-    const policeNumber = facture['N°Police'] || '';
-
-    if (!confirm(`Confirmez-vous la suppression de la facture ${policeNumber} du dépôt ?`)) {
-        // Restaurer l'état en cas d'annulation
-        window.facturesPrevisualisation = window.facturesAvantSuppression;
-        window.facturesAvantSuppression = null;
-        return;
-    }
-
-    try {
-        // Envoyer la suppression au Google Sheet
-        await fetch(`https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=deleteFacture`, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                idClient: clientId,
-                policeNumber: policeNumber
-            })
-        });
-
-        // Supprimer de la prévisualisation
-        window.facturesPrevisualisation.splice(index, 1);
-        
-        // Nettoyer la sauvegarde
-        window.facturesAvantSuppression = null;
-        
-        // Réafficher la modal de prévisualisation
-        if (window.criteresDepot) {
-            afficherModalPrevisualisation(window.facturesPrevisualisation, 
-                window.criteresDepot.dateDebut, 
-                window.criteresDepot.dateFin, 
-                window.criteresDepot.assurance, 
-                window.criteresDepot.compagnie);
-        }
-        
-        // Afficher message de succès
-        UIManager.showTemporaryMessage('✅ Facture supprimée du dépôt', 'success', 3000);
-        
-    } catch (error) {
-        console.error('Erreur réseau:', error);
-        
-        // En cas d'erreur, restaurer l'état précédent
-        if (window.facturesAvantSuppression) {
-            window.facturesPrevisualisation = window.facturesAvantSuppression;
-            
-            if (window.criteresDepot) {
-                afficherModalPrevisualisation(window.facturesPrevisualisation, 
-                    window.criteresDepot.dateDebut, 
-                    window.criteresDepot.dateFin, 
-                    window.criteresDepot.assurance, 
-                    window.criteresDepot.compagnie);
-            }
-        }
-        
-        afficherMessagePrevisualisation('❌ Erreur lors de la suppression', 'error');
-    }
-}
-
-async function ajouterFactureAuDepot(dateDebut, dateFin, assurance, compagnie) {
-    // Sauvegarder l'état actuel des factures avant d'ouvrir la modal d'ajout
-    window.facturesAvantAjout = JSON.parse(JSON.stringify(window.facturesPrevisualisation));
-    
-    // Ouvrir la modal d'ajout de facture
-    await openAddFactureModalDepot(dateDebut, dateFin, assurance, compagnie);
-}
-
-async function openAddFactureModalDepot(dateDebut, dateFin, assurance, compagnie) {
-    const modalContainer = document.getElementById('modal-container');
-    
-    const today = new Date().toISOString().split('T')[0];
-
-    const modalHTML = `
-    <div class="edit-modal active" id="addFactureDepotModal">
-        <div class="edit-modal-content">
-            <div class="edit-modal-header">
-                <h3 class="edit-modal-title">
-                    <i class="fas fa-plus-circle me-2"></i> 
-                    Ajouter Facture au Dépôt
-                </h3>
-                <button class="modal-close" onclick="fermerAddModalDepotEtReafficherPrevisualisation()" aria-label="Fermer">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div class="edit-modal-body">
-                <div class="alert-message info" style="margin-bottom: 1.5rem;">
-                    <i class="fas fa-info-circle"></i>
-                    <span>Dépôt: ${assurance} - ${compagnie} (${Utils.formatDate(dateDebut)} au ${Utils.formatDate(dateFin)})</span>
-                </div>
-                
-                <form id="addFactureDepotForm">
-                    <div class="edit-row">
-                        <div class="edit-col">
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">ID Client <span class="required">*</span></label>
-                                <input type="text" class="edit-form-control" id="addDepotClientId" required
-                                       placeholder="2 lettres du nom + numéro de police"
-                                       aria-label="ID Client (requis)">
-                            </div>
-                            
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">Date <span class="required">*</span></label>
-                                <input type="date" class="edit-form-control" id="addDepotDate" 
-                                       value="${today}" required
-                                       min="${dateDebut}" max="${dateFin}"
-                                       aria-label="Date de la facture (requis)">
-                                <small class="text-muted">Doit être entre ${Utils.formatDate(dateDebut)} et ${Utils.formatDate(dateFin)}</small>
-                            </div>
-                            
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">N° Police</label>
-                                <input type="text" class="edit-form-control" id="addDepotPolice"
-                                       placeholder="Numéro de police d'assurance">
-                            </div>
-                            
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">Assuré Principal</label>
-                                <input type="text" class="edit-form-control" id="addDepotAssure"
-                                       placeholder="Nom complet de l'assuré">
-                            </div>
-                        </div>
-                        
-                        <div class="edit-col">
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">Bénéficiaire</label>
-                                <input type="text" class="edit-form-control" id="addDepotBeneficiaire"
-                                       placeholder="Nom du bénéficiaire">
-                            </div>
-                            
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">Actes</label>
-                                <textarea class="edit-form-control" id="addDepotActes" rows="1"
-                                        placeholder="Détails des actes médicaux">Lunettes</textarea>
-                            </div>
-                            
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">Montant Total</label>
-                                <input type="number" step="0.01" class="edit-form-control" id="addDepotMontant"
-                                       placeholder="0.00">
-                            </div>
-                            
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">Part Assureur</label>
-                                <input type="number" step="0.01" class="edit-form-control" id="addDepotPartAssureur"
-                                       placeholder="0.00">
-                            </div>
-                            
-                            <div class="edit-form-group">
-                                <label class="edit-form-label">TVA sur Monture</label>
-                                <input type="number" step="0.01" class="edit-form-control" id="addDepotTVA"
-                                       placeholder="0.00">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            
-            <div class="edit-modal-footer">
-                <button type="button" class="edit-btn edit-btn-secondary" onclick="fermerAddModalDepotEtReafficherPrevisualisation()">
-                    <i class="fas fa-times"></i> Annuler
-                </button>
-                <button type="button" class="edit-btn edit-btn-primary" id="submitAddDepotBtn" onclick="sauvegarderNouvelleFacture('${dateDebut}', '${dateFin}', '${assurance}', '${compagnie}')">
-                    <i class="fas fa-save"></i> Ajouter au Dépôt
-                </button>
-            </div>
-        </div>
-    </div>`;
-
-    modalContainer.innerHTML = modalHTML;
-
-    setTimeout(() => {
-        document.getElementById('addDepotClientId')?.focus();
-    }, 100);
-}
-
-function fermerAddModalDepotEtReafficherPrevisualisation() {
-    const modal = document.getElementById('addFactureDepotModal');
-    if (modal) {
-        modal.classList.remove('active');
-        setTimeout(() => {
-            modal.remove();
-        }, 300);
-    }
-    
-    // Restaurer les factures d'avant l'ajout
-    if (window.facturesAvantAjout && window.criteresDepot) {
-        window.facturesPrevisualisation = window.facturesAvantAjout;
-        window.facturesAvantAjout = null;
-        
-        afficherModalPrevisualisation(window.facturesPrevisualisation, 
-            window.criteresDepot.dateDebut, 
-            window.criteresDepot.dateFin, 
-            window.criteresDepot.assurance, 
-            window.criteresDepot.compagnie);
-    } else if (window.criteresDepot) {
-        // Si pas de sauvegarde, filtrer à nouveau les factures
-        filtrerEtReafficherPrevisualisation();
-    }
-}
-
-async function filtrerEtReafficherPrevisualisation() {
-    if (!window.criteresDepot) return;
-    
-    const { dateDebut, dateFin, assurance, compagnie } = window.criteresDepot;
-    
-    // Recharger les données si nécessaire
-    if (factureManager.allData.length === 0) {
-        await factureManager.loadData();
-    }
-    
-    // Filtrer à nouveau
-    const facturesFiltrees = await filtrerFacturesPourDepot(dateDebut, dateFin, assurance, compagnie);
-    
-    // Réafficher la modal
-    afficherModalPrevisualisation(facturesFiltrees, dateDebut, dateFin, assurance, compagnie);
-}
-
-async function sauvegarderNouvelleFacture(dateDebut, dateFin, assurance, compagnie) {
-    const form = document.getElementById('addFactureDepotForm');
-    
-    if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-    }
-
-    // Vérifier que la date est dans l'intervalle
-    const selectedDate = document.getElementById('addDepotDate').value;
-    if (selectedDate < dateDebut || selectedDate > dateFin) {
-        afficherMessagePrevisualisation("La date doit être dans l'intervalle sélectionné", "error");
-        return;
-    }
-
-    const factureData = {
-        clientId: document.getElementById('addDepotClientId').value.trim(),
-        date: selectedDate,
-        police: document.getElementById('addDepotPolice').value.trim(),
-        assure: document.getElementById('addDepotAssure').value.trim(),
-        beneficiaire: document.getElementById('addDepotBeneficiaire').value.trim(),
-        actes: document.getElementById('addDepotActes').value.trim(),
-        montant: parseFloat(document.getElementById('addDepotMontant').value) || 0,
-        partAssureur: parseFloat(document.getElementById('addDepotPartAssureur').value) || 0,
-        tva: parseFloat(document.getElementById('addDepotTVA').value) || 0,
-        assurance: assurance,
-        compagnie: compagnie
-    };
-
-    const submitButton = document.getElementById('submitAddDepotBtn');
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enregistrement...';
-
-    try {
-        // Envoyer la nouvelle facture au Google Sheet
-        const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=addfacture";
-
-        await fetch(apiUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(factureData)
-        });
-
-        // Ajouter la facture à la prévisualisation
-        const nouvelleFacture = {
-            'Id Client': factureData.clientId,
-            'Date': factureData.date,
-            'N°Police': factureData.police,
-            'Assuré Principal': factureData.assure,
-            'Bénéficiaire': factureData.beneficiaire,
-            'Actes': factureData.actes,
-            'MONTANT TOTAL': factureData.montant,
-            'PART ASSUREUR': factureData.partAssureur,
-            'TVA sur Monture': factureData.tva,
-            'Assurance': assurance,
-            'Compagnie': compagnie
-        };
-        
-        // Initialiser si nécessaire
-        if (!window.facturesPrevisualisation) {
-            window.facturesPrevisualisation = [];
-        }
-        
-        // Ajouter la nouvelle facture
-        window.facturesPrevisualisation.push(nouvelleFacture);
-        
-        // Fermer la modal d'ajout
-        const modal = document.getElementById('addFactureDepotModal');
-        if (modal) {
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.remove();
-            }, 300);
-        }
-        
-        // Nettoyer la sauvegarde
-        window.facturesAvantAjout = null;
-        
-        // Réafficher la modal de prévisualisation avec TOUTES les factures
-        afficherModalPrevisualisation(window.facturesPrevisualisation, dateDebut, dateFin, assurance, compagnie);
-        
-        // Afficher message de succès
-        UIManager.showTemporaryMessage('✅ Facture ajoutée au dépôt avec succès', 'success', 3000);
-        
-    } catch (error) {
-        console.error("Erreur:", error);
-        
-        // En cas d'erreur, réafficher la prévisualisation avec les données précédentes
-        if (window.facturesAvantAjout && window.criteresDepot) {
-            window.facturesPrevisualisation = window.facturesAvantAjout;
-            
-            afficherModalPrevisualisation(window.facturesPrevisualisation, 
-                window.criteresDepot.dateDebut, 
-                window.criteresDepot.dateFin, 
-                window.criteresDepot.assurance, 
-                window.criteresDepot.compagnie);
-        }
-        
-        afficherMessagePrevisualisation('❌ Une erreur est survenue lors de l\'enregistrement', 'error');
-    } finally {
-        submitButton.disabled = false;
-        submitButton.innerHTML = '<i class="fas fa-save"></i> Ajouter au Dépôt';
-    }
-}
-
-async function confirmerGenerationDepot(dateDebut, dateFin, assurance, compagnie) {
+async function confirmerGenerationDepotSelectionne() {
     if (!window.facturesPrevisualisation || window.facturesPrevisualisation.length === 0) {
-        afficherMessagePrevisualisation("Aucune facture à générer", "error");
+        UIManager.showTemporaryMessage("Aucune facture à générer", "error");
         return;
     }
     
@@ -4574,21 +4087,25 @@ async function confirmerGenerationDepot(dateDebut, dateFin, assurance, compagnie
     generateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération en cours...';
     
     try {
+        // 1. Mettre à jour les factures sélectionnées dans "DealsAssurance" (colonne O = "OUI")
+        await updateFacturesSelectionnees(window.facturesPrevisualisation);
         
-        await new Promise(resolve => setTimeout(resolve, 5000));
-        
-        // Générer le dépôt final
+        // 2. Générer le dépôt
         const aujourdhui = new Date();
         const dateDuJour = `${String(aujourdhui.getDate()).padStart(2, '0')}/${String(aujourdhui.getMonth() + 1).padStart(2, '0')}/${aujourdhui.getFullYear()}`;
         
+        // Prendre la première facture comme référence pour le dépôt
+        const premiereFacture = window.facturesPrevisualisation[0];
+        
         const data = {
-            dateDebut: dateDebut,
-            dateFin: dateFin,
-            assurance: assurance,
-            compagnie: compagnie,
+            dateDebut: Utils.formatDateForInput(premiereFacture['Date']),
+            dateFin: Utils.formatDateForInput(premiereFacture['Date']),
+            assurance: premiereFacture['Assurance'],
+            compagnie: premiereFacture['Compagnie'],
             dateDuJour: dateDuJour,
             nbFactures: window.facturesPrevisualisation.length,
-            montantTotal: calculerTotaux(window.facturesPrevisualisation).montantTotal
+            montantTotal: calculerTotaux(window.facturesPrevisualisation).montantTotal,
+            factures: window.facturesPrevisualisation.map(f => f['Id Client'])
         };
         
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=adddepotData';
@@ -4602,10 +4119,17 @@ async function confirmerGenerationDepot(dateDebut, dateFin, assurance, compagnie
             body: JSON.stringify(data)
         });
     
-        UIManager.showTemporaryMessage("✅ Dépôt généré avec succès !", 'success', 5000);
+        UIManager.showTemporaryMessage("✅ Dépôt généré avec succès et factures marquées !", 'success', 5000);
         
         // Fermer la modal
         fermerModalPrevisualisation();
+        
+        // Désélectionner toutes les factures
+        factureManager.deselectAllFactures();
+        const checkboxes = document.querySelectorAll('.facture-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
         
         // Recharger les données du point des facturations
         if (document.getElementById('point-facturations').classList.contains('active')) {
@@ -4617,24 +4141,38 @@ async function confirmerGenerationDepot(dateDebut, dateFin, assurance, compagnie
         
     } catch (error) {
         console.error("Erreur lors de l'envoi:", error);
-        afficherMessagePrevisualisation("❌ Erreur lors de la génération du dépôt", 'error');
+        UIManager.showTemporaryMessage("❌ Erreur lors de la génération du dépôt", 'error');
     } finally {
         generateButton.disabled = false;
         generateButton.innerHTML = originalBtnText;
     }
 }
 
-// Ajouter cette fonction au chargement pour s'assurer que les variables globales existent
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialiser les variables globales
-    window.facturesPrevisualisation = null;
-    window.criteresDepot = null;
-    window.facturesOriginales = null;
-    window.facturesAvantAjout = null;
-    window.facturesAvantModification = null;
-    window.facturesAvantSuppression = null;
-    window.factureEditIndex = null;
-});
+async function updateFacturesSelectionnees(factures) {
+    try {
+        const url = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=updateFacturesSelectionnees';
+        
+        const idClients = factures.map(f => f['Id Client']).filter(id => id);
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                idClients: idClients,
+                statut: 'OUI'
+            })
+        });
+        
+        return true;
+    } catch (error) {
+        console.error("Erreur lors de la mise à jour des factures:", error);
+        throw error;
+    }
+}
+
 // ==================== POINT DES FACTURATIONS (SECTION) ====================
 async function loadFacturationDataForSection() {
     UIManager.showLoading('facturationData', 'Chargement des données...');
@@ -4731,7 +4269,6 @@ function displayFilteredFacturation(data) {
     
     facturationData.innerHTML = html;
     
-    // Rafraîchir les effets 3D
     refresh3DEffects();
 }
 
@@ -4933,13 +4470,11 @@ function openStatistiques() {
 
     modalContainer.innerHTML = modalHTML;
     
-    // Charger et afficher les statistiques
     loadStats();
-    loadPointStats(); // Charger les données du point des facturations
+    loadPointStats();
 }
 
 function switchTab(tabId) {
-    // Désactiver tous les onglets
     document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active');
     });
@@ -4948,7 +4483,6 @@ function switchTab(tabId) {
         content.classList.remove('active');
     });
     
-    // Activer l'onglet sélectionné
     const tabElement = document.querySelector(`.tab[onclick*="${tabId}"]`);
     if (tabElement) {
         tabElement.classList.add('active');
@@ -4958,7 +4492,6 @@ function switchTab(tabId) {
         tabContent.classList.add('active');
     }
     
-    // Re-draw les graphiques si nécessaire
     if (tabId === 'tab-monture' && charts.montureChart) {
         charts.montureChart.resize();
     } else if (tabId === 'tab-evolution' && charts.evolutionChart) {
@@ -4970,35 +4503,28 @@ function switchTab(tabId) {
 
 async function loadStats() {
     try {
-        // Détruire les anciens graphiques
         if (charts.montureChart) charts.montureChart.destroy();
         if (charts.evolutionChart) charts.evolutionChart.destroy();
         if (charts.moisChart) charts.moisChart.destroy();
         
-        // Vérifier si les données sont déjà chargées
         if (factureManager.allData.length === 0) {
             await factureManager.loadData();
         }
         
-        // Obtenir les données statistiques
         const statsParAssurance = factureManager.getStatsParAssurance();
         const evolution6Mois = factureManager.getEvolution6MoisParAssurance();
         const facturesCeMois = factureManager.getNombreFacturesCeMoisParAssurance();
         const statsMensuelles = factureManager.getStatsMensuelles();
         
-        // 1. Graphique montant par assurance
         charts.montureChart = ChartManager.createMontureParAssuranceChart(statsParAssurance, 'montureChart');
         updateMontureSummary(statsParAssurance);
         
-        // 2. Graphique d'évolution sur 6 mois
         charts.evolutionChart = ChartManager.createEvolutionChart(evolution6Mois, 'evolutionChart');
         updateMonthlyStats(statsMensuelles);
         
-        // 3. Graphique des factures ce mois
         createMoisChart(facturesCeMois);
         updateMoisSummary(facturesCeMois, statsParAssurance);
         
-        // 4. Tableau détaillé
         updateDetailsTable(statsParAssurance);
         
     } catch (error) {
@@ -5096,7 +4622,6 @@ function updatePointTable(data) {
 function createMoisChart(data) {
     const ctx = document.getElementById('moisChart').getContext('2d');
     
-    // Trier par nombre de factures (décroissant)
     const sortedEntries = Object.entries(data).sort((a, b) => b[1] - a[1]);
     const labels = sortedEntries.map(([assurance]) => assurance);
     const values = sortedEntries.map(([, count]) => count);
@@ -5220,7 +4745,6 @@ function updateDetailsTable(statsParAssurance) {
     
     let html = '';
     sortedEntries.forEach(([assurance, data]) => {
-        // Trouver la dernière facture pour cette assurance
         const lastFacture = factureManager.allData
             .filter(item => item['Assurance'] === assurance)
             .sort((a, b) => new Date(b['Date']) - new Date(a['Date']))[0];
@@ -5269,7 +4793,6 @@ function printStats() {
     const printWindow = window.open('', '_blank');
     
     if (activeTab && activeTab.onclick && activeTab.onclick.toString().includes('tab-point')) {
-        // Impression du point des facturations
         const table = document.getElementById('pointTable');
         if (!table) return;
         
@@ -5300,7 +4823,6 @@ function printStats() {
         printWindow.document.write(printContent);
         
     } else {
-        // Impression des statistiques générales
         const statsParAssurance = factureManager.getStatsParAssurance();
         const sortedEntries = Object.entries(statsParAssurance).sort((a, b) => b[1].montantTotal - a[1].montantTotal);
         
@@ -5318,7 +4840,6 @@ function printStats() {
             `;
         });
         
-        // Calculer les totaux réels
         const totalTva = factureManager.allData.reduce((sum, item) => sum + (parseFloat(item['TVA sur Monture']) || 0), 0);
         const totalPartAssureur = factureManager.allData.reduce((sum, item) => sum + (parseFloat(item['PART ASSUREUR']) || 0), 0);
         const totalFacturesCeMois = Object.values(factureManager.getNombreFacturesCeMoisParAssurance()).reduce((a, b) => a + b, 0);
