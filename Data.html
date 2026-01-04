@@ -14,6 +14,7 @@
             --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
             --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
             --warning-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+            --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             
             --primary-50: #f0f4ff;
             --primary-100: #d9e4ff;
@@ -156,95 +157,81 @@
             color: white;
         }
 
-        .stats-grid {
+        /* Grille des statuts */
+        .status-stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
             margin-bottom: 2rem;
         }
 
-        .stat-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
+        .status-stat-card {
+            background: white;
             border-radius: var(--border-radius-lg);
-            padding: 1.5rem;
+            padding: 1.25rem;
             transition: all 0.3s var(--transition-smooth);
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 2px solid transparent;
             position: relative;
             overflow: hidden;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--glass-shadow);
+        .status-stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
 
-        .stat-header {
+        .status-stat-card.active {
+            border-color: var(--primary-500);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
+        }
+
+        .status-stat-card.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .status-stat-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 1rem;
+            margin-bottom: 0.75rem;
         }
 
-        .stat-icon {
-            width: 48px;
-            height: 48px;
+        .status-stat-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-stat-icon {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
+            font-size: 1rem;
+            color: white;
+            background: var(--primary-gradient);
         }
 
-        .stat-icon.primary {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-            color: var(--primary-500);
-        }
-
-        .stat-icon.success {
-            background: linear-gradient(135deg, rgba(67, 233, 123, 0.1), rgba(56, 249, 215, 0.1));
-            color: #10b981;
-        }
-
-        .stat-icon.warning {
-            background: linear-gradient(135deg, rgba(246, 211, 101, 0.1), rgba(253, 160, 133, 0.1));
-            color: #f59e0b;
-        }
-
-        .stat-icon.info {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(96, 165, 250, 0.1));
-            color: #3b82f6;
-        }
-
-        .stat-value {
-            font-size: 2rem;
+        .status-stat-value {
+            font-size: 1.75rem;
             font-weight: 700;
-            margin-bottom: 0.25rem;
+            color: var(--gray-900);
+            line-height: 1.2;
         }
 
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--gray-500);
-            font-weight: 500;
-        }
-
-        .stat-change {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            font-size: 0.75rem;
-            margin-top: 0.5rem;
-            font-weight: 500;
-        }
-
-        .stat-change.positive {
-            color: #10b981;
-        }
-
-        .stat-change.negative {
-            color: #ef4444;
-        }
-
+        /* Section d'en-tête */
         .section-header {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
@@ -393,21 +380,6 @@
             border-radius: var(--border-radius-full);
             font-size: 0.75rem;
             font-weight: 600;
-        }
-
-        .status-active {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-        }
-
-        .status-pending {
-            background: rgba(245, 158, 11, 0.1);
-            color: #f59e0b;
-        }
-
-        .status-inactive {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
         }
 
         .action-btns {
@@ -574,6 +546,7 @@
             box-shadow: 0 15px 30px rgba(79, 70, 229, 0.4);
         }
 
+        /* Modal améliorée pour commande fournisseur */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -584,6 +557,12 @@
             justify-content: center;
             z-index: 2000;
             padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-overlay.active {
@@ -595,11 +574,23 @@
             border-radius: var(--border-radius-xl);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             max-height: 90vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .modal-header {
@@ -614,17 +605,17 @@
 
         .modal-title {
             margin: 0;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
         }
 
         .modal-close {
             background: transparent;
             border: none;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             color: white;
             cursor: pointer;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -634,10 +625,11 @@
 
         .modal-close:hover {
             background: rgba(255, 255, 255, 0.1);
+            transform: rotate(90deg);
         }
 
         .modal-body {
-            padding: 1.5rem;
+            padding: 0;
             flex: 1;
             overflow-y: auto;
         }
@@ -649,8 +641,187 @@
             justify-content: space-between;
             align-items: center;
             gap: 0.75rem;
+            background: var(--gray-50);
         }
 
+        /* Interface visuelle pour commande fournisseur */
+        .commande-visual-container {
+            display: flex;
+            height: 70vh;
+        }
+
+        .commande-list-container {
+            flex: 0 0 400px;
+            border-right: 1px solid var(--gray-200);
+            overflow-y: auto;
+            background: var(--gray-50);
+        }
+
+        .commande-list-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            background: white;
+        }
+
+        .commande-list-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .commande-list-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .commande-list {
+            padding: 1rem;
+        }
+
+        .commande-client-item {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius-md);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s var(--transition-smooth);
+            position: relative;
+        }
+
+        .commande-client-item:hover {
+            border-color: var(--primary-300);
+            transform: translateX(4px);
+        }
+
+        .commande-client-item.selected {
+            border-color: var(--primary-500);
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(79, 70, 229, 0.1));
+        }
+
+        .commande-client-item.selected::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary-gradient);
+            border-radius: var(--border-radius-md) 0 0 var(--border-radius-md);
+        }
+
+        .commande-client-name {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+        }
+
+        .commande-client-id {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            margin-bottom: 0.5rem;
+        }
+
+        .commande-client-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .commande-client-detail {
+            background: var(--gray-100);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--border-radius-sm);
+            color: var(--gray-700);
+        }
+
+        .commande-details-container {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .commande-details-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-500);
+        }
+
+        .commande-details-title {
+            font-size: 1.5rem;
+            color: var(--gray-900);
+        }
+
+        .commande-details-badge {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius-full);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .commande-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .commande-details-section {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .commande-section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-600);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .commande-details-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .commande-details-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .commande-details-label {
+            font-weight: 500;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .commande-details-value {
+            color: var(--gray-900);
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .commande-details-value.highlight {
+            color: var(--primary-600);
+            font-weight: 600;
+        }
+
+        /* Alertes */
         .alert-message {
             position: fixed;
             top: 20px;
@@ -689,10 +860,11 @@
         }
 
         .alert-info {
-            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            background: var(--info-gradient);
             color: white;
         }
 
+        /* Chargement */
         .loading-indicator {
             display: flex;
             flex-direction: column;
@@ -721,210 +893,40 @@
             color: var(--gray-500);
         }
 
-        .commande-summary {
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-
-        .summary-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--primary-500);
-        }
-
-        .badge {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--border-radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .commande-group {
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--gray-200);
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            transition: all 0.3s var(--transition-smooth);
-        }
-
-        .commande-group:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .group-header {
-            background: var(--gray-50);
-            padding: 1rem 1.5rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s var(--transition-smooth);
-        }
-
-        .group-header:hover {
-            background: var(--gray-100);
-        }
-
-        .group-header h4 {
-            margin: 0;
-            font-size: 1rem;
-            color: var(--gray-900);
-        }
-
-        .count {
-            background: var(--gray-200);
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--border-radius-full);
-            font-size: 0.75rem;
-            color: var(--gray-600);
-        }
-
-        .group-content {
-            padding: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .group-content.expanded {
-            max-height: 1000px;
-        }
-
-        .commande-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--gray-100);
-            transition: all 0.3s var(--transition-smooth);
-        }
-
-        .commande-item:hover {
-            background: var(--gray-50);
-        }
-
-        .commande-item:last-child {
-            border-bottom: none;
-        }
-
-        .client-header {
-            flex: 1;
-        }
-
-        .client-header strong {
-            display: block;
-            margin-bottom: 0.25rem;
-            color: var(--gray-900);
-        }
-
-        .verre-details {
-            flex: 2;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 0.75rem;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-        }
-
-        .label {
-            font-weight: 500;
-            color: var(--gray-600);
-            font-size: 0.875rem;
-        }
-
-        .value {
-            color: var(--gray-900);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-
-        .btn-edit {
-            background: transparent;
-            border: 1px solid var(--primary-300);
-            border-radius: var(--border-radius-sm);
-            padding: 0.5rem;
-            cursor: pointer;
-            color: var(--primary-600);
-            transition: all 0.3s var(--transition-smooth);
-            margin-left: 1rem;
-        }
-
-        .btn-edit:hover {
-            background: var(--primary-gradient);
-            color: white;
-        }
-
-        .fournisseur-selection {
-            padding: 1.5rem;
-            background: var(--gray-50);
-            border-radius: var(--border-radius-lg);
-        }
-
-        .fournisseur-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .fournisseur-card {
-            background: white;
-            border: 2px solid var(--gray-300);
-            border-radius: var(--border-radius-lg);
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s var(--transition-smooth);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .fournisseur-card:hover {
-            border-color: var(--primary-500);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.1);
-        }
-
-        .fournisseur-card.selected {
-            border-color: var(--primary-500);
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(79, 70, 229, 0.1));
-            transform: translateY(-2px);
-        }
-
-        .fournisseur-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(79, 70, 229, 0.2));
-            display: flex;
-            align-items: center;
+        /* Menu de chargement */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            display: none;
             justify-content: center;
-            font-size: 1.5rem;
-            color: var(--primary-600);
-            transition: all 0.3s var(--transition-smooth);
+            align-items: center;
+            z-index: 3000;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .fournisseur-card.selected .fournisseur-icon {
-            background: var(--primary-gradient);
-            color: white;
+        .loading-overlay.active {
+            display: flex;
         }
 
-        .fournisseur-name {
-            font-weight: 600;
-            color: var(--gray-900);
+        .loading-overlay .spinner-border {
+            width: 3rem;
+            height: 3rem;
         }
 
+        .loading-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            text-align: center;
+        }
+
+        /* Section d'impression */
         .print-section {
             display: none;
             background: white;
@@ -1036,13 +1038,85 @@
             }
         }
 
+        .fournisseur-selection {
+            padding: 1.5rem;
+            background: var(--gray-50);
+            border-radius: var(--border-radius-lg);
+        }
+
+        .fournisseur-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .fournisseur-card {
+            background: white;
+            border: 2px solid var(--gray-300);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .fournisseur-card:hover {
+            border-color: var(--primary-500);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.1);
+        }
+
+        .fournisseur-card.selected {
+            border-color: var(--primary-500);
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05), rgba(79, 70, 229, 0.1));
+            transform: translateY(-2px);
+        }
+
+        .fournisseur-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(79, 70, 229, 0.2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary-600);
+            transition: all 0.3s var(--transition-smooth);
+        }
+
+        .fournisseur-card.selected .fournisseur-icon {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .fournisseur-name {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .print-section {
+            display: none;
+            background: white;
+            color: black;
+            padding: 2rem;
+            font-family: 'Inter', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         @media (max-width: 1024px) {
             .dashboard-container {
                 padding: 1rem;
             }
             
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .status-stats-grid {
+                grid-template-columns: repeat(3, 1fr);
             }
             
             .search-filters {
@@ -1052,6 +1126,19 @@
             
             .filter-group {
                 min-width: 100%;
+            }
+            
+            .commande-visual-container {
+                flex-direction: column;
+                height: auto;
+                max-height: 80vh;
+            }
+            
+            .commande-list-container {
+                flex: none;
+                max-height: 300px;
+                border-right: none;
+                border-bottom: 1px solid var(--gray-200);
             }
         }
 
@@ -1063,8 +1150,8 @@
                 text-align: center;
             }
             
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .status-stats-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
             
             .section-header {
@@ -1086,35 +1173,19 @@
                 flex-direction: column;
             }
             
-            .commande-item {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .btn-edit {
-                margin-left: 0;
-                margin-top: 0.5rem;
-                align-self: flex-end;
-            }
-            
-            .modal-content {
-                max-height: 100vh;
-                border-radius: 0;
-            }
-            
-            .fournisseur-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .commande-details-grid {
+                grid-template-columns: 1fr;
             }
         }
 
         @media (max-width: 480px) {
+            .status-stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
             .pagination {
                 flex-direction: column;
                 gap: 1rem;
-            }
-            
-            .fournisseur-grid {
-                grid-template-columns: 1fr;
             }
             
             .floating-actions {
@@ -1134,7 +1205,7 @@
     <div class="dashboard-container">
         <header class="header">
             <div class="header-left">
-                <h1>Base Client</h1>
+                <h1>VisionPro - Base Client</h1>
             </div>
             <div class="user-info">
                 <span id="username-display"></span>
@@ -1148,72 +1219,12 @@
             </button>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div>
-                        <div class="stat-value" id="totalClients">0</div>
-                        <div class="stat-label">Total Clients</div>
-                    </div>
-                    <div class="stat-icon primary">
-                        <i class="fas fa-users"></i>
-                    </div>
-                </div>
-                <div class="stat-change" id="totalClientsChange">
-                    <i class="fas fa-minus"></i>
-                    <span id="totalClientsPercent">0%</span> ce mois
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div>
-                        <div class="stat-value" id="newSales">0</div>
-                        <div class="stat-label">Nouvelles Ventes</div>
-                    </div>
-                    <div class="stat-icon success">
-                        <i class="fas fa-shopping-cart"></i>
-                    </div>
-                </div>
-                <div class="stat-change" id="newSalesChange">
-                    <i class="fas fa-minus"></i>
-                    <span id="newSalesPercent">0%</span> ce mois
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div>
-                        <div class="stat-value" id="inProgress">0</div>
-                        <div class="stat-label">En Traitement</div>
-                    </div>
-                    <div class="stat-icon warning">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                </div>
-                <div class="stat-change" id="inProgressChange">
-                    <i class="fas fa-minus"></i>
-                    <span id="inProgressPercent">0%</span> ce mois
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <div>
-                        <div class="stat-value" id="totalRevenue">0 FCFA</div>
-                        <div class="stat-label">Chiffre d'Affaires</div>
-                    </div>
-                    <div class="stat-icon info">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                </div>
-                <div class="stat-change" id="revenueChange">
-                    <i class="fas fa-minus"></i>
-                    <span id="revenuePercent">0%</span> ce mois
-                </div>
-            </div>
+        <!-- Nouvelle grille des statuts de deals -->
+        <div class="status-stats-grid" id="statusStatsGrid">
+            <!-- Les cartes de statuts seront générées dynamiquement -->
         </div>
 
+        <!-- Bulk Actions -->
         <div class="bulk-actions" id="bulkActions">
             <span class="selected-count" id="selectedCount">0</span> client(s) sélectionné(s)
             <button class="bulk-action-btn" onclick="sendCommande()">
@@ -1238,12 +1249,7 @@
                     <label class="form-label">Statut</label>
                     <select class="form-control" id="statusFilter">
                         <option value="">Tous les statuts</option>
-                        <option value="Nouvelle vente">Nouvelle vente</option>
-                        <option value="Lunette Disponible">Lunette Disponible</option>
-                        <option value="En traitement">En traitement</option>
-                        <option value="Livré">Livré</option>
-                        <option value="Perdu">Perdu</option>
-                        <option value="Cancel">Annulé</option>
+                        <!-- Les options seront générées dynamiquement -->
                     </select>
                 </div>
                 <div class="filter-group">
@@ -1319,6 +1325,12 @@
         </button>
     </div>
 
+    <!-- Menu de chargement -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-border"></div>
+        <div class="loading-text">Chargement des données de commande...</div>
+    </div>
+
     <!-- Modal Container -->
     <div id="modal-container"></div>
 
@@ -1378,11 +1390,34 @@
         let commandesData = [];
         let selectedFournisseur = null;
         let inactivityTimer;
+        let activeStatusFilter = null;
+        let statusConfig = [];
+        let availableStatuses = [];
 
-        // Structure pour stocker les données mensuelles
-        let monthlyData = {
-            current: { clients: 0, newSales: 0, inProgress: 0, revenue: 0 },
-            previous: { clients: 0, newSales: 0, inProgress: 0, revenue: 0 }
+        // Définition des icônes par défaut pour les statuts
+        const defaultStatusIcons = {
+            'nouvelle vente': 'fas fa-shopping-cart',
+            'en traitement': 'fas fa-cogs',
+            'reçu boutique': 'fas fa-store',
+            'livré': 'fas fa-truck',
+            'cancel': 'fas fa-times-circle',
+            'annulé': 'fas fa-ban',
+            'perdu': 'fas fa-times-circle',
+            'fr traitement': 'fas fa-cogs',
+            'default': 'fas fa-circle'
+        };
+
+        // Définition des couleurs par défaut pour les statuts
+        const defaultStatusColors = {
+            'nouvelle vente': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'en traitement': 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
+            'reçu boutique': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            'livré': 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            'cancel': 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            'annulé': 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            'perdu': 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            'fr traitement': 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
+            'default': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
         };
 
         // ==================== INITIALISATION ====================
@@ -1463,11 +1498,17 @@
                 allClients = processClientData(result.data);
                 filteredClients = [...allClients];
                 
-                // Mettre à jour les statistiques
-                updateStats();
+                // Générer dynamiquement la configuration des statuts
+                generateStatusConfig();
+                
+                // Mettre à jour les statistiques des statuts
+                updateStatusStats();
                 
                 // Mettre à jour les filtres d'agence
                 updateAgencyFilter();
+                
+                // Mettre à jour le filtre des statuts
+                updateStatusFilter();
                 
                 // Afficher les clients
                 displayClients();
@@ -1499,6 +1540,10 @@
                     registrationDate = parseDate(dateString);
                 }
                 
+                // Normaliser le statut
+                let status = row[headerMap["Statut de la vente"]] || 'Nouvelle vente';
+                status = normalizeStatus(status);
+                
                 return {
                     id: row[headerMap["ID client"]] || '',
                     fullName: row[headerMap["Nom Complet Client"]] || '',
@@ -1506,10 +1551,51 @@
                     agency: row[headerMap["Agence"]] || '',
                     salesperson: row[headerMap["Commercial"]] || '',
                     netAmount: row[headerMap["Net à Payer (FCFA)"]] || 0,
-                    status: row[headerMap["Statut de la vente"]] || 'Nouvelle vente',
+                    status: status,
                     registrationDate: registrationDate
                 };
             });
+        }
+
+        function generateStatusConfig() {
+            // Collecter tous les statuts uniques des clients
+            const uniqueStatuses = [...new Set(allClients.map(client => client.status))];
+            availableStatuses = uniqueStatuses.sort();
+            
+            // Générer la configuration dynamique
+            statusConfig = availableStatuses.map(status => {
+                const normalizedKey = status.toLowerCase().trim();
+                
+                return {
+                    id: normalizedKey.replace(/[^a-z0-9]/g, '-'),
+                    name: status,
+                    icon: defaultStatusIcons[normalizedKey] || defaultStatusIcons.default,
+                    color: normalizedKey, // Utilisé pour le nom de classe CSS
+                    statusValue: status
+                };
+            });
+            
+            console.log('Configuration des statuts générée:', statusConfig);
+        }
+
+        function normalizeStatus(status) {
+            if (!status || status.trim() === '') {
+                return 'Nouvelle vente';
+            }
+            
+            const statusMap = {
+                'nouvelle vente': 'Nouvelle vente',
+                'en traitement': 'En traitement',
+                'reçu boutique': 'Reçu boutique',
+                'livré': 'Livré',
+                'cancel': 'Cancel',
+                'annulé': 'Cancel',
+                'perdu': 'Cancel',
+                'fr traitement': 'En traitement'
+            };
+            
+            const lowerStatus = status.toLowerCase().trim();
+            return statusMap[lowerStatus] || status;
         }
 
         function parseDate(dateString) {
@@ -1547,113 +1633,74 @@
             return null;
         }
 
-        // ==================== GESTION DES STATISTIQUES ====================
-        function calculateRealStats(clients) {
-            const currentMonth = new Date().getMonth();
-            const currentYear = new Date().getFullYear();
+        // ==================== STATISTIQUES DES STATUTS ====================
+        function updateStatusStats() {
+            const container = document.getElementById('statusStatsGrid');
+            if (!container) return;
             
-            monthlyData.current = { clients: 0, newSales: 0, inProgress: 0, revenue: 0 };
-            monthlyData.previous = { clients: 0, newSales: 0, inProgress: 0, revenue: 0 };
+            let html = '';
             
-            clients.forEach(client => {
-                let registrationDate = client.registrationDate;
-                
-                if (!registrationDate || isNaN(registrationDate.getTime())) {
-                    registrationDate = new Date();
-                }
-                
-                const clientMonth = registrationDate.getMonth();
-                const clientYear = registrationDate.getFullYear();
-                
-                const isCurrentMonth = clientMonth === currentMonth && clientYear === currentYear;
-                const isPreviousMonth = clientMonth === (currentMonth === 0 ? 11 : currentMonth - 1) && 
-                                       clientYear === (currentMonth === 0 ? currentYear - 1 : currentYear);
-                
-                if (isCurrentMonth) {
-                    monthlyData.current.clients++;
-                    monthlyData.current.revenue += parseFloat(client.netAmount) || 0;
-                    
-                    if (client.status === 'Nouvelle vente') {
-                        monthlyData.current.newSales++;
-                    }
-                    if (client.status === 'En traitement' || client.status === 'En Traitement') {
-                        monthlyData.current.inProgress++;
-                    }
-                }
-                
-                if (isPreviousMonth) {
-                    monthlyData.previous.clients++;
-                    monthlyData.previous.revenue += parseFloat(client.netAmount) || 0;
-                    
-                    if (client.status === 'Nouvelle vente') {
-                        monthlyData.previous.newSales++;
-                    }
-                    if (client.status === 'En traitement' || client.status === 'En Traitement') {
-                        monthlyData.previous.inProgress++;
-                    }
-                }
+            // Calculer les totaux par statut
+            const statusCounts = {};
+            statusConfig.forEach(status => {
+                statusCounts[status.id] = allClients.filter(client => 
+                    client.status === status.statusValue
+                ).length;
             });
             
-            updateStatsDisplay();
+            statusConfig.forEach(status => {
+                const currentCount = statusCounts[status.id] || 0;
+                const isActive = activeStatusFilter === status.statusValue;
+                
+                // Obtenir la couleur spécifique pour ce statut
+                const statusColor = defaultStatusColors[status.color] || defaultStatusColors.default;
+                
+                html += `
+                    <div class="status-stat-card ${isActive ? 'active' : ''}" 
+                         onclick="filterByStatus('${status.statusValue}')"
+                         style="--status-color: ${statusColor};">
+                        <div class="status-stat-header">
+                            <div class="status-stat-title">${status.name}</div>
+                            <div class="status-stat-icon" style="background: ${statusColor}">
+                                <i class="${status.icon}"></i>
+                            </div>
+                        </div>
+                        <div class="status-stat-value">${currentCount.toLocaleString()}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
         }
 
-        function calculatePercentageChange(current, previous) {
-            if (previous === 0) {
-                return current > 0 ? 100 : 0;
-            }
-            return ((current - previous) / previous) * 100;
+        function updateStatusFilter() {
+            const statusFilter = document.getElementById('statusFilter');
+            if (!statusFilter) return;
+            
+            let optionsHTML = '<option value="">Tous les statuts</option>';
+            statusConfig.forEach(status => {
+                optionsHTML += `<option value="${status.statusValue}">${status.name}</option>`;
+            });
+            
+            statusFilter.innerHTML = optionsHTML;
         }
 
-        function updateStatsDisplay() {
-            const clientsPercent = calculatePercentageChange(monthlyData.current.clients, monthlyData.previous.clients);
-            const newSalesPercent = calculatePercentageChange(monthlyData.current.newSales, monthlyData.previous.newSales);
-            const inProgressPercent = calculatePercentageChange(monthlyData.current.inProgress, monthlyData.previous.inProgress);
-            const revenuePercent = calculatePercentageChange(monthlyData.current.revenue, monthlyData.previous.revenue);
-            
-            document.getElementById('totalClients').textContent = monthlyData.current.clients.toLocaleString();
-            document.getElementById('newSales').textContent = monthlyData.current.newSales.toLocaleString();
-            document.getElementById('inProgress').textContent = monthlyData.current.inProgress.toLocaleString();
-            document.getElementById('totalRevenue').textContent = monthlyData.current.revenue.toLocaleString('fr-FR') + ' FCFA';
-            
-            updateStatChange('totalClients', clientsPercent);
-            updateStatChange('newSales', newSalesPercent);
-            updateStatChange('inProgress', inProgressPercent);
-            updateStatChange('revenue', revenuePercent);
-        }
-
-        function updateStatChange(statId, percent) {
-            const changeElement = document.getElementById(statId + 'Change');
-            const percentElement = document.getElementById(statId + 'Percent');
-            const iconElement = changeElement.querySelector('i');
-            
-            percentElement.textContent = Math.abs(percent).toFixed(1) + '%';
-            
-            if (percent > 0) {
-                changeElement.className = 'stat-change positive';
-                iconElement.className = 'fas fa-arrow-up';
-            } else if (percent < 0) {
-                changeElement.className = 'stat-change negative';
-                iconElement.className = 'fas fa-arrow-down';
+        function filterByStatus(status) {
+            if (activeStatusFilter === status) {
+                // Si le statut est déjà actif, on le désactive
+                activeStatusFilter = null;
+                document.getElementById('statusFilter').value = '';
             } else {
-                changeElement.className = 'stat-change';
-                iconElement.className = 'fas fa-minus';
+                // Sinon, on active le nouveau filtre
+                activeStatusFilter = status;
+                document.getElementById('statusFilter').value = status;
             }
-        }
-
-        function updateStats() {
-            const totalClients = allClients.length;
-            const newSales = allClients.filter(client => 
-                client.status === 'Nouvelle vente'
-            ).length;
-            const inProgress = allClients.filter(client => 
-                client.status === 'En traitement' || client.status === 'En traitement'
-            ).length;
             
-            const totalRevenue = allClients.reduce((sum, client) => {
-                return sum + (parseFloat(client.netAmount) || 0);
-            }, 0);
+            // Mettre à jour l'affichage des cartes de statuts
+            updateStatusStats();
             
-            calculateRealStats(allClients);
+            // Appliquer les filtres
+            applyFilters();
         }
 
         // ==================== AFFICHAGE DES CLIENTS ====================
@@ -1682,12 +1729,9 @@
                 clientsToShow.forEach(client => {
                     const row = document.createElement('tr');
                     
-                    let statusClass = 'status-active';
-                    if (client.status === 'Perdu' || client.status === 'Cancel') {
-                        statusClass = 'status-inactive';
-                    } else if (client.status === 'Nouvelle vente') {
-                        statusClass = 'status-pending';
-                    }
+                    // Déterminer la couleur du badge de statut
+                    const normalizedStatus = client.status.toLowerCase().trim();
+                    const badgeColor = defaultStatusColors[normalizedStatus] || defaultStatusColors.default;
                     
                     const formattedPhone = formatPhoneNumber(client.phone);
                     const formattedAmount = client.netAmount ? 
@@ -1715,7 +1759,11 @@
                         <td>${client.agency || 'N/A'}</td>
                         <td>${client.salesperson || 'N/A'}</td>
                         <td>${formattedAmount}</td>
-                        <td><span class="status-badge ${statusClass}">${client.status}</span></td>
+                        <td>
+                            <span class="status-badge" style="background: ${badgeColor}; color: white;">
+                                ${client.status}
+                            </span>
+                        </td>
                         <td>
                             <div class="action-btns">
                                 <button class="action-btn btn-view" title="Voir détails" onclick="viewClientDetails('${client.id}')">
@@ -1826,7 +1874,11 @@
             }
             
             if (statusFilter) {
-                statusFilter.addEventListener('change', applyFilters);
+                statusFilter.addEventListener('change', function() {
+                    activeStatusFilter = this.value || null;
+                    updateStatusStats();
+                    applyFilters();
+                });
             }
             
             if (agencyFilter) {
@@ -1947,7 +1999,7 @@
             updateBulkActions();
         }
 
-        // ==================== COMMANDES FOURNISSEUR ====================
+        // ==================== COMMANDES FOURNISSEUR (NOUVELLE INTERFACE) ====================
         async function sendCommande() {
             if (selectedClients.size === 0) {
                 showAlertMessage("Aucun client sélectionné", "error");
@@ -1955,90 +2007,88 @@
             }
             
             try {
-                // Afficher l'indicateur de chargement
-                const tableBody = document.getElementById('clientsTableBody');
-                if (tableBody) {
-                    tableBody.innerHTML = `
-                        <tr>
-                            <td colspan="8" class="text-center">
-                                <div class="loading-indicator">
-                                    <div class="spinner-border"></div>
-                                    <div>Préparation des commandes...</div>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                }
+                showAlertMessage("Préparation de la commande en cours...", "info");
                 
                 const selectedClientsData = allClients.filter(client => 
                     selectedClients.has(client.id)
                 );
                 
                 commandesData = await prepareCommandesData(selectedClientsData);
-                showCommandeModal();
+                showCommandeVisualModal();
                 
             } catch (error) {
                 console.error("Erreur lors de la préparation des commandes:", error);
                 showAlertMessage("Erreur lors du chargement des données", "error");
-                // Restaurer l'affichage normal
-                displayClients();
             }
         }
 
         async function prepareCommandesData(selectedClientsData) {
+            // Afficher le menu de chargement
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('active');
+            }
+            
             const commandes = [];
             
-            for (const client of selectedClientsData) {
-                try {
-                    const clientDetails = await fetchClientDetails(client.id);
-                    commandes.push({
-                        clientId: client.id,
-                        clientName: client.fullName,
-                        clientPhone: client.phone,
-                        clientAgency: client.agency,
-                        salesperson: client.salesperson,
-                        typeVerre: clientDetails.typeVerre || "",
-                        gammeVerres: clientDetails.gammeVerres || "",
-                        odSphere: clientDetails.odSphere || "0.00",
-                        odCylindre: clientDetails.odCylindre || "0.00",
-                        odAxe: clientDetails.odAxe || "0°",
-                        odADD: clientDetails.odADD || "0.00",
-                        odDP: clientDetails.odDP || "0",
-                        odHauteur: clientDetails.odHauteur || "0",
-                        ogSphere: clientDetails.ogSphere || "0.00",
-                        ogCylindre: clientDetails.ogCylindre || "0.00",
-                        ogAxe: clientDetails.ogAxe || "0°",
-                        ogADD: clientDetails.ogADD || "0.00",
-                        ogDP: clientDetails.ogDP || "0",
-                        ogHauteur: clientDetails.ogHauteur || "0",
-                        monture: clientDetails.monture || " ",
-                        netAmount: client.netAmount || 0
-                    });
-                } catch (error) {
-                    console.error(`Erreur pour le client ${client.id}:`, error);
-                    commandes.push({
-                        clientId: client.id,
-                        clientName: client.fullName,
-                        clientPhone: client.phone,
-                        clientAgency: client.agency,
-                        salesperson: client.salesperson,
-                        typeVerre: "Non spécifié",
-                        gammeVerres: "Standard",
-                        odSphere: "0.00",
-                        odCylindre: "0.00",
-                        odAxe: "0°",
-                        odADD: "0.00",
-                        odDP: "0",
-                        odHauteur: "0",
-                        ogSphere: "0.00",
-                        ogCylindre: "0.00",
-                        ogAxe: "0°",
-                        ogADD: "0.00",
-                        ogDP: "0",
-                        ogHauteur: "0",
-                        monture: " ",
-                        netAmount: client.netAmount || 0
-                    });
+            try {
+                for (const client of selectedClientsData) {
+                    try {
+                        const clientDetails = await fetchClientDetails(client.id);
+                        commandes.push({
+                            clientId: client.id,
+                            clientName: client.fullName,
+                            clientPhone: client.phone,
+                            clientAgency: client.agency,
+                            salesperson: client.salesperson,
+                            typeVerre: clientDetails.typeVerre || "Non spécifié",
+                            gammeVerres: clientDetails.gammeVerres || "Standard",
+                            odSphere: clientDetails.odSphere || "0.00",
+                            odCylindre: clientDetails.odCylindre || "0.00",
+                            odAxe: clientDetails.odAxe || "0°",
+                            odADD: clientDetails.odADD || "0.00",
+                            odDP: clientDetails.odDP || "0",
+                            odHauteur: clientDetails.odHauteur || "0",
+                            ogSphere: clientDetails.ogSphere || "0.00",
+                            ogCylindre: clientDetails.ogCylindre || "0.00",
+                            ogAxe: clientDetails.ogAxe || "0°",
+                            ogADD: clientDetails.ogADD || "0.00",
+                            ogDP: clientDetails.ogDP || "0",
+                            ogHauteur: clientDetails.ogHauteur || "0",
+                            monture: clientDetails.monture || "Non spécifiée",
+                            netAmount: client.netAmount || 0
+                        });
+                    } catch (error) {
+                        console.error(`Erreur pour le client ${client.id}:`, error);
+                        commandes.push({
+                            clientId: client.id,
+                            clientName: client.fullName,
+                            clientPhone: client.phone,
+                            clientAgency: client.agency,
+                            salesperson: client.salesperson,
+                            typeVerre: "Non spécifié",
+                            gammeVerres: "Standard",
+                            odSphere: "0.00",
+                            odCylindre: "0.00",
+                            odAxe: "0°",
+                            odADD: "0.00",
+                            odDP: "0",
+                            odHauteur: "0",
+                            ogSphere: "0.00",
+                            ogCylindre: "0.00",
+                            ogAxe: "0°",
+                            ogADD: "0.00",
+                            ogDP: "0",
+                            ogHauteur: "0",
+                            monture: "Non spécifiée",
+                            netAmount: client.netAmount || 0
+                        });
+                    }
+                }
+            } finally {
+                // Cacher le menu de chargement
+                if (loadingOverlay) {
+                    loadingOverlay.classList.remove('active');
                 }
             }
             
@@ -2088,113 +2138,49 @@
             };
         }
 
-        function generateCommandeModalContent() {
-            if (commandesData.length === 0) {
-                return '<div class="no-data">Aucune donnée de commande disponible</div>';
-            }
-            
-            let html = `
-                <div class="commande-summary">
-                    <div class="summary-header">
-                        <h3>Récapitulatif des Commandes</h3>
-                        <span class="badge">${commandesData.length} client(s)</span>
-                    </div>
-            `;
-            
-            const groupedByType = groupCommandesByType();
-            
-            Object.keys(groupedByType).forEach(typeVerre => {
-                const commandes = groupedByType[typeVerre];
-                html += `
-                    <div class="commande-group">
-                        <div class="group-header" onclick="toggleGroup('${typeVerre}')">
-                            <h4>${typeVerre}</h4>
-                            <span class="count">${commandes.length} commande(s)</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="group-content" id="group-${typeVerre}">
-                `;
-                
-                commandes.forEach((commande, index) => {
-                    html += `
-                        <div class="commande-item">
-                            <div class="client-header">
-                                <strong>${commande.clientName}</strong>
-                                <span class="client-id">${commande.clientId}</span>
-                            </div>
-                            <div class="verre-details">
-                                <div class="detail-row">
-                                    <span class="label">Gamme:</span>
-                                    <span class="value">${commande.gammeVerres}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="label">OD:</span>
-                                    <span class="value">${commande.odSphere} / ${commande.odCylindre} / ${commande.odAxe}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="label">OG:</span>
-                                    <span class="value">${commande.ogSphere} / ${commande.ogCylindre} / ${commande.ogAxe}</span>
-                                </div>
-                                <div class="detail-row">
-                                    <span class="label">ADD:</span>
-                                    <span class="value">OD ${commande.odADD} - OG ${commande.ogADD}</span>
-                                </div>
-                            </div>
-                            <button class="btn-edit" onclick="editCommande(${index})">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </div>
-                    `;
-                });
-                
-                html += `</div></div>`;
-            });
-            
-            html += `</div>`;
-            return html;
-        }
-
-        function groupCommandesByType() {
-            const grouped = {};
-            commandesData.forEach(commande => {
-                const type = commande.typeVerre || "Non spécifié";
-                if (!grouped[type]) {
-                    grouped[type] = [];
-                }
-                grouped[type].push(commande);
-            });
-            return grouped;
-        }
-
-        function toggleGroup(typeVerre) {
-            const groupContent = document.getElementById(`group-${typeVerre}`);
-            const icon = groupContent.previousElementSibling.querySelector('.fa-chevron-down');
-            
-            if (groupContent.classList.contains('expanded')) {
-                groupContent.classList.remove('expanded');
-                icon.className = 'fas fa-chevron-down';
-            } else {
-                groupContent.classList.add('expanded');
-                icon.className = 'fas fa-chevron-up';
-            }
-        }
-
-        function showCommandeModal() {
+        function showCommandeVisualModal() {
             const modalContainer = document.getElementById('modal-container');
             
             const modalHTML = `
                 <div class="modal-overlay active">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h3 class="modal-title">Commande Fournisseur</h3>
+                            <h3 class="modal-title">Commande Fournisseur - Vue Visuelle</h3>
                             <button class="modal-close" onclick="closeModal()">&times;</button>
                         </div>
-                        <div class="modal-body" id="commandeModalBody">
-                            ${generateCommandeModalContent()}
+                        <div class="modal-body">
+                            <div class="commande-visual-container">
+                                <div class="commande-list-container">
+                                    <div class="commande-list-header">
+                                        <div class="commande-list-title">${commandesData.length} Clients Sélectionnés</div>
+                                        <div class="commande-list-subtitle">Cliquez sur un client pour voir les détails</div>
+                                    </div>
+                                    <div class="commande-list" id="commandeClientList">
+                                        ${generateCommandeClientList()}
+                                    </div>
+                                </div>
+                                <div class="commande-details-container">
+                                    <div class="commande-details-header">
+                                        <div class="commande-details-title">Détails de la Commande</div>
+                                        <div class="commande-details-badge">Sélectionnez un client</div>
+                                    </div>
+                                    <div id="commandeDetailsContent">
+                                        <div class="no-data" style="padding: 4rem; text-align: center;">
+                                            <i class="fas fa-mouse-pointer" style="font-size: 3rem; color: var(--gray-400); margin-bottom: 1rem;"></i>
+                                            <div style="font-size: 1.1rem; color: var(--gray-600); margin-bottom: 0.5rem;">
+                                                Sélectionnez un client dans la liste
+                                            </div>
+                                            <div style="font-size: 0.875rem; color: var(--gray-500);">
+                                                Cliquez sur un nom de client pour afficher ses détails
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <div>
-                                <strong><span id="totalCommandes">${commandesData.length}</span> commande(s)</strong>
+                                <strong><span id="totalCommandes">${commandesData.length}</span> commande(s) préparée(s)</strong>
                             </div>
                             <div>
                                 <button class="btn" onclick="closeModal()">Annuler</button>
@@ -2208,124 +2194,194 @@
             `;
             
             modalContainer.innerHTML = modalHTML;
+            
+            // Sélectionner le premier client par défaut
+            if (commandesData.length > 0) {
+                setTimeout(() => {
+                    selectCommandeClient(0);
+                }, 100);
+            }
+        }
+
+        function generateCommandeClientList() {
+            return commandesData.map((commande, index) => `
+                <div class="commande-client-item" onclick="selectCommandeClient(${index})" id="commande-client-${index}">
+                    <div class="commande-client-name">${commande.clientName}</div>
+                    <div class="commande-client-id">${commande.clientId}</div>
+                    <div class="commande-client-details">
+                        <span class="commande-client-detail">${commande.typeVerre}</span>
+                        <span class="commande-client-detail">${commande.gammeVerres}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectCommandeClient(index) {
+            // Retirer la sélection précédente
+            document.querySelectorAll('.commande-client-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // Ajouter la sélection actuelle
+            const selectedItem = document.getElementById(`commande-client-${index}`);
+            if (selectedItem) {
+                selectedItem.classList.add('selected');
+            }
+            
+            // Afficher les détails
+            showCommandeDetails(index);
+        }
+
+        function showCommandeDetails(index) {
+            const commande = commandesData[index];
+            const detailsContainer = document.getElementById('commandeDetailsContent');
+            
+            if (!detailsContainer) return;
+            
+            detailsContainer.innerHTML = `
+                <div class="commande-details-grid">
+                    <div class="commande-details-section">
+                        <div class="commande-section-title">
+                            <i class="fas fa-user-circle"></i> Informations Client
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Nom Complet:</span>
+                            <span class="commande-details-value highlight">${commande.clientName}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">ID Client:</span>
+                            <span class="commande-details-value">${commande.clientId}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Téléphone:</span>
+                            <span class="commande-details-value">${formatPhoneNumber(commande.clientPhone)}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Agence:</span>
+                            <span class="commande-details-value">${commande.clientAgency}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Commercial:</span>
+                            <span class="commande-details-value">${commande.salesperson}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Montant:</span>
+                            <span class="commande-details-value highlight">${parseFloat(commande.netAmount).toLocaleString('fr-FR')} FCFA</span>
+                        </div>
+                    </div>
+                    
+                    <div class="commande-details-section">
+                        <div class="commande-section-title">
+                            <i class="fas fa-glasses"></i> Détails des Verres
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Type de Verre:</span>
+                            <span class="commande-details-value">${commande.typeVerre}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Gamme:</span>
+                            <span class="commande-details-value">${commande.gammeVerres}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Monture:</span>
+                            <span class="commande-details-value">${commande.monture}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="commande-details-section">
+                        <div class="commande-section-title">
+                            <i class="fas fa-eye"></i> Œil Droit (OD)
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Sphere:</span>
+                            <span class="commande-details-value">${commande.odSphere}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Cylindre:</span>
+                            <span class="commande-details-value">${commande.odCylindre}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Axe:</span>
+                            <span class="commande-details-value">${commande.odAxe}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">ADD:</span>
+                            <span class="commande-details-value">${commande.odADD}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">DP:</span>
+                            <span class="commande-details-value">${commande.odDP}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Hauteur:</span>
+                            <span class="commande-details-value">${commande.odHauteur}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="commande-details-section">
+                        <div class="commande-section-title">
+                            <i class="fas fa-eye"></i> Œil Gauche (OG)
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Sphere:</span>
+                            <span class="commande-details-value">${commande.ogSphere}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Cylindre:</span>
+                            <span class="commande-details-value">${commande.ogCylindre}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Axe:</span>
+                            <span class="commande-details-value">${commande.ogAxe}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">ADD:</span>
+                            <span class="commande-details-value">${commande.ogADD}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">DP:</span>
+                            <span class="commande-details-value">${commande.ogDP}</span>
+                        </div>
+                        <div class="commande-details-row">
+                            <span class="commande-details-label">Hauteur:</span>
+                            <span class="commande-details-value">${commande.ogHauteur}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--gray-50); border-radius: var(--border-radius-md);">
+                    <button class="btn btn-primary" onclick="editCommande(${index})" style="width: 100%;">
+                        <i class="fas fa-edit"></i> Modifier cette commande
+                    </button>
+                </div>
+            `;
+            
+            // Mettre à jour le badge
+            const badge = document.querySelector('.commande-details-badge');
+            if (badge) {
+                badge.textContent = `Client ${index + 1}/${commandesData.length}`;
+            }
         }
 
         function editCommande(index) {
             const commande = commandesData[index];
             
-            const modalBody = document.querySelector('#commandeModalBody');
-            if (!modalBody) return;
+            // Pour simplifier, nous utilisons un prompt pour chaque champ
+            // Dans une version plus avancée, on pourrait créer un formulaire d'édition
             
-            modalBody.innerHTML = `
-                <div class="edit-commande">
-                    <div style="display: flex; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gray-200);">
-                        <button class="btn" onclick="refreshCommandeModal()" style="margin-right: 1rem;">
-                            <i class="fas fa-arrow-left"></i>
-                        </button>
-                        <h3 style="margin: 0;">Modifier: ${commande.clientName}</h3>
-                    </div>
-                    
-                    <div style="background: var(--gray-50); padding: 1rem; border-radius: var(--border-radius-md); margin-bottom: 1.5rem;">
-                        <p><strong>ID:</strong> ${commande.clientId}</p>
-                        <p><strong>Agence:</strong> ${commande.clientAgency}</p>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Type de Verre</label>
-                            <input type="text" class="form-control" value="${commande.typeVerre || 'Non spécifié'}" 
-                                   onchange="updateCommandeData(${index}, 'typeVerre', this.value)">
-                        </div>
-                        <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Gamme</label>
-                            <input type="text" class="form-control" value="${commande.gammeVerres || 'Standard'}" 
-                                   onchange="updateCommandeData(${index}, 'gammeVerres', this.value)">
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="margin-bottom: 1rem; color: var(--primary-600);">Œil Droit (OD)</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">Sphere</label>
-                                <input type="text" class="form-control" value="${commande.odSphere || '0.00'}" 
-                                       onchange="updateCommandeData(${index}, 'odSphere', this.value)">
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">Cylindre</label>
-                                <input type="text" class="form-control" value="${commande.odCylindre || '0.00'}" 
-                                       onchange="updateCommandeData(${index}, 'odCylindre', this.value)">
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">Axe</label>
-                                <input type="text" class="form-control" value="${commande.odAxe || '0°'}" 
-                                       onchange="updateCommandeData(${index}, 'odAxe', this.value)">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="margin-bottom: 1rem; color: var(--primary-600);">Œil Gauche (OG)</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">Sphere</label>
-                                <input type="text" class="form-control" value="${commande.ogSphere || '0.00'}" 
-                                       onchange="updateCommandeData(${index}, 'ogSphere', this.value)">
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">Cylindre</label>
-                                <input type="text" class="form-control" value="${commande.ogCylindre || '0.00'}" 
-                                       onchange="updateCommandeData(${index}, 'ogCylindre', this.value)">
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">Axe</label>
-                                <input type="text" class="form-control" value="${commande.ogAxe || '0°'}" 
-                                       onchange="updateCommandeData(${index}, 'ogAxe', this.value)">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-bottom: 1.5rem;">
-                        <h4 style="margin-bottom: 1rem; color: var(--primary-600);">Autres informations</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">ADD OD</label>
-                                <input type="text" class="form-control" value="${commande.odADD || '0.00'}" 
-                                       onchange="updateCommandeData(${index}, 'odADD', this.value)">
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">ADD OG</label>
-                                <input type="text" class="form-control" value="${commande.ogADD || '0.00'}" 
-                                       onchange="updateCommandeData(${index}, 'ogADD', this.value)">
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-size: 0.875rem;">Monture</label>
-                                <input type="text" class="form-control" value="${commande.monture || 'Non spécifiée'}" 
-                                       onchange="updateCommandeData(${index}, 'monture', this.value)">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
-                        <button class="btn btn-primary" onclick="refreshCommandeModal()">
-                            <i class="fas fa-check"></i> Enregistrer et retourner
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function updateCommandeData(index, field, value) {
-            if (commandesData[index]) {
-                commandesData[index][field] = value;
+            const newTypeVerre = prompt("Type de verre:", commande.typeVerre);
+            if (newTypeVerre !== null) {
+                commandesData[index].typeVerre = newTypeVerre;
             }
-        }
-
-        function refreshCommandeModal() {
-            const modalBody = document.querySelector('#commandeModalBody');
-            if (modalBody) {
-                modalBody.innerHTML = generateCommandeModalContent();
+            
+            const newGammeVerres = prompt("Gamme des verres:", commande.gammeVerres);
+            if (newGammeVerres !== null) {
+                commandesData[index].gammeVerres = newGammeVerres;
             }
+            
+            // Mettre à jour l'affichage
+            selectCommandeClient(index);
+            showAlertMessage("Commande modifiée avec succès", "success");
         }
 
         function showFournisseurSelection() {
@@ -2341,13 +2397,16 @@
                             <button class="modal-close" onclick="closeModal()">&times;</button>
                         </div>
                         <div class="modal-body">
-                            <div class="fournisseur-selection">
-                                <h3 style="margin-bottom: 1rem;">Choisissez un fournisseur</h3>
+                            <div class="fournisseur-selection" style="padding: 2rem;">
+                                <h3 style="margin-bottom: 1rem; color: var(--gray-900);">Choisissez un fournisseur</h3>
+                                <p style="color: var(--gray-600); margin-bottom: 1.5rem;">
+                                    Vous êtes sur le point de passer une commande pour ${commandesData.length} client(s)
+                                </p>
                                 <div class="fournisseur-grid" id="fournisseurGrid"></div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn" onclick="showCommandeModal()">
+                            <button class="btn" onclick="showCommandeVisualModal()">
                                 <i class="fas fa-arrow-left"></i> Retour
                             </button>
                             <button class="btn btn-primary" id="btnImprimerCommande" disabled onclick="imprimerCommande()">
@@ -2362,12 +2421,12 @@
             
             const fournisseurGrid = document.getElementById('fournisseurGrid');
             const fournisseurs = [
-                { id: 'essilor', name: 'Essilor', icon: 'fas fa-glasses' },
-                { id: 'hoya', name: 'Hoya', icon: 'fas fa-eye' },
-                { id: 'zeiss', name: 'Zeiss', icon: 'fas fa-microscope' },
-                { id: 'rodenstock', name: 'Rodenstock', icon: 'fas fa-certificate' },
-                { id: 'seiko', name: 'Seiko', icon: 'fas fa-clock' },
-                { id: 'SIVO', name: 'SIVO', icon: 'fas fa-star' }
+                { id: 'essilor', name: 'Essilor', icon: 'fas fa-glasses', description: 'Leader mondial' },
+                { id: 'hoya', name: 'Hoya', icon: 'fas fa-eye', description: 'Technologie avancée' },
+                { id: 'zeiss', name: 'Zeiss', icon: 'fas fa-microscope', description: 'Précision allemande' },
+                { id: 'rodenstock', name: 'Rodenstock', icon: 'fas fa-certificate', description: 'Qualité premium' },
+                { id: 'seiko', name: 'Seiko', icon: 'fas fa-clock', description: 'Précision japonaise' },
+                { id: 'SIVO', name: 'SIVO', icon: 'fas fa-star', description: 'Fournisseur local' }
             ];
             
             fournisseurGrid.innerHTML = fournisseurs.map(fournisseur => `
@@ -2376,6 +2435,9 @@
                         <i class="${fournisseur.icon}"></i>
                     </div>
                     <div class="fournisseur-name">${fournisseur.name}</div>
+                    <div style="font-size: 0.75rem; color: var(--gray-500); margin-top: 0.25rem;">
+                        ${fournisseur.description}
+                    </div>
                 </div>
             `).join('');
         }
@@ -2493,9 +2555,13 @@
                 }
             });
             
+            // Régénérer la configuration des statuts
+            generateStatusConfig();
+            
             // Mettre à jour l'affichage
             displayClients();
-            updateStats();
+            updateStatusStats();
+            updateStatusFilter();
             clearSelection();
             
             // Rafraîchir aussi les filtres
@@ -2572,6 +2638,18 @@
             });
             
             printCommandesContent.innerHTML = html;
+        }
+
+        function groupCommandesByType() {
+            const grouped = {};
+            commandesData.forEach(commande => {
+                const type = commande.typeVerre || "Non spécifié";
+                if (!grouped[type]) {
+                    grouped[type] = [];
+                }
+                grouped[type].push(commande);
+            });
+            return grouped;
         }
 
         // ==================== FONCTIONS UTILITAIRES ====================
@@ -2716,20 +2794,6 @@
             }, 3000);
         }
 
-        // Fermer les modals en cliquant à l'extérieur
-        window.addEventListener('click', function(event) {
-            const modal = document.querySelector('.modal-overlay.active');
-            if (event.target === modal) {
-                closeModal();
-            }
-        });
-
-        // Empêcher la fermeture des modals en cliquant à l'intérieur
-        window.addEventListener('click', function(event) {
-            if (event.target.closest('.modal-content')) {
-                event.stopPropagation();
-            }
-        });
     </script>
 </body>
 </html>
