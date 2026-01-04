@@ -5784,22 +5784,22 @@ body {
         <div class="detail-couts-grid">
             <div class="detail-cout-item">
                 <label for="coutVerre">Coût du verre (FCFA)</label>
-                <input type="number" name="cout_verre" id="coutVerre" value="0" min="0" placeholder="0">
+                <input type="number" name="coutVerre" id="coutVerre" value="0" min="0" placeholder="0">
             </div>
             
             <div class="detail-cout-item">
                 <label for="coutPhotochromique">Photochromique/Transition (FCFA)</label>
-                <input type="number" name="cout_photochromique" id="coutPhotochromique" value="0" min="0" placeholder="0">
+                <input type="number" name="coutPhotochromique" id="coutPhotochromique" value="0" min="0" placeholder="0">
             </div>
             
             <div class="detail-cout-item">
                 <label for="coutAntireflet">Antireflet (FCFA)</label>
-                <input type="number" name="cout_antireflet" id="coutAntireflet" value="0" min="0" placeholder="0">
+                <input type="number" name="coutAntireflet" id="coutAntireflet" value="0" min="0" placeholder="0">
             </div>
             
             <div class="detail-cout-item">
                 <label for="coutAntiLumiereBleu">Anti-lumière bleue (FCFA)</label>
-                <input type="number" name="cout_anti_lumiere_bleu" id="coutAntiLumiereBleu" value="0" min="0" placeholder="0">
+                <input type="number" name="coutAntiLumiereBleu" id="coutAntiLumiereBleu" value="0" min="0" placeholder="0">
             </div>
         </div>
     </div>
@@ -6021,10 +6021,10 @@ async function generatePDF() {
         remise_type: document.getElementById('remise_type').value,
         net_a_payer: document.getElementById('net_a_payer').value,
         // Ajouter les détails des coûts
-        cout_verre: document.getElementById('coutVerre')?.value || 0,
-        cout_photochromique: document.getElementById('coutPhotochromique')?.value || 0,
-        cout_antireflet: document.getElementById('coutAntireflet')?.value || 0,
-        cout_anti_lumiere_bleu: document.getElementById('coutAntiLumiereBleu')?.value || 0
+        coutVerre: document.getElementById('coutVerre')?.value || 0,
+        coutPhotochromique: document.getElementById('coutPhotochromique')?.value || 0,
+        coutAntireflet: document.getElementById('coutAntireflet')?.value || 0,
+        coutAntiLumiereBleu: document.getElementById('coutAntiLumiereBleu')?.value || 0
     };
 
     // Afficher un indicateur de chargement
