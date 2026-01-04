@@ -7745,44 +7745,43 @@ function openNewSale() {
                         <h2 class="section-title">Tier Payant</h2>
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="assurance">Assurance</label>
-                                <div class="select-with-input">
-                                    <select name="assurance" id="assurance" class="form-control" style="display: none;">
-                                        <option value="">-- Choisir --</option>
-                                    </select>
-                                    <input type="text" id="assurance_input" class="form-control" 
-                                          placeholder="Nom de l'assurance">
-                                </div>
-                                <button type="button" class="btn btn-small" onclick="toggleInput('assurance')" 
-                                        style="margin-top: 5px; padding: 0.25rem 0.5rem;">
-                                    <i class="fas fa-exchange-alt"></i> Choisir dans la liste
-                                </button>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="compagnie">Compagnie</label>
-                                <div class="select-with-input">
-                                    <select name="compagnie" id="compagnie" class="form-control" style="display: none;">
-                                        <option value="">-- Choisir --</option>
-                                    </select>
-                                    <input type="text" id="compagnie_input" class="form-control" 
-                                          placeholder="Nom de la compagnie">
-                                </div>
-                                <button type="button" class="btn btn-small" onclick="toggleInput('compagnie')"
-                                        style="margin-top: 5px; padding: 0.25rem 0.5rem;">
-                                    <i class="fas fa-exchange-alt"></i> Choisir dans la liste
-                                </button>
-                            </div>
+    <label for="assurance">Assurance</label>
+    <div class="select-with-input">
+        <select name="assurance" id="assurance" class="form-control">
+            <option value="">-- Choisir --</option>
+        </select>
+        <input type="text" id="assurance_input" class="form-control" 
+              placeholder="Nom de l'assurance" style="display: none;">
+    </div>
+    <button type="button" class="btn btn-small" onclick="toggleInput('assurance')" 
+            style="margin-top: 5px; padding: 0.25rem 0.5rem;">
+        <i class="fas fa-plus"></i> Ajouter nouveau
+    </button>
+</div>
+
+<div class="form-group">
+    <label for="compagnie">Compagnie</label>
+    <div class="select-with-input">
+        <select name="compagnie" id="compagnie" class="form-control">
+            <option value="">-- Choisir --</option>
+        </select>
+        <input type="text" id="compagnie_input" class="form-control" 
+              placeholder="Nom de la compagnie" style="display: none;">
+    </div>
+    <button type="button" class="btn btn-small" onclick="toggleInput('compagnie')"
+            style="margin-top: 5px; padding: 0.25rem 0.5rem;">
+        <i class="fas fas fa-plus"></i> Ajouter nouveau 
+    </button>
+</div>
                             
                             <div class="form-group">
                                 <label for="numero_police">N° Police</label>
                                 <input type="text" name="numero_police" id="numero_police" class="form-control" placeholder="Numéro de police d'assurance" />
                             </div>
-                            
-                                <div class="form-group">
-                                    <label for="taux_couverture">Taux de couverture (%)</label>
-                                    <input type="number" name="taux_couverture" id="taux_couverture" class="form-control" placeholder="Ex: 80" min="0" max="100" />
-                                </div>
+                            <div class="form-group">
+  <label for="tva">TVA sur la monture (18%)</label>
+  <input type="number" name="tva" id="tva" class="form-control" readonly style="background-color: #f8f9fa;">
+</div>
                                 
                                 <div class="form-group">
                                     <label for="assure_principal">Assuré Principal</label>
@@ -8387,7 +8386,6 @@ function initializeMontureField() {
         // Activer le champ monture
         montureSelect.disabled = false;
         montureSelect.classList.remove('monture-select-disabled');
-        montureSelect.innerHTML = '<option value="">-- Chargement des montures... --</option>';
         
         // Charger les montures pour cette agence
         await loadMonturesForAgence(selectedAgence);
@@ -8398,7 +8396,6 @@ function initializeMontureField() {
 async function loadMonturesForAgence(agence) {
     try {
         console.log('⏳ Début du chargement des montures pour l\'agence:', agence);
-        showStatusMessage('Chargement des montures...');
         
         const response = await fetch(PRODUCTS_URL);
         
@@ -8527,7 +8524,11 @@ function populateMonturesSelect(montures, agence) {
         montureSelect.classList.remove('monture-select-disabled');
         
         // Trier les montures par référence
-        montures.sort((a, b) => {     const refA = (a.reference || '').toString();     const refB = (b.reference || '').toString();     return refA.localeCompare(refB); });
+       montures.sort((a, b) => {
+    const refA = (a.reference || '').toString();
+    const refB = (b.reference || '').toString();
+    return refA.localeCompare(refB);
+});
         
         // Ajouter les options
         montures.forEach((monture) => {
