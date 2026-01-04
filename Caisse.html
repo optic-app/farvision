@@ -1208,10 +1208,10 @@ async function loadAllCaisses() {
                 categorieFilter.innerHTML += `<option value="${cat}">${cat}</option>`;
             });
             
-            // Définir les dates par défaut (dernière semaine)
+            // Définir les dates par défaut (dernière mois)
             const today = new Date();
             const lastWeek = new Date();
-            lastWeek.setDate(lastWeek.getDate() - 7);
+            lastWeek.setDate(lastWeek.getDate() - 30);
             
             document.getElementById('filterDateStart').value = lastWeek.toISOString().split('T')[0];
             document.getElementById('filterDateEnd').value = today.toISOString().split('T')[0];
