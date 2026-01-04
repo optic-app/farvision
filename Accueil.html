@@ -5013,7 +5013,7 @@ body {
                                 <label class="required-field">Contact</label>
                                 <div style="display: flex; gap: 0.5rem;">
                                     <input type="text" name="indicatif" placeholder="+229" value="+229" style="width: 70px;" required/>
-                                    <input type="tel" name="numero" placeholder="012345678" required />
+                                    <input type="tel" name="numero" placeholder="012345678"  />
                                 </div>
                             </div>
                          </div>
@@ -5051,7 +5051,7 @@ body {
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="type_verre" class="required-field">Type de Verre</label>
-                                <select name="type_verre" id="type_verre" required>
+                                <select name="type_verre" id="type_verre" >
                                     <option value="">-- Sélectionnez --</option>
 <option value="ACHAT MONTURE">ACHAT MONTURE</option>
 <option value="ORGANIQUE1.56 UNIFOCAL BLANC/ ANTIREFLET">ORGANIQUE1.56 UNIFOCAL BLANC/ ANTIREFLET</option>
@@ -5143,10 +5143,10 @@ body {
                             
                             <div class="form-group">
                                 <label for="gamme_verre" class="required-field">Gamme des Verres</label>
-                                <select name="gamme_verre" id="gamme_verre" required>
-                                    <option value="">-- Sélectionnez --</option>
+                                <select name="gamme_verre" id="gamme_verre" >
+                                  <option value="MOYEN DE GAMME">MOYEN DE GAMME</option>
                                     <option value="ENTREE DE GAMME">ENTREE DE GAMME</option>
-                                    <option value="MOYEN DE GAMME">MOYEN DE GAMME</option>
+                              
                                     <option value="HAUT DE GAMME">HAUT DE GAMME</option>
                                     
                                 </select>
@@ -5156,7 +5156,7 @@ body {
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="choix_monture" class="required-field">Choix de Monture</label>
-                              <input type="text"  name="choixmonture" id="choixmonture" required />
+                              <input type="text"  name="choixmonture" id="choixmonture"  />
                                 
                             </div>
                         </div>
@@ -5728,7 +5728,7 @@ body {
                         </div>
                     </div>
                     
-<!-- Step 4: Payment -->
+<!-- Step 3: Payment -->
 <div class="form-section" id="section4">
     <h2 class="section-title">DÉTAILS DE PAIEMENT</h2>
     
@@ -5783,23 +5783,23 @@ body {
         <h3 class="detail-couts-title">DÉTAIL DES PRODUITS</h3>
         <div class="detail-couts-grid">
             <div class="detail-cout-item">
-                <label for="coutVerre">Coût du verre (FCFA)</label>
-                <input type="number" name="coutVerre" id="coutVerre" value="0" min="0" placeholder="0">
+                <label for="coutverre">Coût du verre (FCFA)</label>
+                <input type="number" name="coutverre" id="coutverre" value="0" min="0" placeholder="0">
             </div>
             
             <div class="detail-cout-item">
-                <label for="coutPhotochromique">Photochromique/Transition (FCFA)</label>
-                <input type="number" name="coutPhotochromique" id="coutPhotochromique" value="0" min="0" placeholder="0">
+                <label for="coutphotochromique">Photochromique/Transition (FCFA)</label>
+                <input type="number" name="coutphotochromique" id="coutphotochromique" value="0" min="0" placeholder="0">
             </div>
             
             <div class="detail-cout-item">
-                <label for="coutAntireflet">Antireflet (FCFA)</label>
-                <input type="number" name="coutAntireflet" id="coutAntireflet" value="0" min="0" placeholder="0">
+                <label for="coutantireflet">Antireflet (FCFA)</label>
+                <input type="number" name="coutantireflet" id="coutantireflet" value="0" min="0" placeholder="0">
             </div>
             
             <div class="detail-cout-item">
-                <label for="coutAntiLumiereBleu">Anti-lumière bleue (FCFA)</label>
-                <input type="number" name="coutAntiLumiereBleu" id="coutAntiLumiereBleu" value="0" min="0" placeholder="0">
+                <label for="<coutantiLumiereBleu>">Anti-lumière bleue (FCFA)</label>
+                <input type="number" name="coutantiLumiereBleu" id="coutantiLumiereBleu" value="0" min="0" placeholder="0">
             </div>
         </div>
     </div>
@@ -6021,10 +6021,10 @@ async function generatePDF() {
         remise_type: document.getElementById('remise_type').value,
         net_a_payer: document.getElementById('net_a_payer').value,
         // Ajouter les détails des coûts
-        coutverre: document.getElementById('coutVerre')?.value || 0,
-        coutphotochromique: document.getElementById('coutPhotochromique')?.value || 0,
-        coutantireflet: document.getElementById('coutAntireflet')?.value || 0,
-        coutantiLumiereBleu: document.getElementById('coutAntiLumiereBleu')?.value || 0
+        coutverre: document.getElementById('coutverre')?.value || 0,
+        coutphotochromique: document.getElementById('coutphotochromique')?.value || 0,
+        coutantireflet: document.getElementById('coutantireflet')?.value || 0,
+        coutantiLumiereBleu: document.getElementById('coutantiLumiereBleu')?.value || 0
     };
 
     // Afficher un indicateur de chargement
