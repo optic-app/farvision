@@ -9,2086 +9,1398 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root {
-            /* Palette de couleurs harmonisée */
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            --warning-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            
-            /* Couleurs de base */
-            --primary-50: #f0f4ff;
-            --primary-100: #d9e4ff;
-            --primary-200: #b3c9ff;
-            --primary-300: #8daef8;
-            --primary-400: #6793f1;
-            --primary-500: #4f46e5;
-            --primary-600: #4338ca;
-            --primary-700: #3730a3;
-            --primary-800: #312e81;
-            --primary-900: #1e1b4b;
-            
-            /* Neutres */
-            --gray-50: #fafafa;
-            --gray-100: #f5f5f5;
-            --gray-200: #e5e5e5;
-            --gray-300: #d4d4d4;
-            --gray-400: #a3a3a3;
-            --gray-500: #737373;
-            --gray-600: #525252;
-            --gray-700: #404040;
-            --gray-800: #262626;
-            --gray-900: #171717;
-            
-            /* Éléments d'interface */
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            
-            /* Effets spéciaux */
-            --neon-glow: 0 0 20px rgba(103, 147, 241, 0.5),
-                        0 0 40px rgba(103, 147, 241, 0.3),
-                        0 0 60px rgba(103, 147, 241, 0.1);
-            
-            --depth-shadow: 0 1px 1px rgba(0,0,0,0.11), 
-                          0 2px 2px rgba(0,0,0,0.11), 
-                          0 4px 4px rgba(0,0,0,0.11), 
-                          0 8px 8px rgba(0,0,0,0.11),
-                          0 16px 16px rgba(0,0,0,0.11);
-            
-            /* Animations */
-            --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
-            
-            /* Bordures */
-            --border-radius-sm: 8px;
-            --border-radius-md: 16px;
-            --border-radius-lg: 24px;
-            --border-radius-xl: 32px;
-            --border-radius-full: 9999px;
-            
-            /* Éclairage */
-            --light-intensity: 0.8;
-            --shadow-intensity: 0.15;
+    :root {
+        /* Palette de couleurs harmonisée */
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        --danger-gradient: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        --warning-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        
+        /* Couleurs de base */
+        --primary-50: #f0f4ff;
+        --primary-100: #d9e4ff;
+        --primary-200: #b3c9ff;
+        --primary-300: #8daef8;
+        --primary-400: #6793f1;
+        --primary-500: #4f46e5;
+        --primary-600: #4338ca;
+        --primary-700: #3730a3;
+        --primary-800: #312e81;
+        --primary-900: #1e1b4b;
+        
+        /* Neutres */
+        --gray-50: #fafafa;
+        --gray-100: #f5f5f5;
+        --gray-200: #e5e5e5;
+        --gray-300: #d4d4d4;
+        --gray-400: #a3a3a3;
+        --gray-500: #737373;
+        --gray-600: #525252;
+        --gray-700: #404040;
+        --gray-800: #262626;
+        --gray-900: #171717;
+        
+        /* Éléments d'interface */
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        
+        /* Bordures */
+        --border-radius-sm: 6px;
+        --border-radius-md: 10px;
+        --border-radius-lg: 14px;
+        --border-radius-xl: 18px;
+        --border-radius-full: 9999px;
+        
+        /* Animations */
+        --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        --transition-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* ============================================
+       RESET ET BASES
+    =============================================== */
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html {
+        font-size: 15px;
+        scroll-behavior: smooth;
+        font-smooth: always;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+        background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+        min-height: 100vh;
+        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        color: #2d3748;
+        position: relative;
+    }
+
+    /* ============================================
+       TYPOGRAPHIE
+    =============================================== */
+
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 700;
+        line-height: 1.2;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        margin-bottom: 0.75rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    /* ============================================
+       LAYOUT GÉNÉRAL
+    =============================================== */
+
+    .dashboard {
+        min-height: 100vh;
+        padding: 1rem;
+    }
+
+    .main {
+        width: 100%;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    /* ============================================
+       HEADER
+    =============================================== */
+
+    .header {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        padding: 1rem 1.5rem;
+        box-shadow: var(--glass-shadow);
+        margin-bottom: 1.5rem;
+        position: sticky;
+        top: 1rem;
+        z-index: 1000;
+        animation: slideDown 0.6s var(--transition-bounce);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-15px) scale(0.95);
         }
-
-        /* Mode sombre avec effets spéciaux */
-        .dark-mode {
-            --glass-bg: rgba(0, 0, 0, 0.2);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --neon-glow: 0 0 30px rgba(103, 147, 241, 0.7),
-                        0 0 60px rgba(103, 147, 241, 0.4),
-                        0 0 90px rgba(103, 147, 241, 0.2);
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
+    }
 
-        /* ============================================
-           RESET ET BASES AVANCÉES
-        =============================================== */
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    .page-title {
+        position: relative;
+        padding-left: 1.25rem;
+        font-size: 1.25rem;
+        margin: 0;
+    }
+
+    .page-title::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 24px;
+        background: var(--primary-gradient);
+        border-radius: var(--border-radius-full);
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    /* ============================================
+       BOUTONS
+    =============================================== */
+
+    .btn {
+        position: relative;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: var(--border-radius-md);
+        font-weight: 600;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.3s var(--transition-elastic);
+        overflow: hidden;
+        isolation: isolate;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-width: 100px;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px) scale(1.03);
+        box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+    }
+
+    .btn:active {
+        transform: translateY(-1px) scale(0.98);
+        transition: all 0.1s ease;
+    }
+
+    .btn-primary {
+        color: white;
+        background: var(--primary-gradient);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+    }
+
+    .btn-secondary {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        color: var(--primary-600);
+        border: 1px solid var(--glass-border);
+    }
+
+    .btn-secondary:hover {
+        background: var(--primary-gradient);
+        color: white;
+    }
+
+    .btn-success {
+        background: var(--success-gradient);
+        color: white;
+        box-shadow: 0 4px 12px rgba(67, 233, 123, 0.2);
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        min-width: auto;
+    }
+
+    /* ============================================
+       CARTES
+    =============================================== */
+
+    .section-container {
+        display: none;
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.3s var(--transition-smooth);
+    }
+
+    .section-container.active {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .produit-container,
+    .chart-container,
+    .assurance-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--glass-shadow);
+        transition: all 0.3s var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .produit-container:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--glass-shadow);
+        border-color: var(--primary-300);
+    }
+
+    /* ============================================
+       NAVIGATION ENTRE SECTIONS
+    =============================================== */
+
+    .section-nav {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding: 0.75rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-radius: var(--border-radius-lg);
+        border: 1px solid var(--glass-border);
+        overflow-x: auto;
+    }
+
+    .section-nav-btn {
+        padding: 0.75rem 1rem;
+        background: transparent;
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-md);
+        color: var(--gray-600);
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s var(--transition-smooth);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+        font-size: 0.85rem;
+    }
+
+    .section-nav-btn:hover {
+        background: rgba(79, 70, 229, 0.1);
+        color: var(--primary-600);
+        transform: translateY(-1px);
+    }
+
+    .section-nav-btn.active {
+        background: var(--primary-gradient);
+        color: white;
+        border-color: transparent;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    /* ============================================
+       EN-TÊTES DE SECTION
+    =============================================== */
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        position: sticky;
+        top: 80px;
+        z-index: 900;
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        padding: 1rem;
+        border-radius: var(--border-radius-lg);
+        border: 1px solid var(--glass-border);
+        margin-top: -0.5rem;
+    }
+
+    .section-title {
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    .dashboard-buttons {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    /* ============================================
+       FILTRES
+    =============================================== */
+
+    .filters-panel {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        position: sticky;
+        top: 140px;
+        z-index: 800;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .filter-group-label {
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--gray-600);
+    }
+
+    .form-control,
+    .form-select {
+        padding: 0.6rem 0.8rem;
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-md);
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--gray-800);
+        font-family: inherit;
+        font-size: 0.8rem;
+        transition: all 0.2s var(--transition-smooth);
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        outline: none;
+        border-color: var(--primary-400);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .form-select {
+        cursor: pointer;
+    }
+
+    /* ============================================
+       TABLEAUX
+    =============================================== */
+
+    .table-container {
+        position: relative;
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table-container::-webkit-scrollbar {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb {
+        background: var(--primary-gradient);
+        border-radius: 3px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb:hover {
+        background: var(--primary-600);
+    }
+
+    .produit-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        min-width: 1000px;
+    }
+
+    @media (max-width: 1200px) {
+        .produit-table {
+            min-width: 800px;
         }
+    }
 
-        html {
-            font-size: 16px;
-            scroll-behavior: smooth;
-            font-smooth: always;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+    @media (max-width: 768px) {
+        .produit-table {
+            min-width: 600px;
         }
+    }
 
-        body {
-            background: 
-                linear-gradient(180deg, #ffffff 0%, #fafafa 100%),
-                radial-gradient(ellipse at 50% -20%, rgba(120, 119, 198, 0.15) 0%, transparent 60%);
-            min-height: 100vh;
-            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-            color: #2d3748;
-            position: relative;
+    .produit-table th,
+    .produit-table td {
+        min-width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .produit-table th {
+        text-align: left;
+        background: rgba(79, 70, 229, 0.95);
+        color: white;
+        font-weight: 600;
+        border-bottom: 2px solid var(--primary-300);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+    }
+
+    .produit-table td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.2s var(--transition-smooth);
+    }
+
+    .produit-table tbody tr:hover {
+        background: rgba(79, 70, 229, 0.05);
+        transform: translateY(-1px);
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .text-end {
+        text-align: right;
+    }
+
+    /* ============================================
+       BOUTONS D'ACTION
+    =============================================== */
+
+    .action-btns {
+        display: flex;
+        gap: 0.3rem;
+    }
+
+    .action-btn {
+        width: 28px;
+        height: 28px;
+        border-radius: var(--border-radius-md);
+        border: none;
+        background: var(--glass-bg);
+        color: var(--gray-600);
+        cursor: pointer;
+        transition: all 0.2s var(--transition-smooth);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .btn-edit:hover {
+        background: var(--accent-gradient);
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: var(--danger-gradient);
+        color: white;
+    }
+
+    /* ============================================
+       BADGES
+    =============================================== */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.3rem 0.75rem;
+        border-radius: var(--border-radius-full);
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .status-badge::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: currentColor;
+        opacity: 0.1;
+        z-index: -1;
+    }
+
+    .status-high {
+        color: #10b981;
+    }
+
+    .status-medium {
+        color: #f59e0b;
+    }
+
+    .status-low {
+        color: #ef4444;
+    }
+
+    /* ============================================
+       MESSAGES D'ALERTE
+    =============================================== */
+
+    .alert-message {
+        padding: 0.75rem 1rem;
+        border-radius: var(--border-radius-md);
+        margin: 0.75rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        animation: slideInRight 0.2s var(--transition-smooth);
+        position: relative;
+        overflow: hidden;
+        font-size: 0.85rem;
+    }
+
+    .alert-message::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: 0.1;
+        z-index: -1;
+    }
+
+    .alert-message.success {
+        background: rgba(16, 185, 129, 0.1);
+        color: #10b981;
+        border-left: 3px solid #10b981;
+    }
+
+    .alert-message.error {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        border-left: 3px solid #ef4444;
+    }
+
+    .alert-message.warning {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+        border-left: 3px solid #f59e0b;
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(10px);
         }
-
-        /* Effet de texture géométrique */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            right: -200px;
-            width: 400px;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.03) 50%, transparent);
-            transform: skewX(-15deg);
-            pointer-events: none;
+        to {
+            opacity: 1;
+            transform: translateX(0);
         }
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234f46e5' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: -1;
+    }
+
+    /* ============================================
+       INDICATEUR DE CHARGEMENT
+    =============================================== */
+
+    .loading-indicator {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1.5rem;
+    }
+
+    .spinner-border {
+        width: 2rem;
+        height: 2rem;
+        border: 3px solid currentColor;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
         }
+    }
 
-        /* ============================================
-           TYPOGRAPHIE PRÉMIUM
-        =============================================== */
+    .loading-text {
+        color: var(--gray-600);
+        font-size: 0.8rem;
+    }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-weight: 700;
-            line-height: 1.2;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            position: relative;
+    /* ============================================
+       INFO UTILISATEUR
+    =============================================== */
+
+    .user-info {
+        position: relative;
+    }
+
+    .profile-dropdown {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--border-radius-full);
+        background: var(--glass-bg);
+        transition: all 0.2s var(--transition-smooth);
+    }
+
+    .profile-dropdown:hover {
+        background: rgba(79, 70, 229, 0.1);
+    }
+
+    .profile-name {
+        font-weight: 500;
+        color: var(--gray-700);
+        font-size: 0.85rem;
+    }
+
+    .profile-img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid var(--glass-border);
+    }
+
+    /* ============================================
+       MODALES
+    =============================================== */
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        animation: fadeIn 0.2s var(--transition-smooth);
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: var(--border-radius-xl);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        animation: modalSlideUp 0.3s var(--transition-smooth);
+        max-width: 90vw;
+        max-height: 90vh;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    @keyframes modalSlideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .modal-header {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 0;
+        color: var(--primary-700);
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .modal-close {
+        width: 28px;
+        height: 28px;
+        border-radius: var(--border-radius-full);
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        color: var(--gray-500);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s var(--transition-smooth);
+        font-size: 0.9rem;
+    }
+
+    .modal-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        transform: rotate(90deg);
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+        overflow-y: auto;
+        max-height: calc(90vh - 120px);
+    }
+
+    .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        background: rgba(250, 250, 250, 0.8);
+    }
+
+    /* ============================================
+       MODALES D'ÉDITION
+    =============================================== */
+
+    .edit-modal {
+        font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.2s ease;
+    }
+
+    .edit-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .edit-modal-content {
+        width: 90%;
+        max-width: 700px;
+        background: white;
+        border-radius: 14px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+        transform: translateY(15px);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .edit-modal.active .edit-modal-content {
+        transform: translateY(0);
+    }
+
+    .edit-modal-header {
+        background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
+        padding: 1.25rem 1.5rem;
+        position: relative;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .edit-modal-title {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin: 0;
+        color: var(--primary-700);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .edit-modal-close {
+        background: rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 8px;
+        color: var(--gray-500);
+        cursor: pointer;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        position: absolute;
+        top: 1.25rem;
+        right: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .edit-modal-close:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+
+    .edit-modal-body {
+        padding: 1.5rem;
+    }
+
+    .edit-form-group {
+        margin-bottom: 1rem;
+        position: relative;
+    }
+
+    .edit-form-label {
+        font-weight: 500;
+        color: var(--gray-700);
+        margin-bottom: 0.3rem;
+        font-size: 0.8rem;
+        display: block;
+    }
+
+    .edit-form-control {
+        width: 100%;
+        border-radius: 8px;
+        padding: 0.75rem 0.9rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease;
+        font-family: inherit;
+        font-size: 0.85rem;
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--gray-800);
+    }
+
+    .edit-form-control:focus {
+        border-color: var(--primary-400);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        outline: none;
+        background: white;
+    }
+
+    .edit-form-control[readonly] {
+        background-color: rgba(0, 0, 0, 0.02);
+        border-color: rgba(0, 0, 0, 0.05);
+        color: var(--gray-600);
+        cursor: not-allowed;
+    }
+
+    .edit-modal-footer {
+        padding: 1rem 1.5rem;
+        background: rgba(250, 250, 250, 0.8);
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+
+    .edit-btn {
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.8rem;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .edit-btn-secondary {
+        background: rgba(0, 0, 0, 0.03);
+        color: var(--gray-700);
+        border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .edit-btn-secondary:hover {
+        background: rgba(0, 0, 0, 0.06);
+        color: var(--gray-800);
+        transform: translateY(-1px);
+    }
+
+    .edit-btn-primary {
+        background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-400) 100%);
+        color: white;
+        border: none;
+        box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
+    }
+
+    .edit-btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+
+    .edit-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -0.5rem;
+    }
+
+    .edit-col {
+        flex: 1;
+        min-width: 200px;
+        padding: 0 0.5rem;
+    }
+
+    /* ============================================
+       ONGLETS
+    =============================================== */
+
+    .tabs {
+        display: flex;
+        gap: 0.3rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--glass-border);
+        padding-bottom: 0.3rem;
+    }
+
+    .tab {
+        padding: 0.6rem 1rem;
+        background: transparent;
+        border: none;
+        border-radius: var(--border-radius-md);
+        color: var(--gray-600);
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s var(--transition-smooth);
+        font-size: 0.85rem;
+    }
+
+    .tab:hover {
+        background: rgba(79, 70, 229, 0.1);
+        color: var(--primary-600);
+    }
+
+    .tab.active {
+        background: var(--primary-gradient);
+        color: white;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+        animation: fadeIn 0.2s ease;
+    }
+
+    /* ============================================
+       GRAPHIQUES
+    =============================================== */
+
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .chart-title {
+        margin: 0;
+        font-size: 1.1rem;
+    }
+
+    .chart-wrapper {
+        height: 300px;
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    /* ============================================
+       CARTES DE STATISTIQUES
+    =============================================== */
+
+    .assurance-summary,
+    .monthly-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .assurance-card,
+    .month-stat-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        padding: 1rem;
+        transition: all 0.2s var(--transition-smooth);
+    }
+
+    .assurance-card:hover,
+    .month-stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--glass-shadow);
+    }
+
+    .assurance-name,
+    .month-name {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: var(--gray-700);
+        font-size: 0.9rem;
+    }
+
+    .assurance-details {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    .assurance-amount {
+        font-weight: 600;
+        color: var(--primary-600);
+    }
+
+    .assurance-count {
+        font-weight: 600;
+        color: var(--gray-700);
+    }
+
+    .month-amount {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--primary-600);
+        margin: 0.3rem 0;
+    }
+
+    .month-count {
+        font-size: 0.8rem;
+        color: var(--gray-600);
+    }
+
+    /* ============================================
+       ACTION FLOTTANTE
+    =============================================== */
+
+    .floating-actions {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        z-index: 1000;
+    }
+
+    .floating-action-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--border-radius-full);
+        border: none;
+        background: var(--primary-gradient);
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        transition: all 0.2s var(--transition-elastic);
+        font-size: 1.1rem;
+    }
+
+    .floating-action-btn:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+    }
+
+    /* ============================================
+       RESPONSIVE
+    =============================================== */
+
+    @media (max-width: 1200px) {
+        .dashboard {
+            padding: 0.75rem;
+        }
+        
+        .section-header {
+            top: 70px;
+        }
+        
+        .filters-panel {
+            top: 130px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .header {
+            top: 0.75rem;
             margin-bottom: 1rem;
         }
-
-        h1 {
-            font-size: 2.5rem;
-            letter-spacing: -0.025em;
-        }
-
-        h2 {
-            font-size: 2rem;
-        }
-
-        h3 {
-            font-size: 1.5rem;
-        }
-
-        /* ============================================
-           LAYOUT GÉNÉRAL
-        =============================================== */
-
-        .dashboard {
-            min-height: 100vh;
-            padding: 2rem;
-        }
-
-        .main {
-            width: 100%;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* ============================================
-           HEADER ULTRA MODERNE
-        =============================================== */
-
-        .header {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            padding: 1.5rem 2rem;
-            box-shadow: var(--glass-shadow);
-            margin-bottom: 2rem;
-            position: sticky;
-            top: 2rem;
-            z-index: 1000;
-            animation: slideDown 0.6s var(--transition-bounce);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .page-title {
-            position: relative;
-            padding-left: 1.5rem;
-            font-size: 1.5rem;
-            margin: 0;
-        }
-
-        .page-title::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 6px;
-            height: 32px;
-            background: var(--primary-gradient);
-            border-radius: var(--border-radius-full);
-            animation: titleGlow 2s infinite alternate;
-        }
-
-        @keyframes titleGlow {
-            0% {
-                box-shadow: 0 0 5px var(--primary-400);
-            }
-            100% {
-                box-shadow: 0 0 20px var(--primary-400),
-                            0 0 30px var(--primary-300);
-            }
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        /* ============================================
-           BOUTONS ULTRA AVANCÉS
-        =============================================== */
-
-        .btn {
-            position: relative;
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: var(--border-radius-md);
-            font-weight: 600;
-            font-size: 0.875rem;
-            letter-spacing: 0.025em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.4s var(--transition-elastic);
-            overflow: hidden;
-            isolation: isolate;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            min-width: 120px;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--primary-gradient);
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s var(--transition-smooth);
-        }
-
-        .btn::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--primary-gradient);
-            z-index: -1;
-            opacity: 1;
-        }
-
-        .btn:hover::before {
-            opacity: 1;
-        }
-
-        .btn:hover {
-            transform: 
-                translateY(-4px)
-                scale(1.05)
-                rotateX(5deg);
-            box-shadow: 
-                0 20px 40px rgba(79, 70, 229, 0.3),
-                var(--neon-glow);
-        }
-
-        .btn:active {
-            transform: 
-                translateY(-2px)
-                scale(0.98);
-            transition: all 0.1s ease;
-        }
-
-        .btn-primary {
-            color: white;
-            background: var(--primary-gradient);
-            box-shadow: 
-                0 10px 20px rgba(79, 70, 229, 0.2),
-                0 6px 6px rgba(79, 70, 229, 0.1);
-        }
-
-        .btn-secondary {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            color: var(--primary-600);
-            border: 1px solid var(--glass-border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary-gradient);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success-gradient);
-            color: white;
-            box-shadow: 
-                0 10px 20px rgba(67, 233, 123, 0.2),
-                0 6px 6px rgba(67, 233, 123, 0.1);
-        }
-
-        .btn-sm {
-            padding: 0.5rem 1rem;
-            font-size: 0.75rem;
-            min-width: auto;
-        }
-
-        /* ============================================
-           CARTES AVEC EFFET GLASSMORPHISM
-        =============================================== */
-
-        .section-container {
-            display: none;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.4s var(--transition-smooth);
-        }
-
-        .section-container.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
+        
         .produit-container,
-        .chart-container,
-        .assurance-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            padding: 2rem;
-            box-shadow: var(--glass-shadow);
-            transition: all 0.4s var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .produit-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                var(--primary-400),
-                transparent
-            );
-        }
-
-        .produit-container:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 
-                var(--glass-shadow),
-                var(--neon-glow);
-            border-color: var(--primary-300);
-        }
-
-        /* ============================================
-           NAVIGATION ENTRE SECTIONS
-        =============================================== */
-
-        .section-nav {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
+        .chart-container {
             padding: 1rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: var(--border-radius-lg);
-            border: 1px solid var(--glass-border);
         }
-
-        .section-nav-btn {
-            padding: 1rem 1.5rem;
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-md);
-            color: var(--gray-600);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        
+        .section-nav {
+            margin-bottom: 1rem;
         }
-
-        .section-nav-btn:hover {
-            background: rgba(79, 70, 229, 0.1);
-            color: var(--primary-600);
-            transform: translateY(-2px);
-        }
-
-        .section-nav-btn.active {
-            background: var(--primary-gradient);
-            color: white;
-            border-color: transparent;
-            box-shadow: 
-                0 10px 20px rgba(79, 70, 229, 0.3),
-                0 0 20px rgba(79, 70, 229, 0.2);
-        }
-
-        /* ============================================
-           EN-TÊTES DE SECTION AVEC POSITION STICKY
-        =============================================== */
-
-        .section-container.active {
-            display: block;
-            position: relative;
-        }
-
+        
         .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-            /* Rendre le header sticky */
-            position: sticky;
-            top: 120px; /* Ajuster selon la hauteur du header principal */
-            z-index: 900;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            padding: 1.5rem;
-            border-radius: var(--border-radius-lg);
-            border: 1px solid var(--glass-border);
-            margin-top: -1rem;
+            top: 60px;
+            padding: 0.75rem;
         }
-
-        .section-title {
-            margin: 0;
-        }
-
-        .dashboard-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        /* ============================================
-           FILTRES AVEC POSITION STICKY
-        =============================================== */
-
+        
         .filters-panel {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            /* Rendre les filtres sticky */
-            position: sticky;
-            top: 200px; /* Ajuster selon la hauteur du header + section-header */
-            z-index: 800;
+            top: 120px;
+            padding: 0.75rem;
         }
+    }
 
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+    @media (max-width: 768px) {
+        html {
+            font-size: 14px;
         }
-
-        .filter-group-label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--gray-600);
-        }
-
-        .form-control,
-        .form-select {
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-md);
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--gray-800);
-            font-family: inherit;
-            font-size: 0.875rem;
-            transition: all 0.3s var(--transition-smooth);
-        }
-
-        .form-control:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: var(--primary-400);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .form-select {
-            cursor: pointer;
-        }
-
-        /* ============================================
-           DÉFILEMENT HORIZONTAL POUR LES TABLEAUX
-        =============================================== */
-
-        .table-container {
-            position: relative;
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Style de la barre de défilement */
-        .table-container::-webkit-scrollbar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .table-container::-webkit-scrollbar-thumb {
-            background: var(--primary-gradient);
-            border-radius: 4px;
-        }
-
-        .table-container::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-600);
-        }
-
-        .table-container::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 4px;
-        }
-
-        /* S'assurer que le tableau s'étend sur la largeur disponible */
-        .produit-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: var(--border-radius-lg);
-            overflow: hidden;
-            min-width: 1200px;
-        }
-
-        @media (max-width: 1400px) {
-            .produit-table {
-                min-width: 1000px;
-            }
-        }
-
-        @media (max-width: 1200px) {
-            .produit-table {
-                min-width: 800px;
-            }
-        }
-
-        .produit-table th,
-        .produit-table td {
-            min-width: 120px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .produit-table th:nth-child(1),
-        .produit-table td:nth-child(1) {
-            min-width: 150px;
-        }
-
-        .produit-table th:nth-child(2),
-        .produit-table td:nth-child(2) {
-            min-width: 150px;
-        }
-
-        .produit-table th:nth-child(3),
-        .produit-table td:nth-child(3) {
-            min-width: 200px;
-        }
-
-        .produit-table th:nth-child(4),
-        .produit-table td:nth-child(4) {
-            min-width: 180px;
-        }
-
-        .produit-table .text-end {
-            min-width: 140px;
-        }
-
-        /* Animation pour les lignes du tableau */
-        .produit-table tbody tr {
-            animation: slideInUp 0.5s var(--transition-smooth) forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        @keyframes slideInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Délai d'animation pour chaque ligne */
-        .produit-table tbody tr:nth-child(1) { animation-delay: 0.1s; }
-        .produit-table tbody tr:nth-child(2) { animation-delay: 0.2s; }
-        .produit-table tbody tr:nth-child(3) { animation-delay: 0.3s; }
-        .produit-table tbody tr:nth-child(4) { animation-delay: 0.4s; }
-        .produit-table tbody tr:nth-child(5) { animation-delay: 0.5s; }
-
-        .produit-table tbody tr:hover {
-            background: linear-gradient(
-                90deg,
-                rgba(79, 70, 229, 0.1) 0%,
-                rgba(255, 255, 255, 0.1) 50%,
-                rgba(79, 70, 229, 0.1) 100%
-            );
-            transform: 
-                translateY(-2px)
-                scale(1.01)
-                translateZ(20px);
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-            z-index: 10;
-        }
-
-        .produit-table td {
-            padding: 1.25rem 1rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            transition: all 0.3s var(--transition-smooth);
-        }
-
-        .produit-table td:first-child {
-            border-left: 4px solid transparent;
-            background: linear-gradient(
-                90deg,
-                rgba(79, 70, 229, 0.15) 0%,
-                transparent 100%
-            );
-        }
-
-        .produit-table tbody tr:hover td:first-child {
-            border-left-color: var(--primary-400);
-            background: linear-gradient(
-                90deg,
-                rgba(79, 70, 229, 0.25) 0%,
-                transparent 100%
-            );
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .text-end {
-            text-align: right;
-        }
-
-        /* ============================================
-           BOUTONS D'ACTION DANS LES TABLEAUX
-        =============================================== */
-
-        .action-btns {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--border-radius-md);
-            border: none;
-            background: var(--glass-bg);
-            color: var(--gray-600);
-            cursor: pointer;
-            transition: all 0.3s var(--transition-smooth);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .action-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-edit:hover {
-            background: var(--accent-gradient);
-            color: white;
-        }
-
-        .btn-cancel:hover {
-            background: var(--danger-gradient);
-            color: white;
-        }
-
-        /* ============================================
-           BADGES AVEC EFFET NEON
-        =============================================== */
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius-full);
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.3s var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .status-badge::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: currentColor;
-            opacity: 0.1;
-            z-index: -1;
-        }
-
-        .status-high {
-            color: #10b981;
-            box-shadow: 
-                0 4px 15px rgba(16, 185, 129, 0.3),
-                0 0 10px rgba(16, 185, 129, 0.1);
-        }
-
-        .status-medium {
-            color: #f59e0b;
-            box-shadow: 
-                0 4px 15px rgba(245, 158, 11, 0.3),
-                0 0 10px rgba(245, 158, 11, 0.1);
-        }
-
-        .status-low {
-            color: #ef4444;
-            box-shadow: 
-                0 4px 15px rgba(239, 68, 68, 0.3),
-                0 0 10px rgba(239, 68, 68, 0.1);
-        }
-
-        /* ============================================
-           MESSAGES D'ALERTE
-        =============================================== */
-
-        .alert-message {
-            padding: 1rem 1.5rem;
-            border-radius: var(--border-radius-md);
-            margin: 1rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            animation: slideInRight 0.3s var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .alert-message::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            opacity: 0.1;
-            z-index: -1;
-        }
-
-        .alert-message.success {
-            background: rgba(16, 185, 129, 0.1);
-            color: #10b981;
-            border-left: 4px solid #10b981;
-        }
-
-        .alert-message.error {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border-left: 4px solid #ef4444;
-        }
-
-        .alert-message.warning {
-            background: rgba(245, 158, 11, 0.1);
-            color: #f59e0b;
-            border-left: 4px solid #f59e0b;
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideOutRight {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-        }
-
-        /* ============================================
-           INDICATEUR DE CHARGEMENT
-        =============================================== */
-
-        .loading-indicator {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            padding: 2rem;
-        }
-
-        .spinner-border {
-            width: 3rem;
-            height: 3rem;
-            border: 3px solid currentColor;
-            border-right-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-text {
-            color: var(--gray-600);
-            font-size: 0.875rem;
-        }
-
-        /* ============================================
-           INFO UTILISATEUR
-        =============================================== */
-
-        .user-info {
-            position: relative;
-        }
-
-        .profile-dropdown {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            border-radius: var(--border-radius-full);
-            background: var(--glass-bg);
-            transition: all 0.3s var(--transition-smooth);
-        }
-
-        .profile-dropdown:hover {
-            background: rgba(79, 70, 229, 0.1);
-        }
-
-        .profile-name {
-            font-weight: 500;
-            color: var(--gray-700);
-        }
-
-        .profile-img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--glass-border);
-        }
-
-        .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            min-width: 200px;
-            box-shadow: var(--glass-shadow);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s var(--transition-smooth);
-            z-index: 1000;
-        }
-
-        .profile-dropdown:focus-within .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            color: var(--gray-700);
-            text-decoration: none;
-            transition: all 0.2s ease;
+        
+        .dashboard {
+            padding: 0.5rem;
         }
-
-        .dropdown-menu a:hover {
-            background: rgba(79, 70, 229, 0.1);
-            color: var(--primary-600);
-        }
-
-        .dropdown-menu a i {
-            width: 20px;
-            text-align: center;
-        }
-
-        /* ============================================
-           MODALES - DESIGN CLAIR ET ÉPURÉ
-        =============================================== */
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            animation: fadeIn 0.3s var(--transition-smooth);
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: var(--border-radius-xl);
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.08),
-                0 0 40px rgba(79, 70, 229, 0.05);
-            animation: modalSlideUp 0.4s var(--transition-smooth);
-            max-width: 90vw;
-            max-height: 90vh;
-            overflow: hidden;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        @keyframes modalSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .xlarge-modal {
-            width: 1200px;
-            max-width: 95vw;
-            height: 800px;
-            max-height: 90vh;
-        }
-
-        .modal-header {
-            padding: 1.75rem 2rem;
-            background: linear-gradient(
-                135deg,
-                rgba(79, 70, 229, 0.05) 0%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-        }
-
-        .modal-header::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 2rem;
-            right: 2rem;
-            height: 1px;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(79, 70, 229, 0.2),
-                transparent
-            );
-        }
-
-        .modal-title {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin: 0;
-            color: var(--primary-700);
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .modal-icon {
-            color: var(--primary-500);
-            font-size: 1.1em;
-        }
-
-        .modal-close {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--border-radius-full);
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            color: var(--gray-500);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s var(--transition-smooth);
-        }
-
-        .modal-close:hover {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            transform: rotate(90deg);
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-
-        .modal-body {
-            padding: 2rem;
-            overflow-y: auto;
-            max-height: calc(90vh - 200px);
-            background: linear-gradient(
-                180deg,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(250, 250, 250, 0.5) 100%
-            );
-        }
-
-        .modal-footer {
-            padding: 1.5rem 2rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
-            background: rgba(250, 250, 250, 0.8);
-        }
-
-        /* ============================================
-           MODALES D'ÉDITION - DESIGN MODERNE ET CLAIR
-        =============================================== */
-
-        .edit-modal {
-            font-family: 'Inter', 'Plus Jakarta Sans', sans-serif;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .edit-modal.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        
+        .modal-content,
         .edit-modal-content {
-            width: 90%;
-            max-width: 800px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.08),
-                0 0 30px rgba(79, 70, 229, 0.04);
-            overflow: hidden;
-            transform: translateY(20px);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(0, 0, 0, 0.04);
+            width: 95%;
+            margin: 0.5rem;
         }
-
-        .edit-modal.active .edit-modal-content {
-            transform: translateY(0);
+        
+        .section-header {
+            flex-direction: column;
+            align-items: stretch;
+            top: 50px;
+            padding: 0.5rem;
         }
-
-        .edit-modal-header {
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
-            padding: 1.75rem 2rem;
-            position: relative;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .edit-modal-header::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(79, 70, 229, 0.3),
-                transparent
-            );
-        }
-
-        .edit-modal-title {
-            font-weight: 600;
-            letter-spacing: -0.01em;
-            font-size: 1.25rem;
-            margin: 0;
-            color: var(--primary-700);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .edit-modal-title i {
-            color: var(--primary-500);
-        }
-
-        .edit-modal-close {
-            background: rgba(0, 0, 0, 0.03);
-            border: 1px solid rgba(0, 0, 0, 0.08);
-            border-radius: 10px;
-            color: var(--gray-500);
-            font-size: 1.25rem;
-            cursor: pointer;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
+        
+        .dashboard-buttons {
             justify-content: center;
-            transition: all 0.3s ease;
-            position: absolute;
-            top: 1.75rem;
-            right: 2rem;
         }
-
-        .edit-modal-close:hover {
-            background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
-            border-color: rgba(239, 68, 68, 0.2);
-        }
-
-        .edit-modal-body {
-            padding: 2rem;
-            background: linear-gradient(
-                180deg,
-                rgba(250, 250, 250, 0.3) 0%,
-                rgba(255, 255, 255, 0) 100%
-            );
-        }
-
-        .edit-form-group {
-            margin-bottom: 1.25rem;
-            position: relative;
-        }
-
-        .edit-form-label {
-            font-weight: 500;
-            color: var(--gray-700);
-            margin-bottom: 0.5rem;
-            font-size: 0.875rem;
-            display: block;
-        }
-
-        .edit-form-control {
-            width: 100%;
-            border-radius: 10px;
-            padding: 0.875rem 1rem;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            box-shadow: none;
-            font-family: inherit;
-            font-size: 0.9375rem;
-            background: rgba(255, 255, 255, 0.8);
-            color: var(--gray-800);
-        }
-
-        .edit-form-control:focus {
-            border-color: var(--primary-400);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-            outline: none;
-            background: white;
-        }
-
-        .edit-form-control[readonly] {
-            background-color: rgba(0, 0, 0, 0.02);
-            border-color: rgba(0, 0, 0, 0.05);
-            color: var(--gray-600);
-            cursor: not-allowed;
-        }
-
-        .edit-form-control::placeholder {
-            color: var(--gray-400);
-        }
-
-        .edit-modal-footer {
-            padding: 1.5rem 2rem;
-            background: rgba(250, 250, 250, 0.8);
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.75rem;
-        }
-
-        .edit-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 10px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.875rem;
-            border: 1px solid transparent;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            letter-spacing: 0.01em;
-        }
-
-        .edit-btn-secondary {
-            background: rgba(0, 0, 0, 0.03);
-            color: var(--gray-700);
-            border-color: rgba(0, 0, 0, 0.08);
-        }
-
-        .edit-btn-secondary:hover {
-            background: rgba(0, 0, 0, 0.06);
-            color: var(--gray-800);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .edit-btn-primary {
-            background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-400) 100%);
-            color: white;
-            border: none;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
-        }
-
-        .edit-btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: 0.5s;
-        }
-
-        .edit-btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .edit-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.3);
-        }
-
-        .edit-row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0 -0.75rem;
-        }
-
-        .edit-col {
-            flex: 1;
-            min-width: 250px;
-            padding: 0 0.75rem;
-        }
-
-        /* Animation de focus subtile */
-        .edit-form-group:focus-within .edit-form-label {
-            color: var(--primary-600);
-        }
-
-        .edit-form-group:focus-within .edit-form-control {
-            border-color: var(--primary-400);
-            background: white;
-        }
-
-        /* Spinner */
-        .edit-spinner {
-            display: inline-block;
-            width: 1rem;
-            height: 1rem;
-            border: 2px solid currentColor;
-            border-right-color: transparent;
-            border-radius: 50%;
-            animation: edit-spin 0.75s linear infinite;
-        }
-
-        @keyframes edit-spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Adaptation pour mobile */
-        @media (max-width: 768px) {
-            .modal-content,
-            .edit-modal-content {
-                width: 95%;
-                margin: 1rem;
-            }
-            
-            .modal-header,
-            .edit-modal-header {
-                padding: 1.25rem 1.5rem;
-            }
-            
-            .modal-body,
-            .edit-modal-body {
-                padding: 1.5rem;
-            }
-            
-            .modal-footer,
-            .edit-modal-footer {
-                padding: 1.25rem 1.5rem;
-                flex-wrap: wrap;
-            }
-            
-            .edit-row {
-                flex-direction: column;
-            }
-            
-            .edit-col {
-                min-width: 100%;
-            }
-            
-            .edit-modal-close {
-                top: 1.25rem;
-                right: 1.5rem;
-            }
-        }
-
-        /* Mode sombre */
-        .dark-mode .modal-overlay {
-            background: rgba(0, 0, 0, 0.7);
-        }
-
-        .dark-mode .modal-content {
-            background: var(--gray-900);
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.3),
-                0 0 40px rgba(79, 70, 229, 0.1);
-        }
-
-        .dark-mode .modal-header {
-            background: linear-gradient(
-                135deg,
-                rgba(79, 70, 229, 0.1) 0%,
-                rgba(0, 0, 0, 0) 100%
-            );
-            border-bottom-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .dark-mode .modal-header::before {
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(79, 70, 229, 0.3),
-                transparent
-            );
-        }
-
-        .dark-mode .modal-title {
-            color: var(--primary-300);
-        }
-
-        .dark-mode .modal-close {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: var(--gray-400);
-        }
-
-        .dark-mode .modal-body {
-            background: linear-gradient(
-                180deg,
-                rgba(0, 0, 0, 0) 0%,
-                rgba(30, 30, 30, 0.3) 100%
-            );
-        }
-
-        .dark-mode .modal-footer {
-            background: rgba(30, 30, 30, 0.5);
-            border-top-color: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Mode sombre pour edit modal */
-        .dark-mode .edit-modal {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-        .dark-mode .edit-modal-content {
-            background: var(--gray-900);
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(79, 70, 229, 0.1);
-        }
-
-        .dark-mode .edit-modal-header {
-            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
-            border-bottom-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .dark-mode .edit-modal-header::after {
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(79, 70, 229, 0.4),
-                transparent
-            );
-        }
-
-        .dark-mode .edit-modal-title {
-            color: var(--primary-300);
-        }
-
-        .dark-mode .edit-modal-title i {
-            color: var(--primary-400);
-        }
-
-        .dark-mode .edit-modal-close {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: var(--gray-400);
-        }
-
-        .dark-mode .edit-modal-close:hover {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border-color: rgba(239, 68, 68, 0.3);
-        }
-
-        .dark-mode .edit-modal-body {
-            background: linear-gradient(
-                180deg,
-                rgba(30, 30, 30, 0.3) 0%,
-                rgba(0, 0, 0, 0) 100%
-            );
-        }
-
-        .dark-mode .edit-form-label {
-            color: var(--gray-300);
-        }
-
-        .dark-mode .edit-form-control {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.15);
-            color: var(--gray-200);
-        }
-
-        .dark-mode .edit-form-control:focus {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--primary-400);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-        }
-
-        .dark-mode .edit-form-control[readonly] {
-            background-color: rgba(255, 255, 255, 0.03);
-            border-color: rgba(255, 255, 255, 0.08);
-            color: var(--gray-400);
-        }
-
-        .dark-mode .edit-form-control::placeholder {
-            color: var(--gray-500);
-        }
-
-        .dark-mode .edit-modal-footer {
-            background: rgba(30, 30, 30, 0.5);
-            border-top-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .dark-mode .edit-btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--gray-300);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .dark-mode .edit-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--gray-200);
-        }
-        /* ============================================
-           ONGLETS
-        =============================================== */
-
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--glass-border);
-            padding-bottom: 0.5rem;
-        }
-
-        .tab {
-            padding: 0.75rem 1.5rem;
-            background: transparent;
-            border: none;
-            border-radius: var(--border-radius-md);
-            color: var(--gray-600);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s var(--transition-smooth);
-            position: relative;
-        }
-
-        .tab:hover {
-            background: rgba(79, 70, 229, 0.1);
-            color: var(--primary-600);
-        }
-
-        .tab.active {
-            background: var(--primary-gradient);
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* ============================================
-           GRAPHIQUES
-        =============================================== */
-
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .chart-title {
-            margin: 0;
-            font-size: 1.25rem;
-        }
-
-        .chart-wrapper {
-            height: 400px;
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
-
-        /* ============================================
-           CARTES DE STATISTIQUES
-        =============================================== */
-
+        
         .assurance-summary,
         .monthly-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
+            grid-template-columns: 1fr;
         }
-
-        .assurance-card,
-        .month-stat-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--border-radius-lg);
-            padding: 1.5rem;
-            transition: all 0.3s var(--transition-smooth);
+        
+        .filters-panel {
+            top: 100px;
+            padding: 0.5rem;
         }
-
-        .assurance-card:hover,
-        .month-stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--glass-shadow);
+        
+        .section-header,
+        .filters-panel {
+            position: static !important;
         }
-
-        .assurance-name,
-        .month-name {
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--gray-700);
+        
+        .header {
+            padding: 0.75rem 1rem;
         }
-
-        .assurance-details {
-            display: flex;
-            justify-content: space-between;
-            gap: 1rem;
-            font-size: 0.875rem;
+        
+        .page-title {
+            font-size: 1.1rem;
+            padding-left: 1rem;
         }
-
-        .assurance-amount {
-            font-weight: 600;
-            color: var(--primary-600);
-        }
-
-        .assurance-count {
-            font-weight: 600;
-            color: var(--gray-700);
-        }
-
-        .month-amount {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary-600);
-            margin: 0.5rem 0;
-        }
-
-        .month-count {
-            font-size: 0.875rem;
-            color: var(--gray-600);
-        }
-
-        /* ============================================
-           ACTION FLOTTANTE
-        =============================================== */
-
-        .floating-actions {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            z-index: 1000;
-        }
-
-        .floating-action-btn {
-            width: 56px;
-            height: 56px;
-            border-radius: var(--border-radius-full);
-            border: none;
-            background: var(--primary-gradient);
-            color: white;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 
-                0 10px 25px rgba(79, 70, 229, 0.3),
-                var(--neon-glow);
-            transition: all 0.3s var(--transition-elastic);
-        }
-
-        .floating-action-btn:hover {
-            transform: 
-                translateY(-4px)
-                scale(1.1)
-                rotate(5deg);
-            box-shadow: 
-                0 20px 40px rgba(79, 70, 229, 0.4),
-                var(--neon-glow);
-        }
-
-        .floating-action-btn.back {
-            background: var(--secondary-gradient);
-        }
-
-        /* ============================================
-           THEME TOGGLE AVEC EFFET
-        =============================================== */
-
-        .theme-toggle {
-            width: 50px;
-            height: 50px;
-            border-radius: var(--border-radius-full);
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s var(--transition-bounce);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .theme-toggle::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--primary-gradient);
-            opacity: 0;
-            transition: opacity 0.3s var(--transition-smooth);
-        }
-
-        .theme-toggle:hover::before {
-            opacity: 1;
-        }
-
-        .theme-toggle i {
-            font-size: 1.25rem;
-            color: var(--gray-600);
-            transition: all 0.3s var(--transition-smooth);
-            position: relative;
-            z-index: 1;
-        }
-
-        .theme-toggle:hover i {
-            color: white;
-            transform: rotate(180deg) scale(1.2);
-        }
-
-        /* ============================================
-           RESPONSIVE ULTRA AVANCÉ
-        =============================================== */
-
-        @media (max-width: 1200px) {
-            .dashboard {
-                padding: 1.5rem;
-            }
-            
-            .edit-row {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .section-header {
-                top: 100px;
-            }
-            
-            .filters-panel {
-                top: 180px;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .dashboard {
-                grid-template-columns: 1fr;
-            }
-            
-            .header {
-                top: 1rem;
-                margin-bottom: 1.5rem;
-            }
-            
-            .produit-container,
-            .chart-container {
-                padding: 1.5rem;
-            }
-            
-            .section-nav {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-            }
-            
-            .section-nav-btn {
-                white-space: nowrap;
-            }
-            
-            .section-header {
-                top: 90px;
-                padding: 1rem;
-            }
-            
-            .filters-panel {
-                top: 160px;
-                padding: 1rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            html {
-                font-size: 14px;
-            }
-            
-            .dashboard {
-                padding: 1rem;
-            }
-            
-            .modal-content,
-            .edit-modal-content {
-                max-width: 95vw;
-                margin: 1rem;
-            }
-            
-            .produit-table {
-                display: block;
-                overflow-x: auto;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                align-items: stretch;
-                top: 80px;
-                padding: 0.75rem;
-            }
-            
-            .dashboard-buttons {
-                justify-content: center;
-            }
-            
-            .assurance-summary,
-            .monthly-stats {
-                grid-template-columns: 1fr;
-            }
-            
-            .filters-panel {
-                top: 150px;
-                padding: 0.75rem;
-            }
-            
-            .section-header,
-            .filters-panel {
-                position: static !important;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .btn {
-                padding: 0.875rem 1rem;
-                min-width: auto;
-                width: 100%;
-            }
-            
-            .header {
-                padding: 1rem;
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .header-actions {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            .section-nav {
-                padding: 0.5rem;
-            }
-            
-            .section-nav-btn {
-                padding: 0.75rem 1rem;
-                font-size: 0.75rem;
-            }
-            
-            .edit-modal-header,
-            .edit-modal-body,
-            .edit-modal-footer {
-                padding: 1rem;
-            }
-            
-            .floating-actions {
-                bottom: 1rem;
-                right: 1rem;
-            }
-        }
-
-        /* ============================================
-           ACCESSIBILITÉ AVANCÉE
-        =============================================== */
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        .focus-visible {
-            outline: 3px solid var(--primary-400);
-            outline-offset: 3px;
-            border-radius: var(--border-radius-sm);
-        }
-
-        /* ============================================
-           UTILITAIRES
-        =============================================== */
-
-        .text-muted {
-            color: var(--gray-500) !important;
-        }
-
-        .py-4 {
-            padding-top: 1rem !important;
-            padding-bottom: 1rem !important;
-        }
-
-        .me-2 {
-            margin-right: 0.5rem !important;
-        }
-
-        .mb-0 {
-            margin-bottom: 0 !important;
-        }
-
-        .mt-2 {
-            margin-top: 0.5rem !important;
-        }
-
-        .w-100 {
-            width: 100% !important;
-        }
-
-        .d-none {
-            display: none !important;
-        }
-
-        .d-flex {
-            display: flex !important;
-        }
-
-        .justify-content-between {
-            justify-content: space-between !important;
-        }
-
-        .align-items-center {
-            align-items: center !important;
-        }
-
-        .flex-wrap {
-            flex-wrap: wrap !important;
-        }
-
-        /* ============================================
-           ANIMATIONS SUPPLÉMENTAIRES
-        =============================================== */
-
-        @keyframes pulseGlow {
-            0%, 100% {
-                box-shadow: 
-                    0 0 20px rgba(79, 70, 229, 0.2),
-                    0 0 40px rgba(79, 70, 229, 0.1);
-            }
-            50% {
-                box-shadow: 
-                    0 0 30px rgba(79, 70, 229, 0.4),
-                    0 0 60px rgba(79, 70, 229, 0.2),
-                    0 0 80px rgba(79, 70, 229, 0.1);
-            }
-        }
-
-        @keyframes floatElement {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                transform: translateY(-10px) rotate(2deg);
-            }
-        }
-
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        /* ============================================
-           STYLES POUR LES CASES À COCHER
-        =============================================== */
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .facture-checkbox {
-            width: 20px;
+        
+        .page-title::before {
+            width: 3px;
             height: 20px;
-            cursor: pointer;
-            accent-color: var(--primary-500);
-            transition: all 0.3s var(--transition-smooth);
         }
+    }
 
-        .facture-checkbox:hover {
-            transform: scale(1.1);
+    @media (max-width: 480px) {
+        .btn {
+            padding: 0.6rem 0.9rem;
+            min-width: auto;
+            width: 100%;
         }
-
-        .facture-checkbox:checked {
-            box-shadow: 0 0 10px var(--primary-400);
+        
+        .header {
+            padding: 0.5rem;
+            flex-direction: column;
+            gap: 0.5rem;
         }
-
-        .selection-controls {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            margin-bottom: 1rem;
+        
+        .header-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .section-nav {
+            padding: 0.5rem;
+        }
+        
+        .section-nav-btn {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+        }
+        
+        .edit-modal-header,
+        .edit-modal-body,
+        .edit-modal-footer {
             padding: 1rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: var(--border-radius-md);
-            border: 1px solid var(--glass-border);
         }
+        
+        .floating-actions {
+            bottom: 1rem;
+            right: 1rem;
+        }
+        
+        .floating-action-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+    }
 
-        .selection-info {
-            font-size: 0.875rem;
-            color: var(--gray-600);
-            font-weight: 500;
-        }
+    /* ============================================
+       UTILITAIRES
+    =============================================== */
 
-        .selection-info .count {
-            color: var(--primary-600);
-            font-weight: 600;
-        }
-    </style>   
+    .text-muted {
+        color: var(--gray-500) !important;
+    }
+
+    .py-4 {
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    .me-2 {
+        margin-right: 0.3rem !important;
+    }
+
+    .mb-0 {
+        margin-bottom: 0 !important;
+    }
+
+    .mt-2 {
+        margin-top: 0.3rem !important;
+    }
+
+    .w-100 {
+        width: 100% !important;
+    }
+
+    .d-none {
+        display: none !important;
+    }
+
+    .d-flex {
+        display: flex !important;
+    }
+
+    .justify-content-between {
+        justify-content: space-between !important;
+    }
+
+    .align-items-center {
+        align-items: center !important;
+    }
+
+    .flex-wrap {
+        flex-wrap: wrap !important;
+    }
+
+    /* ============================================
+       STYLES POUR LES CASES À COCHER
+    =============================================== */
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .facture-checkbox {
+        width: 16px;
+        height: 16px;
+        cursor: pointer;
+        accent-color: var(--primary-500);
+        transition: all 0.2s var(--transition-smooth);
+    }
+
+    .facture-checkbox:hover {
+        transform: scale(1.1);
+    }
+
+    .selection-controls {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        margin-bottom: 0.75rem;
+        padding: 0.75rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        border-radius: var(--border-radius-md);
+        border: 1px solid var(--glass-border);
+    }
+
+    .selection-info {
+        font-size: 0.8rem;
+        color: var(--gray-600);
+        font-weight: 500;
+    }
+
+    .selection-info .count {
+        color: var(--primary-600);
+        font-weight: 600;
+    }
+</style> 
 </head>
 <body>
 <div class="dashboard">
@@ -2107,11 +1419,6 @@
                     <div class="profile-dropdown" tabindex="0" aria-haspopup="true" aria-expanded="false">
                         <span class="profile-name" id="username-display"></span>
                         <img src="https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff" alt="Photo de profil" class="profile-img">
-                        <div class="dropdown-menu" role="menu">
-                            <a href="#" role="menuitem"><i class="fas fa-user" aria-hidden="true"></i> Mon profil</a>
-                            <a href="#" role="menuitem"><i class="fas fa-cog" aria-hidden="true"></i> Paramètres</a>
-                            <a href="#" id="logout-btn" role="menuitem"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Déconnexion</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -2124,9 +1431,6 @@
             </button>
             <button class="section-nav-btn" onclick="showSection('point-facturations')">
                 <i class="fas fa-chart-bar"></i> Point des Facturations
-            </button>
-            <button class="section-nav-btn" onclick="openStatistiques()">
-                <i class="fas fa-chart-pie"></i> Statistiques
             </button>
         </div>
 
@@ -2284,6 +1588,7 @@
                                 <th scope="col">Nb Factures</th>
                                 <th scope="col">PDF Récap</th>
                                 <th scope="col">PDF Détail</th>
+                                <th scope="col">ID Facturation</th>
                             </tr>
                         </thead>
                         <tbody id="facturationData">
@@ -3524,54 +2829,71 @@ function submitFactureUpdate(index) {
         submitBtn.disabled = false;
     });
 }
-
 async function cancelFacture(index) {
+    // 1. Récupération de la facture
     const facture = factureManager.allData[index];
     const clientId = facture['Id Client'];
     const policeNumber = facture['N°Police'] || '';
 
+    // 2. Confirmation utilisateur
     if (!confirm(`Confirmez-vous l'annulation de la facture ${policeNumber} ?`)) {
-        return;
+        return; // Annuler si l'utilisateur refuse
     }
 
+    // 3. Préparation de l'interface (bouton spinner)
     const btn = event.target.closest('button');
     const originalContent = btn.innerHTML;
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     btn.disabled = true;
 
     try {
-        await fetch(`https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=deleteFacture`, {
+        // 4. Appel au Google Apps Script avec anti-cache
+        const timestamp = new Date().getTime();
+        const url = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=deleteFacture`;
+        
+        const response = await fetch(url, {
             method: 'POST',
-            mode: 'no-cors',
+            mode: 'no-cors', // Important pour Google Apps Script
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 idClient: clientId,
-                policeNumber: policeNumber
+                policeNumber: policeNumber,
+                timestamp: timestamp // Ajout d'un timestamp unique
             })
         });
 
+        // 5. Pause pour laisser le script s'exécuter
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        closeModal();
+
+        // 6. Mise à jour locale (suppression du tableau)
         factureManager.allData.splice(index, 1);
         factureManager.updateStats();
-        
         factureManager.filteredData = [...factureManager.allData];
         
+        // 7. Mise à jour de l'interface
         if (document.getElementById('gestion-facturations').classList.contains('active')) {
             const headers = Object.keys(factureManager.allData[0] || {});
             displayFilteredFactures(factureManager.allData, headers);
         }
         
+        // 8. Confirmation à l'utilisateur
         UIManager.showTemporaryMessage('✅ Facture annulée avec succès', 'success', 3000);
+        closeModal();
+        
     } catch (e) {
+        // 9. Gestion des erreurs
         console.error('Erreur réseau:', e);
         UIManager.showTemporaryMessage('❌ Erreur lors de l\'annulation', 'error', 3000);
+        
     } finally {
+        // 10. Réinitialisation du bouton
         btn.innerHTML = originalContent;
         btn.disabled = false;
     }
 }
-
 // ==================== NOUVELLE FACTURE ====================
 async function openAddFactureModal() {
     const modalContainer = document.getElementById('modal-container');
@@ -3756,6 +3078,7 @@ async function submitNewFacture() {
         });
 
         UIManager.showTemporaryMessage('✅ Facture enregistrée avec succès!', 'success', 3000);
+        closeModal();
         
         await factureManager.loadData();
         
@@ -3972,34 +3295,34 @@ async function confirmerGenerationDepotSelectionne() {
     generateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Génération en cours...';
     
     try {
-        await updateFacturesSelectionnees(window.facturesPrevisualisation);
+        // UN SEUL APPEL - récupérer l'ID
+        const facturationId = await updateFacturesSelectionnees(window.facturesPrevisualisation);
         
         const aujourdhui = new Date();
         const dateDuJour = `${String(aujourdhui.getDate()).padStart(2, '0')}/${String(aujourdhui.getMonth() + 1).padStart(2, '0')}/${aujourdhui.getFullYear()}`;
         
-        const dateDebut = document.getElementById('filterFactureDateStart')?.value;
-        const dateFin = document.getElementById('filterFactureDateEnd')?.value;
-        const assurance = document.getElementById('filterFactureAssurance')?.value;
-        const compagnie = document.getElementById('filterFactureCompagnie')?.value;
-        
-        if (!dateDebut || !dateFin) {
-            throw new Error("Les dates de début et de fin doivent être définies dans les filtres");
-        }
+        // Utiliser les dates des factures sélectionnées plutôt que les filtres
+        const dates = window.facturesPrevisualisation.map(f => f['Date']).filter(Boolean);
+        const datesObj = dates.map(d => new Date(d));
+        const dateMin = new Date(Math.min(...datesObj));
+        const dateMax = new Date(Math.max(...datesObj));
         
         const data = {
-            dateDebut: dateDebut,
-            dateFin: dateFin,
-            assurance: assurance || window.facturesPrevisualisation[0]['Assurance'],
-            compagnie: compagnie || window.facturesPrevisualisation[0]['Compagnie'],
+            dateDebut: Utils.formatDateForInput(dateMin),
+            dateFin: Utils.formatDateForInput(dateMax),
+            assurance: window.facturesPrevisualisation[0]['Assurance'] || '',
+            compagnie: window.facturesPrevisualisation[0]['Compagnie'] || '',
             dateDuJour: dateDuJour,
             nbFactures: window.facturesPrevisualisation.length,
             montantTotal: calculerTotaux(window.facturesPrevisualisation).montantTotal,
-            factures: window.facturesPrevisualisation.map(f => f['Id Client'])
+            factures: window.facturesPrevisualisation.map(f => f['Id Client']),
+            facturationId: facturationId // MÊME ID que celui utilisé pour marquer les factures
         };
         
         const scriptUrl = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=adddepotData';
         
-        await fetch(scriptUrl, {
+        const timestamp = new Date().getTime();
+        await fetch(`${scriptUrl}&_=${timestamp}`, {
             method: 'POST',
             mode: 'no-cors',
             headers: {
@@ -4008,8 +3331,13 @@ async function confirmerGenerationDepotSelectionne() {
             body: JSON.stringify(data)
         });
     
-        UIManager.showTemporaryMessage("✅ Dépôt généré avec succès et factures marquées !", 'success', 5000);
+        UIManager.showTemporaryMessage(
+            `✅ Dépôt généré avec succès !<br>Référence: <strong>${facturationId}</strong>`, 
+            'success', 
+            5000
+        );
         
+        closeModal();
         fermerModalPrevisualisation();
         
         factureManager.deselectAllFactures();
@@ -4032,11 +3360,11 @@ async function confirmerGenerationDepotSelectionne() {
         generateButton.innerHTML = originalBtnText;
     }
 }
-
 async function updateFacturesSelectionnees(factures) {
     try {
-        const url = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=updateFacturesSelectionnees';
-        
+        const timestamp = new Date().getTime();
+        const url = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=updateFacturesSelectionnees&_=${timestamp}`;
+        const facturationId = `FACT-${timestamp}-${Math.random().toString(36).substr(2, 9)}`;
         const idClients = factures.map(f => f['Id Client']).filter(id => id);
         
         await fetch(url, {
@@ -4047,11 +3375,12 @@ async function updateFacturesSelectionnees(factures) {
             },
             body: JSON.stringify({
                 idClients: idClients,
-                statut: 'OUI'
+                statut: facturationId,
+                timestamp: timestamp
             })
         });
         
-        return true;
+        return facturationId;
     } catch (error) {
         console.error("Erreur lors de la mise à jour des factures:", error);
         throw error;
@@ -4066,7 +3395,8 @@ async function loadFacturationDataForSection() {
     if (messageDiv) messageDiv.style.display = 'none';
 
     try {
-        const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=pointfacturation`;
+        const timestamp = new Date().getTime();
+        const apiUrl = `https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=pointfacturation&_=${timestamp}`;
         
         const response = await fetch(apiUrl);
         if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
@@ -4088,10 +3418,11 @@ async function loadFacturationDataForSection() {
                 MontantTotal: parseFloat(row[headers.indexOf('MONTANT TOTAL')]) || 0,
                 PartAssure: parseFloat(row[headers.indexOf('TOTAL PART ASSURE')]) || 0,
                 PartAssureur: parseFloat(row[headers.indexOf('PART ASSUREUR')]) || 0,
-                TVATotale: parseFloat(row[headers.indexOf('TVA TOTALE')]) || 0,
+                TVATotal: parseFloat(row[headers.indexOf('TVA total')]) || 0, // Ajout du champ TVA total
                 NbFactures: row[headers.indexOf('Nbs')] || '',
                 PdfRecap: row[headers.indexOf("lien Pdf Recaps")] || '',
-                PdfDetail: row[headers.indexOf("lien Pdf Detail")] || ''
+                PdfDetail: row[headers.indexOf("lien Pdf Detail")] || '',
+                idfacturation: row[headers.indexOf('Id Facturation')] || '',
             };
         });
 
@@ -4114,7 +3445,7 @@ async function loadFacturationDataForSection() {
         console.error('Erreur:', error);
         const facturationData = document.getElementById('facturationData');
         if (facturationData) {
-            facturationData.innerHTML = '<tr><td colspan="12" class="text-center">Erreur de chargement</td></tr>';
+            facturationData.innerHTML = '<tr><td colspan="13" class="text-center">Erreur de chargement</td></tr>';
         }
     }
 }
@@ -4123,8 +3454,10 @@ function displayFilteredFacturation(data) {
     const facturationData = document.getElementById('facturationData');
     if (!facturationData) return;
     
+    factureManager.lastDisplayedData = [...data];
+    
     if (!data?.length) {
-        facturationData.innerHTML = '<tr><td colspan="12" class="text-center">Aucune donnée trouvée</td></tr>';
+        facturationData.innerHTML = '<tr><td colspan="13" class="text-center">Aucune donnée trouvée</td></tr>';
         return;
     }
     
@@ -4148,10 +3481,11 @@ function displayFilteredFacturation(data) {
                 <td class="text-end">${Utils.formatCurrency(item.MontantTotal)}</td>
                 <td class="text-end">${Utils.formatCurrency(item.PartAssure)}</td>
                 <td class="text-end">${Utils.formatCurrency(item.PartAssureur)}</td>
-                <td class="text-end">${Utils.formatCurrency(item.TVATotale)}</td>
+                <td class="text-end">${Utils.formatCurrency(item.TVATotal)}</td> <!-- Ajout du champ TVA total -->
                 <td>${item.NbFactures}</td>
                 <td>${pdfRecapBtn}</td>
                 <td>${pdfDetailBtn}</td>
+                <td>${item.idfacturation}</td>
             </tr>
         `;
     });
@@ -4199,618 +3533,7 @@ function applyFacturationFilter() {
     displayFilteredFacturation(filteredData);
 }
 
-// ==================== STATISTIQUES ====================
-function openStatistiques() {
-    const modalContainer = document.getElementById('modal-container');
-    if (!modalContainer) return;
-    
-    const modalHTML = `
-        <div class="modal-overlay active">
-            <div class="modal-content xlarge-modal">
-                <div class="modal-header">
-                    <h3 class="modal-title">
-                        <i class="fas fa-chart-pie modal-icon"></i> 
-                        Tableau de Bord Statistiques
-                    </h3>
-                    <button class="modal-close" onclick="closeModal()" aria-label="Fermer la modale">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="printStats()" aria-label="Imprimer les statistiques">
-                        <i class="fas fa-print"></i> Imprimer
-                    </button>
-                </div>
-    
-                <div class="modal-body">
-                    <div class="tabs">
-                        <button class="tab active" onclick="switchTab('tab-monture')">Montant par Assurance</button>
-                        <button class="tab" onclick="switchTab('tab-evolution')">Évolution 6 Mois</button>
-                        <button class="tab" onclick="switchTab('tab-mois')">Factures Ce Mois</button>
-                        <button class="tab" onclick="switchTab('tab-point')">Point des Facturations</button>
-                        <button class="tab" onclick="switchTab('tab-details')">Détails par Assurance</button>
-                    </div>
-
-                    <div id="tab-monture" class="tab-content active">
-                        <div class="chart-container">
-                            <div class="chart-header">
-                                <h3 class="chart-title">Montant à Payer par Assurance</h3>
-                                <button class="btn btn-secondary btn-sm" onclick="refreshStats()">
-                                    <i class="fas fa-sync-alt"></i> Actualiser
-                                </button>
-                            </div>
-                            <div class="chart-wrapper">
-                                <canvas id="montureChart"></canvas>
-                            </div>
-                            <div class="assurance-summary" id="montureSummary">
-                                <!-- Résumé par assurance -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="tab-evolution" class="tab-content">
-                        <div class="chart-container">
-                            <div class="chart-header">
-                                <h3 class="chart-title">Évolution sur les 6 Derniers Mois par Assureur</h3>
-                                <button class="btn btn-secondary btn-sm" onclick="refreshStats()">
-                                    <i class="fas fa-sync-alt"></i> Actualiser
-                                </button>
-                            </div>
-                            <div class="chart-wrapper">
-                                <canvas id="evolutionChart"></canvas>
-                            </div>
-                            <div class="monthly-stats" id="monthlyStats">
-                                <!-- Statistiques mensuelles -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="tab-mois" class="tab-content">
-                        <div class="chart-container">
-                            <div class="chart-header">
-                                <h3 class="chart-title">Nombre de Factures Ce Mois par Assurance</h3>
-                                <span class="text-muted">Mois: ${Utils.getCurrentMonthName()}</span>
-                            </div>
-                            <div class="chart-wrapper">
-                                <canvas id="moisChart"></canvas>
-                            </div>
-                            <div class="assurance-summary" id="moisSummary">
-                                <!-- Détails par assurance -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="tab-point" class="tab-content">
-                        <div class="chart-container">
-                            <div class="chart-header">
-                                <h3 class="chart-title">Point des Facturations</h3>
-                                <button class="btn btn-secondary btn-sm" onclick="refreshPointStats()">
-                                    <i class="fas fa-sync-alt"></i> Actualiser
-                                </button>
-                            </div>
-                            <div class="table-container">
-                                <table class="produit-table" id="pointTable" aria-label="Point des facturations">
-                                    <thead>
-                                        <tr>
-                                            <th>Date début</th>
-                                            <th>Date fin</th>
-                                            <th>Assurance</th>
-                                            <th>Compagnie</th>
-                                            <th>Date dépôt</th>
-                                            <th class="text-end">Montant Total</th>
-                                            <th class="text-end">Part Assuré</th>
-                                            <th class="text-end">Part Assureur</th>
-                                            <th>Nb Factures</th>
-                                            <th>PDF Récap</th>
-                                            <th>PDF Détail</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="pointData">
-                                        <tr>
-                                            <td colspan="11" class="text-center py-4">
-                                                <div class="loading-indicator">
-                                                    <div class="spinner-border" style="color: var(--primary-color);"></div>
-                                                    <div class="loading-text">Chargement du point des facturations...</div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="tab-details" class="tab-content">
-                        <div class="chart-container">
-                            <div class="chart-header">
-                                <h3 class="chart-title">Détails Complets par Assurance</h3>
-                            </div>
-                            <div class="table-container">
-                                <table class="produit-table" id="detailsTable" aria-label="Détails par assurance">
-                                    <thead>
-                                        <tr>
-                                            <th>Assurance</th>
-                                            <th class="text-end">Montant Total</th>
-                                            <th class="text-end">Part Assureur</th>
-                                            <th class="text-end">TVA</th>
-                                            <th>Factures Total</th>
-                                            <th>Factures Ce Mois</th>
-                                            <th>Dernière Facture</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="detailsData">
-                                        <tr>
-                                            <td colspan="7" class="text-center py-4">
-                                                <div class="loading-indicator">
-                                                    <div class="spinner-border" style="color: var(--primary-color);"></div>
-                                                    <div class="loading-text">Chargement des détails...</div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-    modalContainer.innerHTML = modalHTML;
-    
-    loadStats();
-    loadPointStats();
-}
-
-function switchTab(tabId) {
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    
-    const tabElement = document.querySelector(`.tab[onclick*="${tabId}"]`);
-    if (tabElement) {
-        tabElement.classList.add('active');
-    }
-    const tabContent = document.getElementById(tabId);
-    if (tabContent) {
-        tabContent.classList.add('active');
-    }
-    
-    if (tabId === 'tab-monture' && charts.montureChart) {
-        charts.montureChart.resize();
-    } else if (tabId === 'tab-evolution' && charts.evolutionChart) {
-        charts.evolutionChart.resize();
-    } else if (tabId === 'tab-mois' && charts.moisChart) {
-        charts.moisChart.resize();
-    }
-}
-
-async function loadStats() {
-    try {
-        if (charts.montureChart) charts.montureChart.destroy();
-        if (charts.evolutionChart) charts.evolutionChart.destroy();
-        if (charts.moisChart) charts.moisChart.destroy();
-        
-        if (factureManager.allData.length === 0) {
-            await factureManager.loadData();
-        }
-        
-        const statsParAssurance = factureManager.getStatsParAssurance();
-        const evolution6Mois = factureManager.getEvolution6MoisParAssurance();
-        const facturesCeMois = factureManager.getNombreFacturesCeMoisParAssurance();
-        const statsMensuelles = factureManager.getStatsMensuelles();
-        
-        charts.montureChart = ChartManager.createMontureParAssuranceChart(statsParAssurance, 'montureChart');
-        updateMontureSummary(statsParAssurance);
-        
-        charts.evolutionChart = ChartManager.createEvolutionChart(evolution6Mois, 'evolutionChart');
-        updateMonthlyStats(statsMensuelles);
-        
-        createMoisChart(facturesCeMois);
-        updateMoisSummary(facturesCeMois, statsParAssurance);
-        
-        updateDetailsTable(statsParAssurance);
-        
-    } catch (error) {
-        console.error('Erreur lors du chargement des statistiques:', error);
-        UIManager.showTemporaryMessage('❌ Erreur lors du chargement des statistiques', 'error', 3000);
-    }
-}
-
-async function loadPointStats() {
-    try {
-        const apiUrl = 'https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=pointfacturation';
-        
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error(`Erreur HTTP: ${response.status}`);
-        
-        const responseData = await response.json();
-        
-        if (!responseData?.data?.rows) {
-            throw new Error('Structure de données invalide');
-        }
-        
-        const pointData = responseData.data.rows.map(row => {
-            const headers = responseData.data.headers;
-            return {
-                DateDebut: row[headers.indexOf('Date debut')] || '',
-                DateFin: row[headers.indexOf('Date fin')] || '',
-                Assurance: row[headers.indexOf('Assurance')] || '',
-                Compagnie: row[headers.indexOf('Compagnie')] || '',
-                DateDepot: row[headers.indexOf('Date de depot')] || '',
-                MontantTotal: parseFloat(row[headers.indexOf('MONTANT TOTAL')]) || 0,
-                PartAssure: parseFloat(row[headers.indexOf('TOTAL PART ASSURE')]) || 0,
-                PartAssureur: parseFloat(row[headers.indexOf('PART ASSUREUR')]) || 0,
-                NbFactures: row[headers.indexOf('Nbs')] || '',
-                PdfRecap: row[headers.indexOf("lien Pdf Recaps")] || '',
-                PdfDetail: row[headers.indexOf("lien Pdf Detail")] || ''
-            };
-        });
-
-        updatePointTable(pointData);
-        
-    } catch (error) {
-        console.error('Erreur lors du chargement du point des facturations:', error);
-        const pointData = document.getElementById('pointData');
-        if (pointData) {
-            pointData.innerHTML = `
-                <tr>
-                    <td colspan="11" class="text-center py-4">
-                        <div class="alert-message error">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <span>Erreur lors du chargement des données</span>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        }
-    }
-}
-
-function updatePointTable(data) {
-    const tbody = document.getElementById('pointData');
-    if (!tbody) return;
-    
-    if (!data?.length) {
-        tbody.innerHTML = '<tr><td colspan="11" class="text-center">Aucune donnée trouvée</td></tr>';
-        return;
-    }
-    
-    let html = '';
-    data.forEach((item, index) => {
-        const pdfRecapBtn = item.PdfRecap && Utils.isValidUrl(item.PdfRecap) 
-            ? `<a href="${item.PdfRecap}" target="_blank" class="btn btn-primary btn-sm" aria-label="Télécharger la facture récapitulative">Facture</a>`
-            : '<span class="text-muted">-</span>';
-        
-        const pdfDetailBtn = item.PdfDetail && Utils.isValidUrl(item.PdfDetail) 
-            ? `<a href="${item.PdfDetail}" target="_blank" class="btn btn-primary btn-sm" aria-label="Télécharger le détail de la facture">Détail</a>`
-            : '<span class="text-muted">-</span>';
-
-        html += `
-            <tr>
-                <td>${Utils.formatDate(item.DateDebut)}</td>
-                <td>${Utils.formatDate(item.DateFin)}</td>
-                <td>${item.Assurance}</td>
-                <td>${item.Compagnie}</td>
-                <td>${Utils.formatDate(item.DateDepot)}</td>
-                <td class="text-end">${Utils.formatCurrency(item.MontantTotal)}</td>
-                <td class="text-end">${Utils.formatCurrency(item.PartAssure)}</td>
-                <td class="text-end">${Utils.formatCurrency(item.PartAssureur)}</td>
-                <td>${item.NbFactures}</td>
-                <td>${pdfRecapBtn}</td>
-                <td>${pdfDetailBtn}</td>
-            </tr>
-        `;
-    });
-    
-    tbody.innerHTML = html;
-}
-
-function createMoisChart(data) {
-    const ctx = document.getElementById('moisChart');
-    if (!ctx) return;
-    
-    const sortedEntries = Object.entries(data).sort((a, b) => b[1] - a[1]);
-    const labels = sortedEntries.map(([assurance]) => assurance);
-    const values = sortedEntries.map(([, count]) => count);
-    
-    charts.moisChart = new Chart(ctx.getContext('2d'), {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Nombre de factures ce mois',
-                data: values,
-                backgroundColor: ChartManager.generateColors(labels.length, 0.6),
-                borderColor: ChartManager.generateColors(labels.length, 1),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
-                    }
-                }
-            }
-        }
-    });
-}
-
-function updateMontureSummary(stats) {
-    const container = document.getElementById('montureSummary');
-    if (!container) return;
-    
-    const sortedEntries = Object.entries(stats).sort((a, b) => b[1].montantTotal - a[1].montantTotal);
-    
-    let html = '';
-    sortedEntries.forEach(([assurance, data]) => {
-        html += `
-            <div class="assurance-card">
-                <div class="assurance-name">${assurance}</div>
-                <div class="assurance-details">
-                    <div>
-                        <div>Montant total: <span class="assurance-amount">${Utils.formatCurrency(data.montantTotal)}</span></div>
-                        <div>Part assureur: ${Utils.formatCurrency(data.partAssureur)}</div>
-                        <div>TVA: ${Utils.formatCurrency(data.tvaTotal)}</div>
-                    </div>
-                    <div class="text-end">
-                        <div class="assurance-count">${data.nombreFactures} factures</div>
-                        <div class="text-muted">${data.moisActuel} ce mois</div>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-}
-
-function updateMonthlyStats(stats) {
-    const container = document.getElementById('monthlyStats');
-    if (!container) return;
-    
-    let html = '';
-    stats.forEach(stat => {
-        html += `
-            <div class="month-stat-card">
-                <div class="month-name">${stat.mois}</div>
-                <div class="month-amount">${Utils.formatCurrency(stat.montant)}</div>
-                <div class="month-count">${stat.nombre} factures</div>
-                <div class="text-muted" style="font-size: 0.75rem; margin-top: 0.25rem;">
-                    TVA: ${Utils.formatCurrency(stat.tva)}
-                </div>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-}
-
-function updateMoisSummary(facturesCeMois, statsParAssurance) {
-    const container = document.getElementById('moisSummary');
-    if (!container) return;
-    
-    const sortedEntries = Object.entries(facturesCeMois).sort((a, b) => b[1] - a[1]);
-    
-    let html = '';
-    sortedEntries.forEach(([assurance, count]) => {
-        const stats = statsParAssurance[assurance] || { montantTotal: 0, partAssureur: 0, tvaTotal: 0 };
-        html += `
-            <div class="assurance-card">
-                <div class="assurance-name">${assurance}</div>
-                <div class="assurance-details">
-                    <div>
-                        <div>Factures ce mois: <span class="assurance-amount">${count}</span></div>
-                        <div>Montant total: ${Utils.formatCurrency(stats.montantTotal)}</div>
-                        <div>TVA: ${Utils.formatCurrency(stats.tvaTotal)}</div>
-                    </div>
-                    <div class="text-end">
-                        <div>Part assureur: ${Utils.formatCurrency(stats.partAssureur)}</div>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    
-    container.innerHTML = html;
-}
-
-function updateDetailsTable(statsParAssurance) {
-    const tbody = document.getElementById('detailsData');
-    if (!tbody) return;
-    
-    const sortedEntries = Object.entries(statsParAssurance).sort((a, b) => b[1].montantTotal - a[1].montantTotal);
-    
-    let html = '';
-    sortedEntries.forEach(([assurance, data]) => {
-        const lastFacture = factureManager.allData
-            .filter(item => item['Assurance'] === assurance)
-            .sort((a, b) => new Date(b['Date']) - new Date(a['Date']))[0];
-        
-        const derniereDate = lastFacture ? Utils.formatDate(lastFacture['Date']) : 'Aucune';
-        const derniereClient = lastFacture ? lastFacture['Id Client'] || '' : '';
-        
-        html += `
-            <tr>
-                <td><strong>${assurance}</strong></td>
-                <td class="text-end">${Utils.formatCurrency(data.montantTotal)}</td>
-                <td class="text-end">${Utils.formatCurrency(data.partAssureur)}</td>
-                <td class="text-end">${Utils.formatCurrency(data.tvaTotal)}</td>
-                <td>${data.nombreFactures}</td>
-                <td>${data.moisActuel}</td>
-                <td>
-                    <div>${derniereDate}</div>
-                    <div class="text-muted" style="font-size: 0.75rem;">${derniereClient}</div>
-                </td>
-            </tr>
-        `;
-    });
-    
-    tbody.innerHTML = html;
-}
-
-function refreshStats() {
-    loadStats();
-    UIManager.showTemporaryMessage('Statistiques actualisées', 'success', 2000);
-}
-
-function refreshPointStats() {
-    loadPointStats();
-    UIManager.showTemporaryMessage('Point des facturations actualisé', 'success', 2000);
-}
-
-function printStats() {
-    const activeTab = document.querySelector('.tab.active');
-    let tabTitle = 'Statistiques';
-    
-    if (activeTab) {
-        const tabText = activeTab.textContent.trim();
-        tabTitle = tabText;
-    }
-    
-    const printWindow = window.open('', '_blank');
-    
-    if (activeTab && activeTab.onclick && activeTab.onclick.toString().includes('tab-point')) {
-        const table = document.getElementById('pointTable');
-        if (!table) return;
-        
-        const printContent = `
-            <html>
-                <head>
-                    <title>Point des Facturations - ${new Date().toLocaleDateString('fr-FR')}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; font-size: 12px; }
-                        h1 { color: #333; text-align: center; margin-bottom: 10px; font-size: 18px; }
-                        h2 { color: #555; margin-top: 20px; font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                        th { background-color: #f2f2f2; }
-                        .text-right { text-align: right; }
-                        .text-center { text-align: center; }
-                        @page { size: landscape; margin: 10mm; }
-                    </style>
-                </head>
-                <body>
-                    <h1>Point des Facturations</h1>
-                    <p>Date d'impression: ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}</p>
-                    ${table.outerHTML}
-                </body>
-            </html>
-        `;
-        
-        printWindow.document.write(printContent);
-        
-    } else {
-        const statsParAssurance = factureManager.getStatsParAssurance();
-        const sortedEntries = Object.entries(statsParAssurance).sort((a, b) => b[1].montantTotal - a[1].montantTotal);
-        
-        let detailsHtml = '';
-        sortedEntries.forEach(([assurance, data]) => {
-            detailsHtml += `
-                <tr>
-                    <td>${assurance}</td>
-                    <td align="right">${Utils.formatCurrency(data.montantTotal)}</td>
-                    <td align="right">${Utils.formatCurrency(data.partAssureur)}</td>
-                    <td align="right">${Utils.formatCurrency(data.tvaTotal)}</td>
-                    <td align="center">${data.nombreFactures}</td>
-                    <td align="center">${data.moisActuel}</td>
-                </tr>
-            `;
-        });
-        
-        const totalTva = factureManager.allData.reduce((sum, item) => sum + (parseFloat(item['TVA sur Monture']) || 0), 0);
-        const totalPartAssureur = factureManager.allData.reduce((sum, item) => sum + (parseFloat(item['PART ASSUREUR']) || 0), 0);
-        const totalFacturesCeMois = Object.values(factureManager.getNombreFacturesCeMoisParAssurance()).reduce((a, b) => a + b, 0);
-        
-        const printContent = `
-            <html>
-                <head>
-                    <title>${tabTitle} - ${new Date().toLocaleDateString('fr-FR')}</title>
-                    <style>
-                        body { font-family: Arial, sans-serif; margin: 20px; font-size: 12px; }
-                        h1 { color: #333; text-align: center; margin-bottom: 10px; font-size: 18px; }
-                        h2 { color: #555; margin-top: 20px; font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-                        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-                        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-                        th { background-color: #f2f2f2; }
-                        .total-row { font-weight: bold; background-color: #e8f4f8; }
-                        .text-right { text-align: right; }
-                        .text-center { text-align: center; }
-                        @page { size: landscape; margin: 10mm; }
-                    </style>
-                </head>
-                <body>
-                    <h1>Tableau de Bord Statistiques - Facturations</h1>
-                    <p>Date d'impression: ${new Date().toLocaleDateString('fr-FR')} ${new Date().toLocaleTimeString('fr-FR')}</p>
-                    
-                    <h2>Montant à Payer par Assurance</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Assurance</th>
-                                <th class="text-right">Montant Total</th>
-                                <th class="text-right">Part Assureur</th>
-                                <th class="text-right">TVA Réelle</th>
-                                <th class="text-center">Total Factures</th>
-                                <th class="text-center">Factures Ce Mois</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${detailsHtml}
-                            <tr class="total-row">
-                                <td><strong>TOTAL GÉNÉRAL</strong></td>
-                                <td class="text-right">${Utils.formatCurrency(factureManager.stats.amount)}</td>
-                                <td class="text-right">${Utils.formatCurrency(totalPartAssureur)}</td>
-                                <td class="text-right">${Utils.formatCurrency(totalTva)}</td>
-                                <td class="text-center">${factureManager.stats.total}</td>
-                                <td class="text-center">${totalFacturesCeMois}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <h2>Résumé</h2>
-                    <p>• Total des factures: ${factureManager.stats.total}</p>
-                    <p>• Montant total: ${Utils.formatCurrency(factureManager.stats.amount)}</p>
-                    <p>• Part assureur total: ${Utils.formatCurrency(totalPartAssureur)}</p>
-                    <p>• TVA totale: ${Utils.formatCurrency(totalTva)}</p>
-                    <p>• Factures ce mois: ${totalFacturesCeMois}</p>
-                </body>
-            </html>
-        `;
-        
-        printWindow.document.write(printContent);
-    }
-    
-    printWindow.document.close();
-    printWindow.print();
-}
-
 // ==================== FONCTIONS UTILITAIRES RESTANTES ====================
-function closeModal() {
-    const modals = document.querySelectorAll('.modal-overlay.active, .edit-modal.active');
-    modals.forEach(modal => {
-        modal.classList.remove('active');
-        setTimeout(() => {
-            modal.remove();
-        }, 300);
-    });
-}
 
 function openVueGlobale() {
     try {
@@ -4920,6 +3643,13 @@ window.addEventListener('click', function(event) {
         }
     });
 });
+
+function closeModal() {
+    
+    // Rediriger vers Facturation.html
+    window.location.href = 'Facturation.html';
+}
+
 </script>
 </body>
 </html>
