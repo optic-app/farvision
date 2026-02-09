@@ -6079,21 +6079,33 @@ async function checkAndOpenPDF() {
         }
         
         const result = await response.json();
+        console.log("Réponse du serveur:", result); // Pour debug
         
         // Vérifier les deux orthographes possibles (succès/success)
         const isSuccess = result.succès || result.success;
-        const message = result.message || {};
-        const isMessageSuccess = message.succès || message.success;
+        const messageText = result.message || "";
         
         let pdfUrl = null;
         
-        if (isSuccess && message && message.pdfUrl) {
-            pdfUrl = message.pdfUrl;
-        } else if (message && isMessageSuccess === false) {
-            console.warn("⚠️ Aucun PDF disponible:", message);
+        // CORRECTION : Vérifier si la réponse contient data.pdfUrl
+        if (isSuccess && result.data && result.data.pdfUrl) {
+            pdfUrl = result.data.pdfUrl;
+        } 
+        // Gérer les cas où le PDF est en cours de génération
+        else if (messageText === "Le PDF est en cours de génération. Veuillez patienter quelques secondes." ||
+                 messageText.includes("en cours de génération")) {
+            console.warn("⚠️ Aucun PDF disponible:", messageText);
             alert("Le PDF est en cours de génération. Veuillez patienter quelques secondes puis réessayer.");
             return;
-        } else {
+        } 
+        // Gérer les autres cas d'erreur
+        else if (isSuccess === false) {
+            console.warn("⚠️ Échec de génération du PDF:", messageText);
+            alert("Erreur lors de la génération du PDF: " + messageText);
+            return;
+        } 
+        // Structure inattendue
+        else {
             console.warn("⚠️ Structure de réponse inattendue:", result);
             alert("Erreur inattendue lors de la génération du PDF.");
             return;
