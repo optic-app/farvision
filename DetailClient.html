@@ -1797,36 +1797,37 @@
                 const apiUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=addrecu";
                 
                 const payload = {
-            clientId: clientId
-        };
+                    clientId: clientId
+                };
 
-        await fetch(apiUrl, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
+                await fetch(apiUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
 
-        // 2. Attendre un peu pour que le serveur traite les données
-        await new Promise(resolve => setTimeout(resolve, 2000));
+                // 2. Attendre un peu pour que le serveur traite les données
+                await new Promise(resolve => setTimeout(resolve, 2000));
 
-        // 3. Récupérer le lien du PDF généré
-        const pdfUrl = "https://script.google.com/macros/s/AKfycbzFmMSBTBdw8_DcCC1R0Oice_ecTCrggK4Gp59elsQSwhwdRjuuweo18_z79nTZUv6pgA/exec?action=getrecucaissepdf";
-        
-        const response = await fetch(pdfUrl);
-        
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP! statut: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        
-        const isSuccess = result.succès || result.success;
-        
-        let finalPdfUrl = null;
-        
+                // 3. Récupérer le lien du PDF généré
+                const pdfUrl = "https://script.google.com/macros/s/AKfycbzcgbKkkfBZgxlarLyLnsXy6sHpQBWox33RXi_W_DRwhM-fAqTvAWO5tkvBZnRcdxt4aQ/exec?action=getrecucaissepdf";
+                
+                const response = await fetch(pdfUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`Erreur HTTP! statut: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                const isSuccess = result.succès || result.success;
+                const message = result.message || {};
+                const isMessageSuccess = message.succès || message.success;
+                
+                let finalPdfUrl = null;
+                
         if (isSuccess && result.data && result.data.pdfUrl) {
-            // CORRECTION : Accéder à result.data.pdfUrl au lieu de message.pdfUrl
             finalPdfUrl = result.data.pdfUrl;
         } else if (result.message === "Le PDF est en cours de génération. Veuillez patienter quelques secondes.") {
             hideLoadingIndicator();
